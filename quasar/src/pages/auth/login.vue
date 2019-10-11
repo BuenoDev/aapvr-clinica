@@ -9,7 +9,7 @@
           </q-card-section>
           <q-card-section>
             <br>
-            <q-input square outlined v-model="form.email" label="email" >
+            <q-input square outlined v-model="form.email" label="email" :rules="[val => val.length > 0]" lazy-rules>
               <template v-slot:before>
                 <q-icon name="person" />
               </template>
@@ -21,6 +21,9 @@
                 <q-icon name="vpn_key" />
               </template>
             </q-input>
+          </q-card-section>
+          <q-card-section>
+            <q-checkbox v-model="remember" label="Lembrar-me"/>
           </q-card-section>
           <q-card-section>
              <q-btn color="primary" class="full-width q-mb-sm" text-color="white" label="Entrar" @click="login"/>
@@ -37,11 +40,13 @@ export default {
       form: {
         email: '',
         password: ''
-      }
+      },
+      remember: false
     }
   },
   methods: {
     login () {
+      // this.$store.dispatch('auth/rememberMe', this.remember)
       this.$store.dispatch('auth/login', this.form)
         .then(response => {
           this.$router.push('/home')

@@ -1,5 +1,6 @@
 export default {
   //
   token: null,
-  user: null
+  user: null,
+  rememberToken: false
 }

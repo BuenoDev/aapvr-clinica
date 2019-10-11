@@ -49,6 +49,12 @@ export default {
   methods: {
     logout () {
       console.log('logout')
+      this.$store.dispatch('auth/logout').then(response => {
+        this.$q.notify('O usuário foi desconectado com sucesso!')
+        this.$router.push('/login')
+      }).catch(error => {
+        console.error(error)
+      })
     }
   }
 }
