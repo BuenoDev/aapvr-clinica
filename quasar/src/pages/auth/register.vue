@@ -8,7 +8,9 @@
               Cadastro
             </span>
             <span class="text-h4 items-end">
-              <q-icon name="arrow_back" to="/login" class="backArrow"/>
+              <router-link to="/login"  class="backArrow">
+                <q-icon name="arrow_back"/>
+              </router-link>
             </span>
           </q-card-section>
           <q-separator />
@@ -102,6 +104,10 @@ export default {
 }
 .card-header .text-h4{
   color: white;
+}
+.backArrow{
+  color: white;
+  text-decoration: none;
 }
 .backArrow:hover{
   color: rgb(204, 214, 218);
