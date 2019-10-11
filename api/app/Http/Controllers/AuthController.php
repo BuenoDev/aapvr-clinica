@@ -41,6 +41,7 @@ class AuthController extends Controller
      */
     public function me()
     {
+        // TODO: Make Resource
         return response()->json(auth()->user());
     }
 

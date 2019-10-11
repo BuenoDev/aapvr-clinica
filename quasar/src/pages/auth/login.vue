@@ -9,22 +9,22 @@
           </q-card-section>
           <q-card-section>
             <br>
-            <q-input square outlined v-model="email" label="email" >
+            <q-input square outlined v-model="form.email" label="email" >
               <template v-slot:before>
                 <q-icon name="person" />
               </template>
             </q-input>
           </q-card-section>
           <q-card-section>
-            <q-input square outlined v-model="password" type='password' label="Senha" >
+            <q-input square outlined v-model="form.password" type='password' label="Senha" >
               <template v-slot:before>
                 <q-icon name="vpn_key" />
               </template>
             </q-input>
           </q-card-section>
           <q-card-section>
-             <q-btn color="primary" text-color="white" label="Entrar" />
-             <q-btn color="secondary" text-color="white" label="Cadastrar" to="/cadastro"/>
+             <q-btn color="primary" class="full-width q-mb-sm" text-color="white" label="Entrar" @click="login"/>
+             <q-btn color="secondary" class="full-width" text-color="white" label="Cadastrar" to="/cadastro"/>
           </q-card-section>
         </q-card>
     </div>
@@ -34,18 +34,26 @@
 export default {
   data () {
     return {
-      email: '',
-      password: ''
+      form: {
+        email: '',
+        password: ''
+      }
     }
   },
   methods: {
-    submit () {
-      this.$axios.post('auth/login', {
-        email: this.email,
-        password: this.password
-      }).then(response => {
-        console.log(response)
-      })
+    login () {
+      this.$store.dispatch('auth/login', this.form)
+        .then(response => {
+          // this.$router.push('/home')
+          console.log(this.$store)
+        })
+        .catch(error => {
+          this.$q.notify({
+            message: 'Usuário ou senha inválidas. Por favor, tente novamente.',
+            color: 'negative'
+          })
+          console.error(error)
+        })
     }
   }
 }
