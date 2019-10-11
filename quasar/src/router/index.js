@@ -22,5 +22,22 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  Router.beforeEach((to, from, next) => {
+    let isAuth = Router.app.$store.getters['auth/isAuth']
+    let allowGuest = to.meta.allowGuest
+    console.log({ isAuth: isAuth, routeAllowGuests: allowGuest })
+    /**
+     * Redireciona o usuário caso o mesmo não esteja autenticado
+     * a menos que a proxima rota seja para login ou cadastro
+     * ou qualquer outra que aceite visitantes
+     */
+    if (!isAuth && !allowGuest) next('/login')
+    /**
+     * Redireciona para home se usuario tentar entrar nas rotas
+     * login ou cadastro
+     */
+    if (isAuth && allowGuest) next('/home')
+    else next()
+  })
   return Router
 }

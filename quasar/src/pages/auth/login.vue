@@ -44,7 +44,7 @@ export default {
     login () {
       this.$store.dispatch('auth/login', this.form)
         .then(response => {
-          // this.$router.push('/home')
+          this.$router.push('/home')
           console.log(this.$store)
         })
         .catch(error => {
