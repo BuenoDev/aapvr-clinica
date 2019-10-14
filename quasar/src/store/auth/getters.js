@@ -1,7 +1,7 @@
-export function getUserData (state) {
+export function user (state) {
   return state.user
 }
-export function getToken (state) {
+export function token (state) {
   return state.token
 }
 export function rememberToken (state) {

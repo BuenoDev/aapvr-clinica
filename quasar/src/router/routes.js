@@ -1,12 +1,3 @@
-// import store from '../store'
-
-// function guard (to, from, next) {
-//   console.log(router.app.$store.getters['auth/isAuth'])
-//   if (store.getters['auth/isAuth']) {
-//     next()
-//   } else next('/login')
-// }
-
 const routes = [
   {
     path: '',
@@ -30,7 +21,9 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'home', component: () => import('pages/Index.vue') }
+      { path: 'home', component: () => import('pages/Index.vue') },
+      { path: 'agenda', component: () => import('pages/agenda/Index') },
+      { path: 'prontuario', component: () => import('pages/prontuario/Index') }
     ]
   }
 ]

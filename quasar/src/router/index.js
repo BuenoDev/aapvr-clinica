@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+// import { LocalStorage, SessionStorage } from 'quasar'
 
 import routes from './routes'
 
@@ -37,7 +38,17 @@ export default function (/* { store, ssrContext } */) {
      * login ou cadastro
      */
     if (isAuth && allowGuest) next('/home')
-    else next()
+    /**
+     * Checa se usuário possui token em session/local storage
+     * e realiza login de forma automatica
+     */
+    // if (to.fullPath === '/login') {
+    //   console.log('dispatch')
+    //   Router.app.$store.dispatch('auth/loginWithToken')
+    //   next()
+    // }
+    // console.log({ next: to })
+    next()
   })
   return Router
 }

@@ -1,11 +1,11 @@
 import Vue from 'vue'
-import { LocalStorage } from 'quasar'
+import { LocalStorage, SessionStorage } from 'quasar'
 
 export function setToken (state, data) {
-  state.token = data.access_token
-  if (state.rememberToken) {
-    LocalStorage.set('token', state.token)
-  }
+  console.log({ SessionStorage: SessionStorage, LocalStorage: LocalStorage })
+  state.token = data
+  SessionStorage.set('token', state.token)
+  if (state.rememberToken) LocalStorage.set('token', state.token)
   Vue.prototype.$axios.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${state.token}`
     return config
@@ -13,6 +13,8 @@ export function setToken (state, data) {
 }
 export function logout (state) {
   state.token = null
+  SessionStorage.remove('token')
+  LocalStorage.remove('token')
   Vue.prototype.$axios.interceptors.request.use(config => {
     config.headers.Authorization = ''
     return config
