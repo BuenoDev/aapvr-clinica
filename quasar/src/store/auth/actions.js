@@ -20,10 +20,8 @@ export function login (context, data) {
  * Realiza o login automatico se existir um token JWT no storage
  */
 export function loginWithToken (context) {
-  console.log('login with token')
   // Define qual storage existe o token, false se as duas forem vazias
   let storage = LocalStorage.has('token') ? LocalStorage : (SessionStorage.has('token') ? SessionStorage : false)
-  console.log(storage)
   if (storage) {
     context.commit('setToken', storage.getItem('token'))
     context.dispatch('fetchUser')

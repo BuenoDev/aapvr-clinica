@@ -61,7 +61,6 @@ export default {
     login () {
       this.$refs.email.validate()
       this.$refs.password.validate()
-      console.log('log')
       if (
         this.$refs.email.hasError ||
         this.$refs.password.hasError

@@ -26,7 +26,6 @@ export default function (/* { store, ssrContext } */) {
   Router.beforeEach((to, from, next) => {
     let isAuth = Router.app.$store.getters['auth/isAuth']
     let allowGuest = to.meta.allowGuest
-    console.log({ isAuth: isAuth, routeAllowGuests: allowGuest })
     /**
      * Redireciona o usuário caso o mesmo não esteja autenticado
      * a menos que a proxima rota seja para login ou cadastro
@@ -41,7 +40,6 @@ export default function (/* { store, ssrContext } */) {
     /**
      * Checa se usuário possui token em session/local storage
      * e realiza login de forma automatica
-     * 
      * Movido para login.vue
      */
     // if (to.fullPath === '/login') {

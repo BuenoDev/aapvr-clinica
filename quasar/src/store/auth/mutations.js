@@ -2,7 +2,6 @@ import Vue from 'vue'
 import { LocalStorage, SessionStorage } from 'quasar'
 
 export function setToken (state, data) {
-  console.log({ SessionStorage: SessionStorage, LocalStorage: LocalStorage })
   state.token = data
   SessionStorage.set('token', state.token)
   if (state.rememberToken) LocalStorage.set('token', state.token)
