@@ -3,9 +3,14 @@
     <div class="row">
       <div class="col-sm-5 col-xs-12 fixed-center">
         <q-card class="my-card">
-          <q-card-section class="card-header">
-            <span class="text-h4 ">
+          <q-card-section class="card-header row">
+            <span class="text-h4 col">
               Cadastro
+            </span>
+            <span class="text-h4 items-end">
+              <router-link to="/login"  class="backArrow">
+                <q-icon name="arrow_back"/>
+              </router-link>
             </span>
           </q-card-section>
           <q-separator />
@@ -100,5 +105,11 @@ export default {
 .card-header .text-h4{
   color: white;
 }
-
+.backArrow{
+  color: white;
+  text-decoration: none;
+}
+.backArrow:hover{
+  color: rgb(204, 214, 218);
+}
 </style>

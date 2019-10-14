@@ -47,8 +47,19 @@ module.exports = function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Notify'
-      ]
+        'Notify',
+        'LoadingBar',
+        'LocalStorage',
+        'SessionStorage',
+        'Loading'
+      ],
+      config: {
+        loadingBar: {
+          position:'bottom',
+          size: '8px',
+          color: 'primary'
+        }
+      }
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
