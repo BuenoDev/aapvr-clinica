@@ -41,6 +41,8 @@ export default function (/* { store, ssrContext } */) {
     /**
      * Checa se usuário possui token em session/local storage
      * e realiza login de forma automatica
+     * 
+     * Movido para login.vue
      */
     // if (to.fullPath === '/login') {
     //   console.log('dispatch')
