@@ -21,12 +21,12 @@
     <q-drawer show-if-above v-model="left" side="left" elevated :width="220">
       <!-- drawer content -->
           <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
-            <div class="absolute-bottom bg-transparent" v-if="user">
+            <div class="absolute-bottom bg-transparent" v-if="authUser">
               <q-avatar size="56px" class="q-mb-sm">
                 <img src="https://cdn.quasar.dev/img/boy-avatar.png">
               </q-avatar>
-              <div class="text-weight-bold">{{ user.name }}</div>
-              <div>{{ user.email }}</div>
+              <div class="text-weight-bold">{{ authUser.name }}</div>
+              <div>{{ authUser.email }}</div>
             </div>
           </q-img>
         <q-list padding class="menu-list" style="margin-top:150px">
@@ -102,7 +102,7 @@ export default {
   },
   computed: {
     ...mapGetters('auth', [
-      'user'
+      'authUser'
     ])
   },
   methods: {
