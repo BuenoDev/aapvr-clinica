@@ -7,8 +7,8 @@
 
         <q-toolbar-title>
           <q-avatar>
-            <!-- <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg"> -->
-             <img src="https://static.wixstatic.com/media/769b46_80e632a9b8e64f80a2b12a0fce072515~mv2.png/v1/fill/w_84,h_78,al_c,q_80,usm_0.66_1.00_0.01/769b46_80e632a9b8e64f80a2b12a0fce072515~mv2.webp" >
+            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
+             <!-- <img src="https://static.wixstatic.com/media/769b46_80e632a9b8e64f80a2b12a0fce072515~mv2.png/v1/fill/w_84,h_78,al_c,q_80,usm_0.66_1.00_0.01/769b46_80e632a9b8e64f80a2b12a0fce072515~mv2.webp" > -->
           </q-avatar>
           AAPVR - Associação de Aposentados de Volta Redonda
         </q-toolbar-title>
@@ -110,7 +110,6 @@ export default {
       return this.$router.currentRoute.fullPath
     },
     logout () {
-      console.log('logout')
       this.$store.dispatch('auth/logout').then(response => {
         this.$q.notify('O usuário foi desconectado com sucesso!')
         this.$router.push('/login')
@@ -118,6 +117,20 @@ export default {
         console.error(error)
       })
     }
+  },
+  mounted () {
+    this.$q.loading.show({
+      message: 'Buscando informações do usuário'
+    })
+    this.$store.dispatch('auth/fetchUser').then(response => {
+      this.$q.loading.hide()
+    }).catch(error => {
+      console.log('status:' + error.request.status)
+      this.$q.loading.hide()
+      this.$store.dispatch('auth/logout').finally(() => {
+        this.$router.push('/login')
+      })
+    })
   }
 }
 </script>

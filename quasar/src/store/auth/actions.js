@@ -13,7 +13,7 @@ export function login (context, data) {
     password: data.password
   }).then(response => {
     context.commit('setToken', response.data.access_token)
-    context.dispatch('fetchUser')
+    // context.dispatch('fetchUser')
   })
 }
 /**
@@ -24,7 +24,8 @@ export function loginWithToken (context) {
   let storage = LocalStorage.has('token') ? LocalStorage : (SessionStorage.has('token') ? SessionStorage : false)
   if (storage) {
     context.commit('setToken', storage.getItem('token'))
-    context.dispatch('fetchUser')
+    // context.dispatch('refreshToken')
+    // context.dispatch('fetchUser')
     return true
   } else return false
 }
@@ -34,9 +35,10 @@ export function loginWithToken (context) {
 export function logout (context) {
   return Vue.prototype.$axios.post('auth/logout').then(response => {
     console.log(response)
-    context.commit('logout')
   }).catch(error => {
     console.error(error)
+  }).finally(() => {
+    context.commit('logout')
   })
 }
 /**
@@ -52,5 +54,13 @@ export function rememberMe (context, data) {
 export function fetchUser (context) {
   return Vue.prototype.$axios.post('/auth/me').then(response => {
     context.commit('setUserData', response.data)
+  })
+}
+/**
+ * Atualiza JWT token
+ */
+export function refreshToken (context) {
+  return Vue.prototype.$axios.post('auth/refresh').then(response => {
+    context.commit('setToken', response.access_token)
   })
 }

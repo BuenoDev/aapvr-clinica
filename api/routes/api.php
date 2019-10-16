@@ -19,15 +19,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'register'], function () {
     Route::post('/','RegisterUserController@store');
 });
-Route::group([
-    // 'middleware' => 'cors',
+Route::group([    
     'prefix' => 'auth'
-], function ($router) {
-    Route::get('test',function(){
-        return 'ok';
-    });
+], function () {
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+});
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('test',function(){
+        return response()->ok();
+    });
 });

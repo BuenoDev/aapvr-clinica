@@ -54,6 +54,16 @@ module.exports = function (ctx) {
         'Loading'
       ],
       config: {
+        brand: {
+          primary: '#0747a6',
+          secondary: '#027be3',
+          accent: '#9C27B0',
+
+          positive: '#21BA45',
+          negative: '#C10015',
+          info: '#31CCEC',
+          warning: '#F2C037'
+        },
         loadingBar: {
           position:'bottom',
           size: '8px',
