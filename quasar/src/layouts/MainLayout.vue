@@ -20,7 +20,7 @@
 
     <q-drawer show-if-above v-model="left" side="left" elevated :width="220">
       <!-- drawer content -->
-          <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
             <div class="absolute-bottom bg-transparent" v-if="authUser">
               <q-avatar size="56px" class="q-mb-sm">
                 <img src="https://cdn.quasar.dev/img/boy-avatar.png">
@@ -28,7 +28,7 @@
               <div class="text-weight-bold">{{ authUser.name }}</div>
               <div>{{ authUser.email }}</div>
             </div>
-          </q-img>
+        </q-img>
         <q-list padding class="menu-list" style="margin-top:150px">
           <q-item :active="activeRoute === '/home'" to="home" clickable v-ripple>
               <q-item-section avatar>
@@ -68,6 +68,14 @@
               </q-item-section>
               <q-item-section>
                 Financeiro
+              </q-item-section>
+          </q-item>
+          <q-item :active="activeRoute === '/permissoes'" to="permissoes" clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon name="pan_tool" />
+              </q-item-section>
+              <q-item-section>
+                Grupos e permissões
               </q-item-section>
           </q-item>
         </q-list>

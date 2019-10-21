@@ -23,7 +23,15 @@ const routes = [
     children: [
       { path: 'home', component: () => import('pages/Index.vue') },
       { path: 'agenda', component: () => import('pages/agenda/Index') },
-      { path: 'prontuario', component: () => import('pages/prontuario/Index') }
+      { path: 'prontuario', component: () => import('pages/prontuario/Index') },
+      {
+        path: 'permissoes',
+        component: () => import('pages/permissoes/Index')
+      },
+      { path: 'permissoes/usuario/:id', component: () => import('pages/permissoes/usuario/show') },
+      { path: 'permissoes/grupos/:id', component: () => import('pages/permissoes/grupos/show') },
+      { path: 'permissoes/permissoes/:id', component: () => import('pages/permissoes/permissoes/show') }
+
     ]
   }
 ]

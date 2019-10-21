@@ -13,12 +13,16 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        //        
+        //
         $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('123123')
         ]);
         $admin->assignRole('admin');
+
+        //Dev only
+        $users = factory(App\User::class, 1320)->create();
+        foreach($users as $user) $user->assignRole('medico');
     }
 }

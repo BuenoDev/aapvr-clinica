@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'register'], function () {
     Route::post('/','RegisterUserController@store');
 });
-Route::group([    
+Route::group([
     'prefix' => 'auth'
 ], function () {
     Route::post('login', 'AuthController@login');
@@ -28,7 +28,9 @@ Route::group([
     Route::post('me', 'AuthController@me');
 });
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('test',function(){
-        return response()->ok();
+    Route::group(['prefix' => 'user'], function () {
+        Route::resource('/', 'UserController');
     });
+    Route::get('role','RoleController@index');
+    Route::get('permission','PermissionController@index');
 });
