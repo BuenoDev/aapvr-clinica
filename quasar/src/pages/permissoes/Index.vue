@@ -1,19 +1,9 @@
 <template>
   <div class="q-pa-md">
-    <div class="row">
-      <q-breadcrumbs class="q-pl-md q-mb-xl col-md-4">
-        <q-breadcrumbs-el icon="home" to="/" />
-        <q-breadcrumbs-el label="Permissões" icon="assignment_ind"/>
-      </q-breadcrumbs>
-      <div class="justify-right col-md-2 offset-6">
-        <q-btn
-        label="voltar"
-        size="sm"
-        icon="arrow_back"
-        to="/"
-        />
-      </div>
-    </div>
+    <default-page-header
+     :config="headerConfig"
+     backTo="home"
+    />
     <div class="q-gutter-y-md " style="min-width: 900px">
       <q-card>
         <q-tabs
@@ -51,16 +41,30 @@
 import usuarios from './usuario/index'
 import permissoes from './permissoes/index'
 import grupos from './grupos/index'
+import defaultPageHeader from '../../components/defaultPageHeader'
 
 export default {
   components: {
     usuarios,
     permissoes,
-    grupos
+    grupos,
+    defaultPageHeader
   },
   data () {
     return {
-      tab: 'usuarios'
+      tab: 'usuarios',
+      headerConfig: [
+        {
+          icon: 'home',
+          route: '/',
+          label: 'Home'
+        },
+        {
+          icon: '',
+          route: '/permission',
+          label: 'Permissoes'
+        }
+      ]
     }
   }
 }

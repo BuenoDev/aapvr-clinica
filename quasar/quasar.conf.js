@@ -55,14 +55,13 @@ module.exports = function (ctx) {
       ],
       config: {
         brand: {
-          primary: '#0747a6',
-          secondary: '#027be3',
-          accent: '#9C27B0',
-
-          positive: '#21BA45',
-          negative: '#C10015',
-          info: '#31CCEC',
-          warning: '#F2C037'
+          primary : '#027BE3',
+          secondary : '#31ccec',
+          accent : '#9C27B0',
+          positive : '#21BA45',
+          negative : '#C10015',
+          info : '#31ccec',
+          warning : '#F2C037'
         },
         loadingBar: {
           position:'bottom',

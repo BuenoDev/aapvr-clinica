@@ -1,9 +1,9 @@
 <template>
-  <div class="q-pa-md">
+  <div>
     <q-table
       @request="updateRequest"
       title="Usuários"
-      :data="data"
+      :data="users "
       :columns="columns"
       :loading="loading"
       :pagination = "pagination"
@@ -56,6 +56,8 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'usuario',
   data () {
@@ -92,17 +94,30 @@ export default {
           field: 'id',
           align: 'center'
         }
-      ],
-      data: []
+      ]
     }
   },
   mounted () {
     this.fetchUsers()
+    console.log(this.users)
+    if (this.users.lenght === 0) {
+      console.log('if')
+      this.fetchUsers()
+    } else {
+      this.loading = false
+      this.pagination.rowsNumber = this.usersCount
+    }
   },
   watch: {
     search () {
       this.fetchUsers()
     }
+  },
+  computed: {
+    ...mapGetters('permissions', [
+      'usersCount',
+      'users'
+    ])
   },
   methods: {
     updateRequest (payload) {
@@ -111,15 +126,13 @@ export default {
     },
     fetchUsers () {
       this.loading = true
-      this.$axios.get('user', {
-        params: {
-          page: this.pagination.page,
-          rowsPerPage: this.pagination.rowsPerPage,
-          searchParam: this.search
-        }
+      this.$store.dispatch('permissions/searchUsers', {
+        page: this.pagination.page,
+        rowsPerPage: this.pagination.rowsPerPage,
+        searchParam: this.search
       }).then(response => {
-        this.pagination.rowsNumber = response.data.count
-        this.data = response.data.users
+        console.log(response)
+        this.pagination.rowsNumber = this.usersCount
         this.loading = false
       })
     }

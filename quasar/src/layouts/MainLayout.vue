@@ -30,7 +30,7 @@
             </div>
         </q-img>
         <q-list padding class="menu-list" style="margin-top:150px">
-          <q-item :active="activeRoute === '/home'" to="home" clickable v-ripple>
+          <q-item :active="activeRoute === '/home'" to="/home" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="pie_chart" />
               </q-item-section>
@@ -38,7 +38,7 @@
                 Dashboard
               </q-item-section>
           </q-item>
-          <q-item :active="activeRoute === '/agenda'" to="agenda" clickable v-ripple>
+          <q-item :active="activeRoute === '/agenda'" to="/agenda" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="calendar_today" />
               </q-item-section>
@@ -46,7 +46,7 @@
                 Agenda
               </q-item-section>
           </q-item>
-          <q-item :active="activeRoute === '/prontuario'" to="prontuario" clickable v-ripple>
+          <q-item :active="activeRoute === '/prontuario'" to="/prontuario" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="file_copy" />
               </q-item-section>
@@ -70,7 +70,7 @@
                 Financeiro
               </q-item-section>
           </q-item>
-          <q-item :active="activeRoute === '/permissoes'" to="permissoes" clickable v-ripple>
+          <q-item :active="activeRoute === '/permissoes'" to="/permissoes" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="pan_tool" />
               </q-item-section>
