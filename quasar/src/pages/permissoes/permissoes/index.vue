@@ -3,7 +3,7 @@
     <q-table
       @request="updateRequest"
       title="Usuários"
-      :data="data"
+      :data="permissions"
       :columns="columns"
       :loading="loading"
       :pagination = "pagination"
@@ -36,6 +36,8 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
@@ -65,17 +67,28 @@ export default {
           field: 'id',
           align: 'center'
         }
-      ],
-      data: []
+      ]
     }
   },
   mounted () {
-    this.fetch()
+    if (this.permissions.length === 0) {
+      this.loading = true
+      this.fetch()
+    } else {
+      this.loading = false
+      this.pagination.rowsNumber = this.permissionCount
+    }
   },
   watch: {
     search () {
       this.fetch()
     }
+  },
+  computed: {
+    ...mapGetters('permissions', [
+      'permissionsCount',
+      'permissions'
+    ])
   },
   methods: {
     updateRequest (payload) {
@@ -84,15 +97,12 @@ export default {
     },
     fetch () {
       this.loading = true
-      this.$axios.get('permission', {
-        params: {
-          page: this.pagination.page,
-          rowsPerPage: this.pagination.rowsPerPage,
-          searchParam: this.search
-        }
+      this.$store.dispatch('permissions/searchPermission', {
+        page: this.pagination.page,
+        rowsPerPage: this.pagination.rowsPerPage,
+        searchParam: this.search
       }).then(response => {
-        this.pagination.rowsNumber = response.data.count
-        this.data = response.data.permissions
+        this.pagination.rowsNumber = this.permissionCount
         this.loading = false
       })
     }

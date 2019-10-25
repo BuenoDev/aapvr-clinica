@@ -28,9 +28,8 @@ Route::group([
     Route::post('me', 'AuthController@me');
 });
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::group(['prefix' => 'user'], function () {
-        Route::resource('/', 'UserController');
-    });
-    Route::get('role','RoleController@index');
-    Route::get('permission','PermissionController@index');
+    Route::get('/user', 'UserController@index');
+    Route::delete('/user/{user}/role','UserController@revoke');
+    Route::get('/role','RoleController@index');
+    Route::get('/permission','PermissionController@index');
 });

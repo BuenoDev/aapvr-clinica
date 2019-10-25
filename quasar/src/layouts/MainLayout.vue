@@ -20,16 +20,19 @@
 
     <q-drawer show-if-above v-model="left" side="left" elevated :width="220">
       <!-- drawer content -->
-        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 110px">
             <div class="absolute-bottom bg-transparent" v-if="authUser">
-              <q-avatar size="56px" class="q-mb-sm">
+              <!-- <q-avatar size="56px" class="q-mb-sm">
                 <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-              </q-avatar>
+              </q-avatar> -->
               <div class="text-weight-bold">{{ authUser.name }}</div>
+              <div>
+                <span v-for="(role, index) in authUser.roles" :key="index">{{ role }}</span>
+              </div>
               <div>{{ authUser.email }}</div>
             </div>
         </q-img>
-        <q-list padding class="menu-list" style="margin-top:150px">
+        <q-list padding class="menu-list" style="margin-top:110px">
           <q-item :active="activeRoute === '/home'" to="/home" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="pie_chart" />

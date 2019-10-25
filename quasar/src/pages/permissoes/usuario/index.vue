@@ -98,10 +98,8 @@ export default {
     }
   },
   mounted () {
-    this.fetchUsers()
-    console.log(this.users)
-    if (this.users.lenght === 0) {
-      console.log('if')
+    if (this.users.length === 0) {
+      this.loading = true
       this.fetchUsers()
     } else {
       this.loading = false
@@ -131,7 +129,6 @@ export default {
         rowsPerPage: this.pagination.rowsPerPage,
         searchParam: this.search
       }).then(response => {
-        console.log(response)
         this.pagination.rowsNumber = this.usersCount
         this.loading = false
       })

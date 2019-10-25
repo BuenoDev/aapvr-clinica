@@ -6,6 +6,7 @@ use App\Repositories\UserRepository;
 use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -33,6 +34,10 @@ class UserController extends Controller
         ]);
     }
 
+    public function revoke( User $user, Request $request){
+        $user = $user->removeRole($request->role);
+        return response()->json(new UserResource($user));
+    }
     /**
      * Store a newly created resource in storage.
      *

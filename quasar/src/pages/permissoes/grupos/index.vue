@@ -2,8 +2,7 @@
   <div class="">
     <q-table
       @request="updateRequest"
-      title="Usuários"
-      :data="data"
+      :data="roles"
       :columns="columns"
       :loading="loading"
       :pagination.sync = "pagination"
@@ -55,6 +54,8 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
@@ -72,12 +73,6 @@ export default {
           field: 'name',
           align: 'center'
         },
-        // {
-        //   name: 'permissions',
-        //   label: 'Permissoes',
-        //   field: 'permissions',
-        //   align: 'left'
-        // },
         {
           name: 'actions',
           label: 'Ações',
@@ -89,12 +84,24 @@ export default {
     }
   },
   mounted () {
-    this.fetch()
+    if (this.roles.length === 0) {
+      this.loading = true
+      this.fetch()
+    } else {
+      this.loading = false
+      this.pagination.rowsNumber = this.permissionCount
+    }
   },
   watch: {
     search () {
       this.fetch()
     }
+  },
+  computed: {
+    ...mapGetters('permissions', [
+      'rolesCount',
+      'roles'
+    ])
   },
   methods: {
     updateRequest (payload) {
@@ -103,15 +110,12 @@ export default {
     },
     fetch () {
       this.loading = true
-      this.$axios.get('role', {
-        params: {
-          page: this.pagination.page,
-          rowsPerPage: this.pagination.rowsPerPage,
-          searchParam: this.search
-        }
+      this.$store.dispatch('permissions/searchRole', {
+        page: this.pagination.page,
+        rowsPerPage: this.pagination.rowsPerPage,
+        searchParam: this.search
       }).then(response => {
-        this.pagination.rowsNumber = response.data.count
-        this.data = response.data.roles
+        this.pagination.rowsNumber = this.rolesCount
         this.loading = false
       })
     }

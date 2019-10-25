@@ -6,6 +6,10 @@
         <span class="text-h4" style="color:black">
           {{ user.name }}
         </span>
+        <br>
+        <span class="text-h7">
+          {{ user.email }}
+        </span>
       </q-card-section>
       <q-card-section>
         <div class="row">
@@ -19,7 +23,7 @@
                   {{ role }}
                 </q-item-section>
                 <q-item-section side>
-                  <q-icon color="negative" name="delete" style="font-size: x-large"/>
+                  <q-icon color="negative" name="delete" style="font-size: x-large" @click="removeRole(role)"/>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -82,10 +86,23 @@ export default {
       user: null
     }
   },
-  beforeCreate () {
-    this.$store.dispatch('permissions/getUser', this.$route.params.id).then(user => {
-      this.user = user
-    })
+  created () {
+    this.fetch()
+  },
+  methods: {
+    fetch () {
+      this.$store.dispatch('permissions/getUser', this.$route.params.id).then(user => {
+        this.user = user
+      })
+    },
+    removeRole (role) {
+      this.$store.dispatch('permissions/revokeRole', {
+        user: this.user.id,
+        role: role
+      }).then(() => {
+        this.fetch()
+      })
+    }
   }
 }
 </script>

@@ -17,4 +17,7 @@ class UserRepository extends BaseRepository{
     public function search($param){
         return $this->model->where('name','like','%' . $param . '%')->with('roles','permissions');
     }
+    public function revoke($role){
+        return $this->model->removeRole($role);
+    }
 }

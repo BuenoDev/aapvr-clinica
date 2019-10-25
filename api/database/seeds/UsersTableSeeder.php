@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
         $admin->assignRole('admin');
 
         //Dev only
-        $users = factory(App\User::class, 1320)->create();
+        $users = factory(App\User::class, 30)->create();
         foreach($users as $user) $user->assignRole('medico');
     }
 }
