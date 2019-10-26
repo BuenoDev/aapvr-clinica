@@ -38,6 +38,11 @@ class UserController extends Controller
         $user = $user->removeRole($request->role);
         return response()->json(new UserResource($user));
     }
+
+    public function sync(User $user, Request $request){                
+        $user = $user->syncRoles($request->roles);
+        return response()->json(new UserResource($user));
+    }
     /**
      * Store a newly created resource in storage.
      *

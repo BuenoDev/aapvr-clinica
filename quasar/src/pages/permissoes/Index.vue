@@ -50,6 +50,10 @@ export default {
     grupos,
     defaultPageHeader
   },
+  created () {
+    this.$store.dispatch('permissions/searchRole')
+    this.$store.dispatch('permissions/searchPermission')
+  },
   data () {
     return {
       tab: 'usuarios',

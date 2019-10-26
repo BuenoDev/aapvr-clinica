@@ -11,7 +11,7 @@
       row-key="name"
     >
       <template v-slot:top>
-        <q-btn color="white" text-color="black" label="Adicionar Grupo" />
+        <q-btn color="white" text-color="black" label="Adicionar Grupo" @click="openDialog"/>
         <q-space />
         <q-input  dense debounce="300" color="primary" v-model="search">
           <template v-slot:append>
@@ -51,6 +51,27 @@
           </q-td>
       </template>
     </q-table>
+    <q-dialog v-model="createDialog">
+      <q-card>
+        <q-card-section class="row">
+          <q-btn icon="close" flat round dense v-close-popup class="col-2 offset-10"/>
+        </q-card-section>
+        <q-card-section class="row itens-center">
+          <q-input
+            v-model="roleName"
+            label="Nome"
+          />
+        </q-card-section>
+        <q-card-section>
+          <q-btn
+            class="full-width"
+            label="Adicionar"
+            :loading="loading"
+            @click="createRole"
+          ></q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script>
@@ -80,7 +101,9 @@ export default {
           align: 'center'
         }
       ],
-      data: []
+      data: [],
+      createDialog: false,
+      roleName: null
     }
   },
   mounted () {
@@ -104,6 +127,9 @@ export default {
     ])
   },
   methods: {
+    openDialog () {
+      this.createDialog = true
+    },
     updateRequest (payload) {
       this.pagination = payload.pagination
       this.fetch()
@@ -117,6 +143,18 @@ export default {
       }).then(response => {
         this.pagination.rowsNumber = this.rolesCount
         this.loading = false
+      })
+    },
+    createRole () {
+      this.loading = true
+      this.$axios.post('/role', {
+        role: this.roleName
+      }).then(() => {
+        this.createDialog = false
+        this.$q.notify({
+          message: 'Grupo adicionado com sucesso'
+        })
+        this.fetch()
       })
     }
   }

@@ -1,5 +1,6 @@
 export default {
   users: {
+    selected: null,
     data: [],
     count: 0
   },
