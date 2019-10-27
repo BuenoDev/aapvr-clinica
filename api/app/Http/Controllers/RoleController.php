@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RoleResource;
+use App\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
@@ -16,7 +18,7 @@ class RoleController extends Controller
     {
         //
         return [
-            'roles' => Role::all(),
+            'roles' => RoleResource::collection(Role::all()),
             'count' => Role::all()->count()
         ];
     }
@@ -32,6 +34,17 @@ class RoleController extends Controller
         return Role::create(['name' => $request->role]);
     }
 
+    public function syncPermissions(Role $role, Request $request){        
+        $role = $role->syncPermissions($request->permissions);
+
+        // Reassign all roles to sync user permissions        
+        $users = User::role($role)->get();
+        foreach($users as $user){
+            $user->removeRole($role);
+            $user->assignRole($role);
+        }
+        return response()->json( new RoleResource($role) );
+    }
     /**
      * Display the specified resource.
      *

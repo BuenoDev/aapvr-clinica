@@ -36,6 +36,7 @@ export function selectUser (context, id) {
 export function getRole (context, id) {
   context.commit('selectRole', parseInt(id))
 }
+// TODO: remove
 export function revokeRole (context, data) {
   console.log(data)
   return Vue.prototype.$axios.delete(`/user/${data.user}/role`, {
@@ -58,5 +59,12 @@ export function syncUserPermissions (context, data) {
     permissions: data.permissions
   }).then(response => {
     context.commit('updateUser', response.data)
+  })
+}
+export function syncRolePermissions (context, data) {
+  return Vue.prototype.$axios.put(`/role/${data.role_id}/permission`, {
+    permissions: data.permissions
+  }).then(response => {
+    context.commit('updateRole', response.data)
   })
 }

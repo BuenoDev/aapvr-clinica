@@ -36,6 +36,10 @@ export default function (/* { ssrContext } */) {
       const newAuth = require('./auth').default
       Store.hotUpdate({ modules: { auth: newAuth } })
     })
+    module.hot.accept(['./permissions'], () => {
+      const newPermissions = require('./permissions').default
+      Store.hotUpdate({ modules: { permissions: newPermissions } })
+    })
   }
   return Store
 }

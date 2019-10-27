@@ -7,9 +7,6 @@
           {{ selectedRole.name }}
         </span>
         <br>
-        <span class="text-h7">
-          {{ selectedRole.email }}
-        </span>
       </q-card-section>
       <q-separator/>
       <q-card-section>
@@ -18,16 +15,16 @@
             <span class="text-h5">
               Permissões
             </span>
-            <q-btn size="sm" class="q-ml-md" @click="openPermissionDialog" :disabled="true">
-              Adicionar
+            <q-btn size="sm" class="q-ml-md" @click="sync" >
+              Sincronizar
             </q-btn>
             <q-list bordered separator class="q-mt-md permission-list">
-              <q-item clickable v-ripple v-for="permission in selectedRole.permissions" :key="permission">
+              <q-item clickable v-ripple v-for="permission in rolePermissions" :key="permission.id">
                 <q-item-section>
-                  {{ permission }}
+                  {{ permission.name }}
                 </q-item-section>
                 <q-item-section side>
-                  <q-icon color="negative" name="delete" style="font-size: x-large"/>
+                  <q-toggle v-model="permission.has" />
                 </q-item-section>
               </q-item>
             </q-list>
@@ -36,34 +33,6 @@
         </div>
       </q-card-section>
     </q-card>
-    <q-dialog v-model="roleDialog" @hide="setPermissionsList">
-      <q-card>
-        <q-card-section class="row items-center">
-          <div class="text-h6">Atribuir grupo</div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
-        </q-card-section>
-
-        <q-card-section>
-          <div class="row" v-for="(role, index) in addPermissionsList " :key="index" >
-            <div class="col-8">
-              {{ role.name }}
-            </div>
-            <div class="col-4">
-              <q-toggle
-                v-model="role.has"
-              />
-            </div>
-            <q-separator/>
-          </div>
-        </q-card-section>
-        <q-card-section>
-          <q-btn @click="confirmPermissions" :loading="loading" class="full-width">
-            Confirmar
-          </q-btn>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
   </div>
 </template>
 <script>
@@ -100,10 +69,8 @@ export default {
         ],
         back: '/permissoes'
       },
-      roleDialog: false,
-      permissiomDialog: false,
       loading: false,
-      addPermissionsList: []
+      rolePermissions: []
     }
   },
   mounted () {
@@ -112,11 +79,11 @@ export default {
   methods: {
     fetch () {
       this.$store.dispatch('permissions/getRole', this.$route.params.id).then(() => {
-        // this.setPermissionsList()
+        this.setPermissions()
       })
     },
-    setPermissionsList () {
-      this.addPermissionsList = this.permissions.map(permission => {
+    setPermissions () {
+      this.rolePermissions = this.permissions.map(permission => {
         return {
           id: permission.id,
           name: permission.name,
@@ -126,17 +93,6 @@ export default {
     },
     roleHasPermission (permission) {
       return this.selectedRole.permissions.includes(permission)
-    },
-    // removeRole (role) {
-    //   this.$store.dispatch('permissions/revokeRole', {
-    //     user: this.selectedUser.id,
-    //     role: role
-    //   }).then(() => {
-    //     this.fetch()
-    //   })
-    // },
-    openPermissionDialog () {
-      this.permissiomDialog = true
     },
     confirmPermissions () {
       this.loading = true
@@ -153,6 +109,27 @@ export default {
           message: error,
           color: 'negative'
         })
+      })
+    },
+    sync () {
+      this.$q.loading.show({
+        message: 'Atualizando permissões'
+      })
+      this.$store.dispatch('permissions/syncRolePermissions', {
+        role_id: this.selectedRole.id,
+        permissions: this.rolePermissions.filter(permission => permission.has).map(permission => permission.name)
+      }).then(() => {
+        this.$store.dispatch('permissions/searchUsers')
+        this.$q.notify({
+          message: 'Permissões sincronizadas com sucesso'
+        })
+      }).catch(error => {
+        console.error(error)
+        this.$q.notify({
+          message: 'Ocorreu um erro ao tentar sincronizar as permissões, tente novamente'
+        })
+      }).finally(() => {
+        this.$q.loading.hide()
       })
     }
   }
