@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\RoleResource;
+use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -44,6 +45,10 @@ class RoleController extends Controller
             $user->assignRole($role);
         }
         return response()->json( new RoleResource($role) );
+    }
+
+    public function getUsers(Role $role){
+        return response()->json(UserResource::collection($role->users));
     }
     /**
      * Display the specified resource.

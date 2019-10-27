@@ -20,6 +20,9 @@ export function selectUser (state, data) {
 export function selectRole (state, data) {
   state.roles.selected = state.roles.data.find(role => role.id === data)
 }
+export function selectPermission (state, data) {
+  state.permissions.selected = state.permissions.data.find(permission => permission.id === data)
+}
 export function updateUser (state, data) {
   state.users.data = state.users.data.map(function (user) {
     return user.id === data.id ? data : user

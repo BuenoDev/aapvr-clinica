@@ -33,8 +33,11 @@ export function searchPermission (context, params) {
 export function selectUser (context, id) {
   context.commit('selectUser', parseInt(id))
 }
-export function getRole (context, id) {
+export function selectRole (context, id) {
   context.commit('selectRole', parseInt(id))
+}
+export function selectPermission (context, id) {
+  context.commit('selectPermission', parseInt(id))
 }
 // TODO: remove
 export function revokeRole (context, data) {

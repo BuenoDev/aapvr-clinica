@@ -14,7 +14,7 @@
       <q-separator/>
       <q-card-section>
         <div class="row">
-          <div class="col-md-6 col-sm-12">
+          <div class="col-md-4 col-sm-12">
             <span class="text-h5">
               Permissões
             </span>
@@ -32,6 +32,29 @@
               </q-item>
             </q-list>
 
+          </div>
+          <div class="offset-md-2 col-md-4 col-sm-12" v-if="users.length !== 0">
+            <span class="text-h5" style="color:black">
+              Usuários
+            </span>
+            <q-list>
+              <q-list bordered separator class="q-mt-md permission-list">
+                <q-item clickable v-ripple v-for="user in users" :key="user.id">
+                  <q-item-section>
+                    {{ user.name }}
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-btn
+                      size="sm"
+                      color="primary"
+                      icon="visibility"
+                      :to="`/permissoes/usuario/${user.id}`"
+                      :loading="loading"
+                    />
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-list>
           </div>
         </div>
       </q-card-section>
@@ -73,6 +96,7 @@ export default {
         back: '/permissoes'
       },
       loading: false,
+      users: [],
       rolePermissions: []
     }
   },
@@ -81,8 +105,17 @@ export default {
   },
   methods: {
     fetch () {
-      this.$store.dispatch('permissions/getRole', this.$route.params.id).then(() => {
+      this.$store.dispatch('permissions/selectRole', this.$route.params.id).then(() => {
         this.setPermissions()
+        this.$axios.get(`/role/${this.selectedRole.id}/users`).then(response => {
+          this.users = response.data
+        }).catch(error => {
+          console.error(error)
+          this.$q.notify({
+            message: 'Não foi possivel carregar os usuários para esse grupo',
+            color: 'negative'
+          })
+        })
       })
     },
     setPermissions () {

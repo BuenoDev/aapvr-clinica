@@ -26,7 +26,7 @@
               size="sm"
               color="primary"
               icon="visibility"
-              :to="`/permissoes/usuario/${props.row.id}/detalhes`"
+              :to="`/permissoes/permissoes/${props.row.id}`"
               :loading="loading"
             >
             </q-btn>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RoleResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 
@@ -20,7 +22,12 @@ class PermissionController extends Controller
         ]);
 
     }
-
+    public function getUsers(Permission $permission){
+        return response()->json(UserResource::collection($permission->users));
+    }
+    public function getRoles(Permission $permission){
+        return response()->json(RoleResource::collection($permission->roles));
+    }
     /**
      * Store a newly created resource in storage.
      *

@@ -22,3 +22,6 @@ export function selectedUser (state) {
 export function selectedRole (state) {
   return state.roles.selected
 }
+export function selectedPermission (state) {
+  return state.permissions.selected
+}
