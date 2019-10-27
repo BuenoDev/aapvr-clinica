@@ -6,6 +6,9 @@
         <span class="text-h4" style="color:black">
           {{ selectedRole.name }}
         </span>
+        <span class="text-h4 q-ml-lg">
+          <q-icon name="delete_forever" color="negative" @click="removeRole"/>
+        </span>
         <br>
       </q-card-section>
       <q-separator/>
@@ -130,6 +133,34 @@ export default {
         })
       }).finally(() => {
         this.$q.loading.hide()
+      })
+    },
+    removeRole () {
+      this.$q.dialog({
+        title: 'Apagar ' + this.selectedRole.name,
+        message: `Tem certeza que deseja apagar ${this.selectedRole.name}? Esta ação não pode ser desfeita!`,
+        cancel: {
+          label: 'Cancelar'
+        }
+      }).onOk(() => {
+        this.$q.loading.show({
+          message: 'Apagando...'
+        })
+        this.$axios.delete(`/role/${this.selectedRole.id}`).then(response => {
+          this.$q.notify({
+            message: 'Grupo excluido',
+            color: 'positive'
+          })
+          this.$router.push('/permissoes')
+        }).catch(error => {
+          console.error(error)
+          this.$q.notify({
+            message: 'Ouve um erro ao tentar excluir este grupo',
+            color: 'negative'
+          })
+        }).finally(() => {
+          this.$q.loading.hide()
+        })
       })
     }
   }

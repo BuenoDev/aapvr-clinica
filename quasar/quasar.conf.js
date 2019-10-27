@@ -51,7 +51,8 @@ module.exports = function (ctx) {
         'LoadingBar',
         'LocalStorage',
         'SessionStorage',
-        'Loading'
+        'Loading',
+        'Dialog'
       ],
       config: {
         brand: {

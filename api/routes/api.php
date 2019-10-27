@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('/user/{user}/permission','UserController@syncPermissions');
     Route::get('/role','RoleController@index');
     Route::post('/role','RoleController@store');
+    route::delete('/role/{role}','RoleController@destroy');
     Route::put('/role/{role}/permission','RoleController@syncPermissions');
     Route::get('/permission','PermissionController@index');
 });
