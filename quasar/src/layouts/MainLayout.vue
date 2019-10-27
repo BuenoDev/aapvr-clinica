@@ -18,10 +18,10 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="left" side="left" elevated :width="220">
+    <q-drawer show-if-above v-model="left" side="left" elevated :width="220"  v-if="authUser">
       <!-- drawer content -->
         <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 110px">
-            <div class="absolute-bottom bg-transparent" v-if="authUser">
+            <div class="absolute-bottom bg-transparent">
               <!-- <q-avatar size="56px" class="q-mb-sm">
                 <img src="https://cdn.quasar.dev/img/boy-avatar.png">
               </q-avatar> -->
@@ -41,7 +41,7 @@
                 Dashboard
               </q-item-section>
           </q-item>
-          <q-item :active="activeRoute === '/agenda'" to="/agenda" clickable v-ripple>
+          <q-item :active="activeRoute === '/agenda'" to="/agenda" clickable v-ripple v-if="authUser.can('visualizar-agenda')">
               <q-item-section avatar>
                 <q-icon name="calendar_today" />
               </q-item-section>
@@ -49,7 +49,7 @@
                 Agenda
               </q-item-section>
           </q-item>
-          <q-item :active="activeRoute === '/prontuario'" to="/prontuario" clickable v-ripple>
+          <q-item :active="activeRoute === '/prontuario'" to="/prontuario" clickable v-ripple v-if="authUser.can('visualizar-prontuario')">
               <q-item-section avatar>
                 <q-icon name="file_copy" />
               </q-item-section>
@@ -73,7 +73,7 @@
                 Financeiro
               </q-item-section>
           </q-item>
-          <q-item :active="activeRoute === '/permissoes'" to="/permissoes" clickable v-ripple>
+          <q-item :active="activeRoute === '/permissoes'" to="/permissoes" clickable v-ripple v-if="authUser.can('visualizar-permissoes')">
               <q-item-section avatar>
                 <q-icon name="pan_tool" />
               </q-item-section>

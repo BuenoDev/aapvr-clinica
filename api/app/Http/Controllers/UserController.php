@@ -39,8 +39,12 @@ class UserController extends Controller
         return response()->json(new UserResource($user));
     }
 
-    public function sync(User $user, Request $request){                
+    public function syncRoles(User $user, Request $request){
         $user = $user->syncRoles($request->roles);
+        return response()->json(new UserResource($user));
+    }
+    public function syncPermissions(User $user, Request $request){
+        $user = $user->syncPermissions($request->permissions);
         return response()->json(new UserResource($user));
     }
     /**

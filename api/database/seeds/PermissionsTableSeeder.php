@@ -11,25 +11,19 @@ class PermissionsTableSeeder extends Seeder
      * @return void
      */
     public function run()
-    {        
+    {
         /**
          * Registre aqui todas as Permissões do sistema
-         * 
-         *      *Apenas exemplos:
+         *
+         *
          */
         $permissions = [
-            [
-                'name' => 'visualizar-agenda'
-            ],
-            [
-                'name' => 'editar-agenda'
-            ],
-            [
-                'name' => 'visualizar-prontuario'
-            ],
+            'editar-permissoes',
+            'visualizar-permissoes',
+            'visualizar-agenda',
+            'editar-agenda',
+            'visualizar-prontuario',
         ];
-        foreach ($permissions as $permission) {
-            Permission::create($permission);
-        }      
+        foreach ($permissions as $permission) Permission::create(['name' => $permission]);
     }
 }

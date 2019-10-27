@@ -22,18 +22,18 @@
     <!-- TODO: fix template -->
       <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
-            <q-btn-dropdown
+            <q-btn
               split
               size="sm"
               color="primary"
               icon="visibility"
-              :to="`/permissoes/usuario/${props.row.id}/detalhes`"
+              :to="`/permissoes/grupos/${props.row.id}`"
               :loading="loading"
-            >
-            <q-list>
+            />
+            <!-- <q-list>
               <q-item clickable v-close-popup
                 :loading="loading"
-                :to="`/permissoes/usuario/${props.row.id}/editar`">
+                :to="`/permissoes/grupos/${props.row.id}`">
               <q-item-section>
                 <q-item-label>Editar</q-item-label>
               </q-item-section>
@@ -47,7 +47,7 @@
               </q-item-section>
               </q-item>
             </q-list>
-            </q-btn-dropdown>
+            </q-btn-dropdown> -->
           </q-td>
       </template>
     </q-table>

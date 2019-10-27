@@ -30,7 +30,8 @@ Route::group([
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/user', 'UserController@index');
     Route::delete('/user/{user}/role','UserController@revoke');
-    Route::put('/user/{user}/role','UserController@sync');
+    Route::put('/user/{user}/role','UserController@syncRoles');
+    Route::put('/user/{user}/permission','UserController@syncPermissions');
     Route::get('/role','RoleController@index');
     Route::post('/role','RoleController@store');
     Route::get('/permission','PermissionController@index');

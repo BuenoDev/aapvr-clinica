@@ -16,6 +16,9 @@ export function permissions (state) {
 export function permissionsCount (state) {
   return state.permissions.count
 }
-export function selected (state) {
+export function selectedUser (state) {
   return state.users.selected
+}
+export function selectedRole (state) {
+  return state.roles.selected
 }

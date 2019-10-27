@@ -20,7 +20,8 @@ export function updateUser (state, data) {
   })
 }
 export function selectUser (state, data) {
-  state.users.selected = state.users.data.find(user => {
-    return user.id === data
-  })
+  state.users.selected = state.users.data.find(user => user.id === data)
+}
+export function selectRole (state, data) {
+  state.roles.selected = state.roles.data.find(role => role.id === data)
 }

@@ -30,9 +30,11 @@ export function searchPermission (context, params) {
     context.commit('setPermissions', response.data)
   })
 }
-// TODO: trocar por array.find
-export function getUser (context, id) {
+export function selectUser (context, id) {
   context.commit('selectUser', parseInt(id))
+}
+export function getRole (context, id) {
+  context.commit('selectRole', parseInt(id))
 }
 export function revokeRole (context, data) {
   console.log(data)
@@ -47,6 +49,13 @@ export function revokeRole (context, data) {
 export function syncUserRoles (context, data) {
   return Vue.prototype.$axios.put(`/user/${data.user_id}/role`, {
     roles: data.roles
+  }).then(response => {
+    context.commit('updateUser', response.data)
+  })
+}
+export function syncUserPermissions (context, data) {
+  return Vue.prototype.$axios.put(`/user/${data.user_id}/permission`, {
+    permissions: data.permissions
   }).then(response => {
     context.commit('updateUser', response.data)
   })
