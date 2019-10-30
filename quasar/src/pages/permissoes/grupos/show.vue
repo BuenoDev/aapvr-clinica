@@ -31,7 +31,6 @@
                 </q-item-section>
               </q-item>
             </q-list>
-
           </div>
           <div class="offset-md-2 col-md-4 col-sm-12" v-if="users.length !== 0">
             <span class="text-h5" style="color:black">

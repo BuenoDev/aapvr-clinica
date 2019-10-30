@@ -6,6 +6,7 @@ use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -17,7 +18,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('viewAny',Role::class);
         return [
             'roles' => RoleResource::collection(Role::all()),
             'count' => Role::all()->count()
@@ -32,13 +33,15 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create',Role::class);
         return Role::create(['name' => $request->role]);
     }
 
-    public function syncPermissions(Role $role, Request $request){        
+    public function syncPermissions(Role $role, Request $request){
+        $this->authorize('update',Role::class);
         $role = $role->syncPermissions($request->permissions);
 
-        // Reassign all roles to sync user permissions        
+        // Reassign all roles to sync user permissions
         $users = User::role($role)->get();
         foreach($users as $user){
             $user->removeRole($role);
@@ -48,28 +51,8 @@ class RoleController extends Controller
     }
 
     public function getUsers(Role $role){
+        $this->authorize('view',$role);
         return response()->json(UserResource::collection($role->users));
-    }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Role $role)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Role $role)
-    {
-        //
     }
 
     /**
@@ -92,6 +75,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        $this->authorize('delete',$role);
         $role->delete();
         return response()->json();
     }

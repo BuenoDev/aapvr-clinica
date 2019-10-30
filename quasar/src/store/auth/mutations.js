@@ -12,6 +12,7 @@ export function setToken (state, data) {
 }
 export function logout (state) {
   state.token = null
+  state.user = null
   SessionStorage.remove('token')
   LocalStorage.remove('token')
   Vue.prototype.$axios.interceptors.request.use(config => {

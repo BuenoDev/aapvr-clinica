@@ -73,14 +73,20 @@
                 Financeiro
               </q-item-section>
           </q-item>
-          <q-item :active="activeRoute === '/permissoes'" to="/permissoes" clickable v-ripple v-if="authUser.can('visualizar-permissoes')">
-              <q-item-section avatar>
-                <q-icon name="pan_tool" />
-              </q-item-section>
-              <q-item-section>
-                Grupos e permissões
-              </q-item-section>
-          </q-item>
+          <q-expansion-item
+            icon="settings"
+            label="Configurações"
+            v-if="authUser.can('visualizar-permissoes')"
+          >
+            <q-item :active="activeRoute === '/permissoes'" to="/permissoes" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="pan_tool" />
+                </q-item-section>
+                <q-item-section>
+                  Grupos e permissões
+                </q-item-section>
+            </q-item>
+          </q-expansion-item>
         </q-list>
     </q-drawer>
 

@@ -13,11 +13,11 @@
     >
       <template v-slot:top>
         <q-space />
-        <q-input  dense debounce="300" color="primary" v-model="search">
+        <!-- <q-input  dense debounce="300" color="primary" v-model="search">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
-        </q-input>
+        </q-input> -->
       </template>
     <!-- TODO: fix template -->
       <template v-slot:body-cell-actions="props">

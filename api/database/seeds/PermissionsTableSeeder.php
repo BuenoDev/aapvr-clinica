@@ -18,6 +18,7 @@ class PermissionsTableSeeder extends Seeder
          *
          */
         $permissions = [
+            'editar-usuarios',
             'editar-permissoes',
             'visualizar-permissoes',
             'visualizar-agenda',

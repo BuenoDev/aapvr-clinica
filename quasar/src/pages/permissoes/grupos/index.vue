@@ -13,13 +13,12 @@
       <template v-slot:top>
         <q-btn color="white" text-color="black" label="Adicionar Grupo" @click="openDialog"/>
         <q-space />
-        <q-input  dense debounce="300" color="primary" v-model="search">
+        <!-- <q-input  dense debounce="300" color="primary" v-model="search">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
-        </q-input>
+        </q-input> -->
       </template>
-    <!-- TODO: fix template -->
       <template v-slot:body-cell-actions="props">
           <q-td key="actions" :props="props">
             <q-btn
@@ -30,45 +29,27 @@
               :to="`/permissoes/grupos/${props.row.id}`"
               :loading="loading"
             />
-            <!-- <q-list>
-              <q-item clickable v-close-popup
-                :loading="loading"
-                :to="`/permissoes/grupos/${props.row.id}`">
-              <q-item-section>
-                <q-item-label>Editar</q-item-label>
-              </q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup
-                :loading="loading"
-                @click="prompt=true,dialog='delete',credential.id = props.row.id"
-              >
-              <q-item-section>
-                <q-item-label>Remover</q-item-label>
-              </q-item-section>
-              </q-item>
-            </q-list>
-            </q-btn-dropdown> -->
           </q-td>
       </template>
     </q-table>
     <q-dialog v-model="createDialog">
       <q-card>
-        <q-card-section class="row">
+        <!-- <q-card-section class="row">
           <q-btn icon="close" flat round dense v-close-popup class="col-2 offset-10"/>
-        </q-card-section>
-        <q-card-section class="row itens-center">
-          <q-input
-            v-model="roleName"
-            label="Nome"
-          />
-        </q-card-section>
-        <q-card-section>
-          <q-btn
-            class="full-width"
-            label="Adicionar"
-            :loading="loading"
-            @click="createRole"
-          ></q-btn>
+        </q-card-section> -->
+        <q-card-section class="itens-center">
+          <form @submit.prevent="createRole">
+            <q-input
+              v-model="roleName"
+              label="Nome"
+            />
+            <q-btn
+              class="full-width q-mt-lg"
+              label="Adicionar"
+              type="submit"
+              :loading="loading"
+            ></q-btn>
+          </form>
         </q-card-section>
       </q-card>
     </q-dialog>
