@@ -21,9 +21,17 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'home', component: () => import('pages/Index.vue') },
-      { path: 'agenda', component: () => import('pages/agenda/Index') },
-      { path: 'prontuario', component: () => import('pages/prontuario/Index') }
+      { path: 'home', name: 'home', component: () => import('pages/Index.vue') },
+      { path: 'agenda', name: 'agenda', component: () => import('pages/agenda/Index') },
+      { path: 'prontuario', name: 'prontuario', component: () => import('pages/prontuario/Index') },
+      {
+        path: 'permissoes',
+        component: () => import('pages/permissoes/Index')
+      },
+      { path: 'permissoes/usuario/:id', component: () => import('pages/permissoes/usuario/show') },
+      { path: 'permissoes/grupos/:id', component: () => import('pages/permissoes/grupos/show') },
+      { path: 'permissoes/permissoes/:id', component: () => import('pages/permissoes/permissoes/show') }
+
     ]
   }
 ]

@@ -1,4 +1,4 @@
-export function user (state) {
+export function authUser (state) {
   return state.user
 }
 export function token (state) {

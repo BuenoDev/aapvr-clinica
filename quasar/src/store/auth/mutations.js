@@ -12,6 +12,7 @@ export function setToken (state, data) {
 }
 export function logout (state) {
   state.token = null
+  state.user = null
   SessionStorage.remove('token')
   LocalStorage.remove('token')
   Vue.prototype.$axios.interceptors.request.use(config => {
@@ -23,5 +24,18 @@ export function rememberMe (state, data) {
   state.rememberToken = data
 }
 export function setUserData (state, data) {
-  state.user = data
+  let user = data
+  /**
+   * Verifica se usuário possui a permissão indicada
+   */
+  user.can = function (permission) {
+    return this.permissions.includes(permission)
+  }
+  /**
+   * Verifica se o usuário pertence ao grupo indicado
+   */
+  user.hasRole = function (role) {
+    return this.roles.includes(role)
+  }
+  state.user = user
 }

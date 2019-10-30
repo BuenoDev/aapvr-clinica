@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import auth from './auth'
+import permissions from './permissions'
 // import example from './module-example'
 
 Vue.use(Vuex)
@@ -14,7 +15,8 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      auth
+      auth,
+      permissions
     },
 
     // enable strict mode (adds overhead!)
@@ -33,6 +35,10 @@ export default function (/* { ssrContext } */) {
     module.hot.accept(['./auth'], () => {
       const newAuth = require('./auth').default
       Store.hotUpdate({ modules: { auth: newAuth } })
+    })
+    module.hot.accept(['./permissions'], () => {
+      const newPermissions = require('./permissions').default
+      Store.hotUpdate({ modules: { permissions: newPermissions } })
     })
   }
   return Store

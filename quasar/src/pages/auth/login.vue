@@ -1,12 +1,16 @@
 <template>
   <div class="row">
-    <div class='col-md-3 fixed-center'>
+    <div class='col-md-4 fixed-center'>
         <q-card>
-          <q-card-section class="card-header">
-            <span class="text-h5" style="color: white;">
-              Login
-            </span>
-          </q-card-section>
+          <!-- <q-card-section class="card-header"> -->
+          <div class="row justify-center">
+            <div class="title-container">
+              <span class="text-h4" >
+                Login
+              </span>
+            </div>
+          </div>
+          <!-- </q-card-section> -->
           <q-card-section>
             <form @submit="login">
               <!-- email -->
@@ -67,6 +71,9 @@ export default {
       ) {
         this.$q.notify('Verifique seu email e senha e tente novamente')
       } else {
+        this.$q.loading.show({
+          message: 'Autenticando'
+        })
         this.$store.dispatch('auth/rememberMe', this.remember)
         this.$store.dispatch('auth/login', this.form)
           .then(response => {
@@ -83,7 +90,9 @@ export default {
                 break
               default:
                 msg = 'Houve um erro inesperado. Codigo ' + error.request.status
+                break
             }
+            this.$q.loading.hide()
             this.$q.notify({
               message: msg,
               color: 'negative'
@@ -94,13 +103,31 @@ export default {
     }
   },
   beforeCreate () {
+    this.$q.loading.show()
     this.$store.dispatch('auth/loginWithToken').then(resolve => {
       if (resolve) this.$router.push('/home')
+      else this.$q.loading.hide()
+    }).catch(error => {
+      console.error(error)
+      this.$q.loading.hide()
     })
   }
 }
 </script>
 <style lang="scss" >
+.title-container{
+  // background-color: rgb(7,71,166);
+  background-color: #0747a6;
+  position: absolute;
+  padding: 20px 60px 20px 60px;
+  top: -40px;
+}
+.text-h4{
+  color:white;
+}
+form{
+  margin-top: 40px
+}
 .card-header{
   background-color: $primary;
 }
