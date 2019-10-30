@@ -86,6 +86,14 @@
                   Grupos e permissões
                 </q-item-section>
             </q-item>
+            <q-item :active="activeRoute === '/prestador/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="person" />
+                </q-item-section>
+                <q-item-section>
+                  Prestador
+                </q-item-section>
+            </q-item>
           </q-expansion-item>
         </q-list>
     </q-drawer>
