@@ -18,7 +18,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="left" side="left" elevated :width="220"  v-if="authUser">
+    <q-drawer show-if-above v-model="left" side="left" elevated :width="220"  v-if="authUser" >
       <!-- drawer content -->
         <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 110px">
             <div class="absolute-bottom bg-transparent">
@@ -86,12 +86,21 @@
                   Grupos e permissões
                 </q-item-section>
             </q-item>
+          </q-expansion-item>
+          <q-expansion-item icon="supervised_user_circle" label="Cadastros" v-if="authUser.hasRole('admin')">
             <q-item :active="activeRoute === '/prestador/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
-                <q-item-section avatar>
-                  <q-icon name="person" />
-                </q-item-section>
                 <q-item-section>
                   Prestador
+                </q-item-section>
+            </q-item>
+            <q-item :active="activeRoute === '/prestador/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section>
+                  Paciente
+                </q-item-section>
+            </q-item>
+            <q-item :active="activeRoute === '/prestador/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section>
+                  Convenio
                 </q-item-section>
             </q-item>
           </q-expansion-item>

@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <q-breadcrumbs class="q-pl-md q-mb-xl col-md-4">
+    <q-breadcrumbs class="q-pl-md q-mb-md col-md-4">
       <template v-for="(conf, index) of config" >
         <q-breadcrumbs-el :icon="conf.icon" :to="conf.route" :label="conf.label" :key="index"/>
       </template>
