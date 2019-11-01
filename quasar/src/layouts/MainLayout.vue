@@ -93,12 +93,12 @@
                   Prestador
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/prestador/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/paciente/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section>
                   Paciente
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/prestador/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/convenio/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section>
                   Convenio
                 </q-item-section>

@@ -228,7 +228,7 @@ export default {
       return phone.tipo === 'Celular' ? '(##) #####-####' : '(##) ####-####'
     },
     submit () {
-      this.$axios.post('/prestador', this.form.data).then(response => {
+      this.$axios.post('/prestador', this.form).then(response => {
         console.log(response)
       }).catch(error => {
         console.error(error)

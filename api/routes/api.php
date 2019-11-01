@@ -28,6 +28,9 @@ Route::group([
     Route::post('me', 'AuthController@me');
 });
 Route::group(['middleware' => ['auth:api']], function () {
+    /**
+     * Roles
+     */
     Route::get('/user', 'UserController@index');
     Route::delete('/user/{user}/role','UserController@revoke');
     Route::put('/user/{user}/role','UserController@syncRoles');
@@ -40,4 +43,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/permission','PermissionController@index');
     Route::get('/permission/{permission}/users', 'PermissionController@getUsers');
     Route::get('/permission/{permission}/roles', 'PermissionController@getRoles');
+    /**
+     * Cruds
+     */
+    Route::resource('prestador', 'PrestadorController');
 });
