@@ -88,7 +88,7 @@
             </q-item>
           </q-expansion-item>
           <q-expansion-item icon="supervised_user_circle" label="Cadastros" v-if="authUser.hasRole('admin')">
-            <q-item :active="activeRoute === '/prestador/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/prestador'" to="/prestador" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section>
                   Prestador
                 </q-item-section>

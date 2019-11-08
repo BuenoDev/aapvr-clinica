@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PrestadorRequest;
 use App\Prestador;
 use App\Repositories\PrestadorRepository;
 use Illuminate\Http\Request;
 
 class PrestadorController extends Controller
 {
-    public function __construct(PrestadorRepository $repo)
-    {
-        $this->repo = $repo;
-    }
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +16,7 @@ class PrestadorController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Prestador::with('enderecos','telefones')->get());
     }
 
     /**
@@ -28,37 +25,10 @@ class PrestadorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PrestadorRequest $request, PrestadorRepository $prestadorRepository)
     {
-        $this->repo->create($this->formatRequest($request));
+        $prestadorRepository->create($request->formated());
         return response()->json();
-    }
-
-    private function formatRequest($request)
-    {
-        $prestador = [
-            'nome' => $request->nome,
-            'nrConselho' => $request->nrConselho,
-            'rg' => $request->rg,
-            'cpf' => $request->cpf,
-        ];
-        $enderecos = collect($request->enderecos)->map(function($endereco){
-            return [
-                'bairro' => $endereco['bairro'],
-                'cep' => $endereco['cep'],
-                'cidade' => $endereco['cidade'],
-                'complemento' => $endereco['complemento'],
-                'logradouro' => $endereco['logradouro'],
-                'tipo' => $endereco['tipo'],
-                'uf' => $endereco['uf'],
-            ];
-        })->toArray();
-        $telefones = $request->telefones;
-        return compact([
-            'prestador',
-            'enderecos',
-            'telefones'
-        ]);
     }
     /**
      * Display the specified resource.
@@ -78,9 +48,11 @@ class PrestadorController extends Controller
      * @param  \App\Prestador  $prestador
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Prestador $prestador)
+    public function update(PrestadorRequest $request, Prestador $prestador, PrestadorRepository $repo)
     {
-        //
+        $repo->setModel($prestador);
+        $repo->update($request->formated());
+        return response()->json();
     }
 
     /**
@@ -91,6 +63,6 @@ class PrestadorController extends Controller
      */
     public function destroy(Prestador $prestador)
     {
-        //
+        $prestador->delete();        
     }
 }

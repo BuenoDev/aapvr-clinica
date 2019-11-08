@@ -34,8 +34,9 @@ const routes = [
       /**
        * Cadastros
        */
-      { path: 'prestador/cadastro', component: () => import('pages/cadastro/prestador/create') }
-
+      { path: 'prestador', component: () => import('pages/cadastro/prestador/index') },
+      { path: 'prestador/cadastro', component: () => import('pages/cadastro/prestador/create') },
+      { path: 'prestador/visualizar', component: () => import('pages/cadastro/prestador/show') }
     ]
   }
 ]
