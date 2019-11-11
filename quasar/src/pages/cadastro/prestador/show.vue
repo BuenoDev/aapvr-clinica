@@ -201,11 +201,19 @@ export default {
       if (cep.length === 8) {
         endereco.cepLoading = true
         axios.get(`https://viacep.com.br/ws/${cep}/json`).then(response => {
-          let data = response.data
-          endereco.logradouro = data.logradouro
-          endereco.bairro = data.bairro
-          endereco.cidade = data.localidade
-          endereco.uf = data.uf
+          if (response.data.erro) {
+            this.$q.notify({
+              message: 'Cep não encontrado.',
+              color: 'negative'
+            })
+          } else {
+            let data = response.data
+            endereco.logradouro = data.logradouro
+            endereco.bairro = data.bairro
+            endereco.cidade = data.localidade
+            endereco.uf = data.uf
+            endereco.cepLoading = false
+          }
         }).catch(error => {
           console.error(error)
           let message = 'Não foi possivel encontrar o CEP'
@@ -213,6 +221,7 @@ export default {
             message: message,
             color: 'negative'
           })
+          endereco.cepLoading = false
         }).finally(() => {
           endereco.cepLoading = false
         })
