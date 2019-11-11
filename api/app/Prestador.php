@@ -21,4 +21,8 @@ class Prestador extends Model
     public function enderecos(){
         return $this->morphMany('App\Endereco','dono');
     }
+    public function unidades()
+    {
+        return $this->belongsToMany('App\Unidade', 'alocacao', 'prestador_id', 'unidade_id');
+    }
 }
