@@ -34,9 +34,19 @@ const routes = [
       /**
        * Cadastros
        */
+
+      /**
+       * Prestador
+       */
       { path: 'prestador', component: () => import('pages/cadastro/prestador/index') },
       { path: 'prestador/cadastro', component: () => import('pages/cadastro/prestador/create') },
-      { path: 'prestador/visualizar', component: () => import('pages/cadastro/prestador/show') }
+      { path: 'prestador/visualizar', component: () => import('pages/cadastro/prestador/show') },
+      /**
+       * Unidade
+       */
+      { path: 'unidade', component: () => import('pages/cadastro/unidade/index') },
+      { path: 'unidade/cadastro', component: () => import('pages/cadastro/unidade/create') },
+      { path: 'unidade/visualizar', component: () => import('pages/cadastro/unidade/show') }
     ]
   }
 ]

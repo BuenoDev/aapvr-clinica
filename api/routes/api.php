@@ -47,4 +47,5 @@ Route::group(['middleware' => ['auth:api']], function () {
      * Cruds
      */
     Route::resource('prestador', 'PrestadorController');
+    Route::resource('unidade', 'UnidadeController');
 });

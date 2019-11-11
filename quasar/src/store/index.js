@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import auth from './auth'
 import permissions from './permissions'
 import prestador from './prestador'
-// import example from './module-example'
+import unidade from './unidade'
 
 Vue.use(Vuex)
 
@@ -18,7 +18,8 @@ export default function (/* { ssrContext } */) {
     modules: {
       auth,
       permissions,
-      prestador
+      prestador,
+      unidade
     },
 
     // enable strict mode (adds overhead!)
@@ -45,6 +46,10 @@ export default function (/* { ssrContext } */) {
     module.hot.accept(['./prestador'], () => {
       const newPrestador = require('./prestador').default
       Store.hotUpdate({ modules: { prestador: newPrestador } })
+    })
+    module.hot.accept(['./unidade'], () => {
+      const newObj = require('./unidade').default
+      Store.hotUpdate({ modules: { unidade: newObj } })
     })
   }
   return Store
