@@ -93,6 +93,11 @@
                   Prestador
                 </q-item-section>
             </q-item>
+            <q-item :active="activeRoute === '/especialidade'" to="/especialidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section>
+                  Especialidade
+                </q-item-section>
+            </q-item>
             <q-item :active="activeRoute === '/unidade/cadastro'" to="/unidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section>
                   Unidade

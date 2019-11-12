@@ -46,7 +46,13 @@ const routes = [
        */
       { path: 'unidade', component: () => import('pages/cadastro/unidade/index') },
       { path: 'unidade/cadastro', component: () => import('pages/cadastro/unidade/create') },
-      { path: 'unidade/visualizar', component: () => import('pages/cadastro/unidade/show') }
+      { path: 'unidade/visualizar', component: () => import('pages/cadastro/unidade/show') },
+      /**
+       * Especialidade
+       */
+      { path: 'especialidade', component: () => import('pages/cadastro/especialidade/index') },
+      { path: 'especialidade/cadastro', component: () => import('pages/cadastro/especialidade/create') },
+      { path: 'especialidade/visualizar', component: () => import('pages/cadastro/especialidade/show') }
     ]
   }
 ]
