@@ -9,17 +9,13 @@
             </span>
           </q-card-section>
           <q-card-section>
-            <q-table  :data="unidades" :columns="columns" :loading="loading"
+            <q-table  :data="tableData" :columns="columns" :loading="loading"
               rows-per-page-label="Registros por página:" loading-label="Carregando..."
               row-key="name">
               <template v-slot:top>
                 <q-btn color="white" text-color="black" label="Adicionar Unidade" to="unidade/cadastro" />
                 <q-space />
-                <!-- <q-input  dense debounce="300" color="primary" v-model="search">
-                <template v-slot:append>
-                  <q-icon name="search" />
-                </template>
-              </q-input> -->
+                <fuse-input :data="unidades" :keys="['nome']" @result="setResult" />
               </template>
               <template v-slot:body-cell-actions="props">
                 <q-td key="actions" :props="props">
@@ -35,11 +31,13 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import fuseInput from '../../../components/fuseInput'
 import defaultPageHeader from '../../../components/defaultPageHeader'
 
 export default {
   components: {
-    defaultPageHeader
+    defaultPageHeader,
+    fuseInput
   },
   computed: {
     ...mapGetters('unidade', [
@@ -50,7 +48,10 @@ export default {
     ...mapActions('unidade', [
       'refresh',
       'select'
-    ])
+    ]),
+    setResult (result) {
+      this.tableData = result
+    }
   },
   data () {
     return {
@@ -80,13 +81,16 @@ export default {
           align: 'center'
         }
       ],
+      tableData: [],
       loading: false
     }
   },
   mounted () {
     this.loading = true
+    this.tableData = this.unidades
     this.refresh().then(() => {
       this.loading = false
+      this.tableData = this.unidades
     })
   }
 }

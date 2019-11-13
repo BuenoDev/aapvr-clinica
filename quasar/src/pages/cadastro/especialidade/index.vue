@@ -15,7 +15,7 @@
               <template v-slot:top>
                 <q-btn color="white" text-color="black" label="Adicionar Especialidade" to="especialidade/cadastro" />
                 <q-space />
-                <fuse-input :data="especialidades" :keys="['nome','codigo']" @result="setEspecialidade" />
+                <fuse-input :data="especialidades" :keys="['nome','codigo']" @result="setResult" />
               </template>
               <template v-slot:body-cell-actions="props">
                 <q-td key="actions" :props="props">
@@ -49,7 +49,7 @@ export default {
       'refresh',
       'select'
     ]),
-    setEspecialidade (result) {
+    setResult (result) {
       this.tableData = result
     }
   },
