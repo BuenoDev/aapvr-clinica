@@ -1,9 +1,8 @@
 <template>
   <div class="q-mt-lg">
-    <default-page-header :config="headerConfig" backTo="home" />
+    <default-page-header :config="headerConfig" backTo="/home" />
     <div class="row justify-center q-mt-lg">
       <div class="col-lg-6 col-md-8 col-sm-12">
-        <q-card>
           <q-card-section>
             <span class="text-h5">
               Prestadores
@@ -30,7 +29,6 @@
               </template>
             </q-table>
           </q-card-section>
-        </q-card>
       </div>
     </div>
   </div>

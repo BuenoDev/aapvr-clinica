@@ -3,24 +3,19 @@
     <default-page-header :config="headerConfig" backTo="home" />
     <div class="row justify-center q-mt-lg">
       <div class="col-lg-6 col-md-8 col-sm-12">
-        <q-card>
           <q-card-section>
             <span class="text-h5">
               Especialidades
             </span>
           </q-card-section>
           <q-card-section>
-            <q-table  :data="especialidades" :columns="columns" :loading="loading"
+            <q-table  :data="tableData" :columns="columns" :loading="loading"
               rows-per-page-label="Registros por página:" loading-label="Carregando..."
               row-key="name">
               <template v-slot:top>
                 <q-btn color="white" text-color="black" label="Adicionar Especialidade" to="especialidade/cadastro" />
                 <q-space />
-                <!-- <q-input  dense debounce="300" color="primary" v-model="search">
-                <template v-slot:append>
-                  <q-icon name="search" />
-                </template>
-              </q-input> -->
+                <fuse-input :data="especialidades" :keys="['nome','codigo']" @result="setEspecialidade" />
               </template>
               <template v-slot:body-cell-actions="props">
                 <q-td key="actions" :props="props">
@@ -30,18 +25,19 @@
               </template>
             </q-table>
           </q-card-section>
-        </q-card>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import fuseInput from '../../../components/fuseInput'
 import defaultPageHeader from '../../../components/defaultPageHeader'
 
 export default {
   components: {
-    defaultPageHeader
+    defaultPageHeader,
+    fuseInput
   },
   computed: {
     ...mapGetters('especialidade', [
@@ -52,7 +48,10 @@ export default {
     ...mapActions('especialidade', [
       'refresh',
       'select'
-    ])
+    ]),
+    setEspecialidade (result) {
+      this.tableData = result
+    }
   },
   data () {
     return {
@@ -88,13 +87,16 @@ export default {
           align: 'center'
         }
       ],
+      tableData: [],
       loading: false
     }
   },
   mounted () {
     this.loading = true
+    this.tableData = this.especialidades
     this.refresh().then(() => {
       this.loading = false
+      this.tableData = this.especialidades
     })
   }
 }
