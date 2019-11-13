@@ -6,6 +6,7 @@ import permissions from './permissions'
 import prestador from './prestador'
 import unidade from './unidade'
 import especialidade from './especialidade'
+import tipoPrestador from './tipo-prestador'
 
 Vue.use(Vuex)
 
@@ -21,7 +22,8 @@ export default function (/* { ssrContext } */) {
       permissions,
       prestador,
       unidade,
-      especialidade
+      especialidade,
+      tipoPrestador
     },
 
     // enable strict mode (adds overhead!)
@@ -56,6 +58,10 @@ export default function (/* { ssrContext } */) {
     module.hot.accept(['./especialidade'], () => {
       const newObj = require('./especialidade').default
       Store.hotUpdate({ modules: { especialidade: newObj } })
+    })
+    module.hot.accept(['./tipo-prestador'], () => {
+      const newObj = require('./tipo-prestador').default
+      Store.hotUpdate({ modules: { tipoPrestador: newObj } })
     })
   }
   return Store

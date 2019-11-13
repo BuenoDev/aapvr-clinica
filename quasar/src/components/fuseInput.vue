@@ -30,7 +30,6 @@ export default {
   },
   watch: {
     search () {
-      console.log(this.search)
       if (this.search !== null) this.$emit('result', this.fuse.search(this.search))
       else this.$emit('result', this.data)
     }

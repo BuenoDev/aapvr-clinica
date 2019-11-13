@@ -93,17 +93,22 @@
                   Prestador
                 </q-item-section>
             </q-item>
+            <q-item :active="activeRoute === '/tipo-prestador'" to="/tipo-prestador" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section>
+                  Tipo de Prestador
+                </q-item-section>
+            </q-item>
             <q-item :active="activeRoute === '/especialidade'" to="/especialidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section>
                   Especialidade
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/unidade/cadastro'" to="/unidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/unidade'" to="/unidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section>
                   Unidade
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/paciente/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <!-- <q-item :active="activeRoute === '/paciente/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section>
                   Paciente
                 </q-item-section>
@@ -112,7 +117,7 @@
                 <q-item-section>
                   Convenio
                 </q-item-section>
-            </q-item>
+            </q-item> -->
           </q-expansion-item>
         </q-list>
     </q-drawer>
