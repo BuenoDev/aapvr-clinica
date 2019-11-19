@@ -14,7 +14,7 @@ class AlterPrestadorTable extends Migration
     public function up()
     {
         Schema::table('prestadores', function (Blueprint $table) {
-            $table->removeColumn('nrconselho');
+            $table->dropColumn('nrconselho');
             $table->bigInteger('tipo_prestador_id');
         });
     }
@@ -27,7 +27,7 @@ class AlterPrestadorTable extends Migration
     public function down()
     {
         Schema::table('prestadores', function (Blueprint $table) {
-            $table->removeColumn('tipo_prestador_id');
+            $table->dropColumn('tipo_prestador_id');
             $table->string('nrconselho');
         });
     }

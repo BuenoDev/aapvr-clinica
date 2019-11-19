@@ -27,6 +27,6 @@ class CreateTipoPrestadorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipo_prestadors');
+        Schema::dropIfExists('tipo_prestador');
     }
 }

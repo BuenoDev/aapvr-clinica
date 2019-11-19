@@ -8,3 +8,9 @@ export function selected (state) {
   obj.enderecos = obj.enderecos.map(el => Object.assign({}, el))
   return obj
 }
+export function tipos (state) {
+  return state.tipos
+}
+export function especialidades (state) {
+  return state.especialidades
+}

@@ -16,9 +16,15 @@
               <q-card-section>
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
                   <q-input class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="nome" :rules="rules.nome" lazy-rules />
-                  <q-input class="q-mb-sm" square dense outlined ref="nrConselho" v-model="form.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
                   <q-input class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="CPF" :mask="mask.cpf" :rules="rules.cpf" lazy-rules />
                   <q-input class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="RG" :mask="mask.rg" :rules="rules.rg" lazy-rules />
+                  <q-select square dense outlined v-model="form.tipo" :options="tipos" label="Tipo" class="q-mb-lg"/>
+                  <q-separator class="q-mb-lg"/>
+                  <span class="text-h6" style="color:black">
+                    Medicos
+                  </span>
+                  <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
+                  <q-select square dense outlined v-model="form.especialidade" :options="especialidades" label="Especialidade" class="q-mb-lg"/>
                   <!-- telefones -->
                   <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addPhone"/>
                   <span class="text-h6" style="color:black">
@@ -82,6 +88,7 @@
 <script>
 import axios from 'axios'
 import defaultPageHeader from '../../../components/defaultPageHeader'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -177,6 +184,12 @@ export default {
         'Comercial'
       ]
     }
+  },
+  computed: {
+    ...mapGetters('prestador', [
+      'tipos',
+      'especialidades'
+    ])
   },
   methods: {
     fetchCEP (endereco) {
