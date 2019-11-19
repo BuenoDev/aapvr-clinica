@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository{
     public function __construct(User $model)
@@ -10,6 +11,18 @@ class UserRepository extends BaseRepository{
         $this->model = $model;
     }
 
+    public function create($params){
+        $user =  User::create([
+            'name' => $params['name'],
+            'email' => $params['email'],
+            'password' => Hash::make($params['password']),
+        ]);
+        return $user;
+    }
+    public function createDefault($params){
+        $params['password'] = '123456';
+        return $this->create($params);
+    }
     public function paginateAll($rows){
         return $this->model->with('roles','permissions')->paginate($rows);
     }

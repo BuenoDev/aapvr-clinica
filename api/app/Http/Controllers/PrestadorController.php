@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PrestadorRequest;
 use App\Prestador;
 use App\Repositories\PrestadorRepository;
-use Illuminate\Http\Request;
+use App\Repositories\UserRepository;
 
 class PrestadorController extends Controller
 {
@@ -25,9 +25,17 @@ class PrestadorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PrestadorRequest $request, PrestadorRepository $prestadorRepository)
+    public function store(PrestadorRequest $request, PrestadorRepository $prestadorRepository, UserRepository $userRepository)
     {
-        $prestadorRepository->create($request->formated());
+        $params = $request->formated();
+        if(!$params['assign']){
+            $user = $userRepository->createDefault($params['user']);
+            $user_id = $user->id;
+        } else {
+            $user_id = $params['assign'];
+        }
+        $prestadorRepository->create($params,$user_id);
+
         return response()->json();
     }
     /**
@@ -63,6 +71,6 @@ class PrestadorController extends Controller
      */
     public function destroy(Prestador $prestador)
     {
-        $prestador->delete();        
+        $prestador->delete();
     }
 }

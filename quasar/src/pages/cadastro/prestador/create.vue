@@ -14,17 +14,25 @@
                 <q-separator/>
               </q-card-section>
               <q-card-section>
-                <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
+                <q-btn class="q-mr-md" color="positive" text-color="white" label="Cadastrar novo usuário" @click="newUserClick"/>
+                <q-btn color="primary" text-color="white" label="Atribuir a usuário existente" @click="assignUserClick"/>
+              </q-card-section>
+              <q-card-section>
+                <q-form ref="form" @submit.prevent = 'submit' autofocus greedy :disabled="disableForm">
                   <q-input class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="nome" :rules="rules.nome" lazy-rules />
+                  <q-input class="q-mb-sm" type="email" square dense outlined ref="email" v-model="form.email" label="Email"  :rules="rules.email" lazy-rules v-if="form.options.newUser"/>
                   <q-input class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="CPF" :mask="mask.cpf" :rules="rules.cpf" lazy-rules />
                   <q-input class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="RG" :mask="mask.rg" :rules="rules.rg" lazy-rules />
-                  <q-select square dense outlined v-model="form.tipo" :options="tipos" label="Tipo" class="q-mb-lg"/>
+                  <q-select square dense outlined v-model="form.role" :options="rolesOptions" label="Cargo" class="q-mb-lg"/>
                   <q-separator class="q-mb-lg"/>
-                  <span class="text-h6" style="color:black">
-                    Medicos
-                  </span>
-                  <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
-                  <q-select square dense outlined v-model="form.especialidade" :options="especialidades" label="Especialidade" class="q-mb-lg"/>
+                  <div v-if="form.role !== null && form.role.label === 'medico'">
+                    <span class="text-h6" style="color:black">
+                      Medicos
+                    </span>
+                    <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
+                    <q-select square dense outlined v-model="form.especialidade" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" />
+                  </div>
+                  <!-- <q-select square dense outlined v-model="form.especialidade" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" use-input @filter="filterEspecialidade"/> -->
                   <!-- telefones -->
                   <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addPhone"/>
                   <span class="text-h6" style="color:black">
@@ -87,12 +95,41 @@
 
 <script>
 import axios from 'axios'
+// import Fuse from 'fuse.js'
 import defaultPageHeader from '../../../components/defaultPageHeader'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
     defaultPageHeader
+  },
+  computed: {
+    ...mapGetters('prestador', [
+      'especialidades'
+    ]),
+    ...mapGetters('permissions', [
+      'roles'
+    ]),
+    disableForm () {
+      return !(this.form.options.newUser || this.form.options.userId !== null)
+      // return !this.form.options.newUser
+    },
+    especialidadesOptions () {
+      return this.especialidades.map(obj => {
+        return {
+          value: obj.id,
+          label: obj.nome
+        }
+      })
+    },
+    rolesOptions () {
+      return this.roles.map(obj => {
+        return {
+          value: obj.id,
+          label: obj.name
+        }
+      })
+    }
   },
   data () {
     return {
@@ -114,10 +151,15 @@ export default {
         }
       ],
       form: {
+        options: {
+          newUser: false,
+          userId: null
+        },
         nome: null,
         nrConselho: null,
         cpf: null,
         rg: null,
+        role: null,
         telefones: [
           {
             numero: null,
@@ -141,7 +183,10 @@ export default {
       rules: {
         nome: [
           val => val !== null || 'Campo Obrigatório',
-          val => val.length > 5 || 'O nome deve ter ao menos 5 caracteres'
+          val => val.length >= 5 || 'O nome deve ter ao menos 5 caracteres'
+        ],
+        email: [
+          val => true || 'message'
         ],
         nrConselho: [
           val => true || 'O numero do conselho deve ter ao menos 5 caracteres'
@@ -182,16 +227,23 @@ export default {
       addressOptions: [
         'Residencial',
         'Comercial'
-      ]
+      ],
+      filteredEspecialidades: null
     }
   },
-  computed: {
-    ...mapGetters('prestador', [
-      'tipos',
-      'especialidades'
-    ])
+  watch: {
+    especialidadesOptions () {
+      this.filteredEspecialidades = this.especialidadesOptions
+    }
   },
   methods: {
+    newUserClick () {
+      console.log('newUserClick')
+      this.form.options.newUser = true
+    },
+    assignUserClick () {
+      console.log('assign user')
+    },
     fetchCEP (endereco) {
       //  this.$axios({ url: `/ws/${this.form.cep}/json`, baseURL: 'https://viacep.com.br/' }).then(response => {
       let cep = endereco.cep.replace('-', '')
@@ -240,6 +292,19 @@ export default {
     phoneMask (phone) {
       return phone.tipo === 'Celular' ? '(##) #####-####' : '(##) ####-####'
     },
+    filterEspecialidade (param) {
+      // let fuse = new Fuse(this.especialidadesOptions, {
+      //   shouldSort: true,
+      //   threshold: 0.6,
+      //   location: 0,
+      //   distance: 100,
+      //   maxPatternLength: 32,
+      //   minMatchCharLength: 1,
+      //   keys: 'label'
+      // })
+      console.log('filter')
+      // this.filteredEspecialidades = fuse.search(param)
+    },
     submit () {
       this.$refs.form.validate().then(result => {
         console.log({ then: result })
@@ -266,6 +331,9 @@ export default {
         })
       })
     }
+  },
+  mounted () {
+    if (this.roles.length === 0) this.$store.dispatch('permissions/searchRole')
   }
 }
 

@@ -93,11 +93,6 @@
                   Prestador
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/tipo-prestador'" to="/tipo-prestador" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
-                <q-item-section>
-                  Tipo de Prestador
-                </q-item-section>
-            </q-item>
             <q-item :active="activeRoute === '/especialidade'" to="/especialidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section>
                   Especialidade

@@ -45,7 +45,7 @@ class User extends Authenticatable implements JWTSubject
      * JWT MEthods
      *
      */
-    
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -64,5 +64,14 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Relationships
+     */
+
+    public function prestador()
+    {
+        return $this->hasOne('App\Prestador', 'user_id');
     }
 }

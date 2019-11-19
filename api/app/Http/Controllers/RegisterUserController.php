@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class RegisterUserController extends Controller
 {
@@ -25,14 +25,13 @@ class RegisterUserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, UserRepository $repo)
     {
-        User::create([
+        $repo->create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
         ]);
-        return ;
     }
 
     /**

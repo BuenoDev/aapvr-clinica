@@ -52,13 +52,7 @@ const routes = [
        */
       { path: 'especialidade', component: () => import('pages/cadastro/especialidade/index') },
       { path: 'especialidade/cadastro', component: () => import('pages/cadastro/especialidade/create') },
-      { path: 'especialidade/visualizar', component: () => import('pages/cadastro/especialidade/show') },
-      /**
-       * Tipo Prestador
-       */
-      { path: 'tipo-prestador', component: () => import('pages/cadastro/tipo-prestador/index') },
-      { path: 'tipo-prestador/cadastro', component: () => import('pages/cadastro/tipo-prestador/create') },
-      { path: 'tipo-prestador/visualizar', component: () => import('pages/cadastro/tipo-prestador/show') }
+      { path: 'especialidade/visualizar', component: () => import('pages/cadastro/especialidade/show') }
     ]
   }
 ]

@@ -49,5 +49,4 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('prestador', 'PrestadorController');
     Route::resource('unidade', 'UnidadeController');
     Route::resource('especialidade','EspecialidadeController');
-    Route::resource('tipo-prestador', 'TipoPrestadorController');
 });

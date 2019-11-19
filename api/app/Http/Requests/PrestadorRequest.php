@@ -36,8 +36,14 @@ class PrestadorRequest extends FormRequest
     public function formated(){
         $data = parent::all();
 
+        $assign = $data['options']['userId'] != null ? $data['options']['userId'] : false;
+        $user = [
+            'name' => $data['nome'],
+            'email' => $data['email'],
+        ];
         $prestador = [
             'nome' => $data['nome'],
+            'role' => $data['role']['label'],
             'nrConselho' => $data['nrConselho'],
             'rg' => $data['rg'],
             'cpf' => $data['cpf'],
@@ -53,7 +59,7 @@ class PrestadorRequest extends FormRequest
                 'uf' => $endereco['uf'],
             ];
             if(isset($endereco['id'])) $array['id'] = $endereco['id'];
-            
+
             return $array;
         })->toArray();
         $telefones = collect($data['telefones'])->map(function($telefone){
@@ -62,10 +68,12 @@ class PrestadorRequest extends FormRequest
                 'tipo' => $telefone['tipo'],
             ];
             if(isset($telefone['id'])) $array['id'] = $telefone['id'];
-            
+
             return $array;
         })->toArray();
         return compact([
+            'assign',
+            'user',
             'prestador',
             'enderecos',
             'telefones'
