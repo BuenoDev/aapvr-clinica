@@ -29,10 +29,9 @@
                     <span class="text-h6" style="color:black">
                       Medicos
                     </span>
-                    <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
-                    <q-select square dense outlined v-model="form.especialidade" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" />
+                    <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.medico.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
+                    <q-select square dense outlined input-debounce="0" v-model="form.medico.especialidades" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" multiple use-input @filter="filterEspecialidade"/>
                   </div>
-                  <!-- <q-select square dense outlined v-model="form.especialidade" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" use-input @filter="filterEspecialidade"/> -->
                   <!-- telefones -->
                   <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addPhone"/>
                   <span class="text-h6" style="color:black">
@@ -44,7 +43,15 @@
                       <q-input class="q-mb-sm" square dense outlined :ref="`telefone${phoneIndex}`" :mask="phoneMask(telefone)" :rules="rules.telefone" v-model="telefone.numero" label="Telefone"/>
                     </div>
                     <div class="col-md-4">
-                      <q-select square dense outlined v-model="telefone.tipo" :options="phoneOptions" label="Tipo" class="q-ml-sm"/>
+                      <q-select square dense outlined v-model="telefone.tipo" :options="phoneOptions" label="Tipo" class="q-ml-sm">
+                        <template v-slot:no-option>
+                          <q-item>
+                            <q-item-section class="text-grey">
+                              Sem Resultados
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </q-select>
                     </div>
                     <div class="col-md-2">
                        <q-btn color="white" text-color="black"  label="Remover" class="q-ml-md" :disabled="form.telefones.length === 1" @click="removePhone(phoneIndex)"/>
@@ -95,7 +102,7 @@
 
 <script>
 import axios from 'axios'
-// import Fuse from 'fuse.js'
+import Fuse from 'fuse.js'
 import defaultPageHeader from '../../../components/defaultPageHeader'
 import { mapGetters } from 'vuex'
 
@@ -104,7 +111,7 @@ export default {
     defaultPageHeader
   },
   computed: {
-    ...mapGetters('prestador', [
+    ...mapGetters('especialidade', [
       'especialidades'
     ]),
     ...mapGetters('permissions', [
@@ -114,7 +121,7 @@ export default {
       return !(this.form.options.newUser || this.form.options.userId !== null)
       // return !this.form.options.newUser
     },
-    especialidadesOptions () {
+    especialidadesInitialOptions () {
       return this.especialidades.map(obj => {
         return {
           value: obj.id,
@@ -155,8 +162,11 @@ export default {
           newUser: false,
           userId: null
         },
+        medico: {
+          nrConselho: null,
+          especialidades: []
+        },
         nome: null,
-        nrConselho: null,
         cpf: null,
         rg: null,
         role: null,
@@ -228,12 +238,7 @@ export default {
         'Residencial',
         'Comercial'
       ],
-      filteredEspecialidades: null
-    }
-  },
-  watch: {
-    especialidadesOptions () {
-      this.filteredEspecialidades = this.especialidadesOptions
+      especialidadesOptions: null
     }
   },
   methods: {
@@ -292,18 +297,26 @@ export default {
     phoneMask (phone) {
       return phone.tipo === 'Celular' ? '(##) #####-####' : '(##) ####-####'
     },
-    filterEspecialidade (param) {
-      // let fuse = new Fuse(this.especialidadesOptions, {
-      //   shouldSort: true,
-      //   threshold: 0.6,
-      //   location: 0,
-      //   distance: 100,
-      //   maxPatternLength: 32,
-      //   minMatchCharLength: 1,
-      //   keys: 'label'
-      // })
-      console.log('filter')
-      // this.filteredEspecialidades = fuse.search(param)
+    filterEspecialidade (param, update) {
+      if (param === '') {
+        update(() => {
+          this.especialidadesOptions = this.especialidadesInitialOptions
+        })
+      } else {
+        let fuse = new Fuse(this.especialidadesOptions, {
+          shouldSort: true,
+          threshold: 0.6,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: ['label']
+        })
+        let result = fuse.search(param)
+        update(() => {
+          this.especialidadesOptions = result
+        })
+      }
     },
     submit () {
       this.$refs.form.validate().then(result => {
@@ -333,7 +346,25 @@ export default {
     }
   },
   mounted () {
-    if (this.roles.length === 0) this.$store.dispatch('permissions/searchRole')
+    if (this.roles.length === 0 || this.especialidades.length === 0) {
+      this.$q.loading.show({
+        message: 'Carregando cargos'
+      })
+      this.$store.dispatch('permissions/searchRole').then(() => {
+        if (this.especialidades.length === 0) {
+          this.$q.loading.show({
+            message: 'Carregando especialidades'
+          })
+          this.$store.dispatch('especialidade/refresh').then(() => {
+            this.especialidadesOptions = this.especialidadesInitialOptions
+            this.$q.loading.hide()
+          })
+        } else {
+          this.especialidadesOptions = this.especialidadesInitialOptions
+          this.$q.loading.hide()
+        }
+      })
+    }
   }
 }
 

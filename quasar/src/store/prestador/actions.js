@@ -1,9 +1,6 @@
 import Vue from 'vue'
 
 export function refresh (context) {
-  Vue.prototype.$axios.get('especialidade').then(response => {
-    context.commit('setEspecialidade', response.data)
-  })
   return Vue.prototype.$axios.get('prestador').then(response => {
     context.commit('refresh', response.data)
   })

@@ -19,10 +19,12 @@ class PrestadorRepository extends BaseRepository{
     }
     public function create($params, $user_id){
         $role = $params['prestador']['role'];
-        $conselho = $params['prestador']['nrConselho'];
+        $conselho = $params['medico']['nrConselho'];
+        $especialidades = $params['medico']['especialidades'];
 
-        unset($params['prestador']['nrConselho']);
+        unset($params['medico']['nrConselho']);
         unset($params['prestador']['role']);
+        unset($params['medico']['especialidades']);
 
         $params['prestador']['user_id'] = $user_id;
 
@@ -36,7 +38,7 @@ class PrestadorRepository extends BaseRepository{
                 'nrconselho' => $conselho,
                 'prestador_id' => $prestador->id
             ]);
-            // $medico->especialidades()->sync();
+            $medico->especialidades()->sync($especialidades);
         }
 
         return $prestador;

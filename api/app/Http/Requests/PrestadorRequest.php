@@ -44,9 +44,14 @@ class PrestadorRequest extends FormRequest
         $prestador = [
             'nome' => $data['nome'],
             'role' => $data['role']['label'],
-            'nrConselho' => $data['nrConselho'],
             'rg' => $data['rg'],
             'cpf' => $data['cpf'],
+        ];
+        $medico = [
+            'nrConselho' => $data['medico']['nrConselho'],
+            'especialidades' => collect($data['medico']['especialidades'])->map(function($especialidade){
+                return $especialidade['value'];
+            })->toArray()
         ];
         $enderecos = collect($data['enderecos'])->map(function($endereco){
             $array = [
@@ -75,6 +80,7 @@ class PrestadorRequest extends FormRequest
             'assign',
             'user',
             'prestador',
+            'medico',
             'enderecos',
             'telefones'
         ]);
