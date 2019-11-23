@@ -65,7 +65,7 @@
                 Turmas
               </q-item-section>
           </q-item>
-          <q-item :active="activeRoute === '/financeiro'" clickable v-ripple>
+          <q-item :active="activeRoute === '/faturamento'" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="attach_money" />
               </q-item-section>
@@ -73,6 +73,16 @@
                 Financeiro
               </q-item-section>
           </q-item>
+        <q-expansion-item icon="file_copy" label="Faturamento" v-if="authUser.hasRole('admin')">
+            <q-item :active="activeRoute === '/grupoprocedimento'" to="/grupoprocedimento" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
+                <q-item-section>
+                  Grupo
+                </q-item-section>
+            </q-item>
+          </q-expansion-item>
           <q-expansion-item
             icon="settings"
             label="Configurações"
@@ -89,23 +99,35 @@
           </q-expansion-item>
           <q-expansion-item icon="supervised_user_circle" label="Cadastros" v-if="authUser.hasRole('admin')">
             <q-item :active="activeRoute === '/prestador'" to="/prestador" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
                 <q-item-section>
                   Prestador
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/unidade/cadastro'" to="/unidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/unidade'" to="/unidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
                 <q-item-section>
                   Unidade
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/paciente/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/paciente'" to="/paciente" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
                 <q-item-section>
                   Paciente
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/convenio/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/convenio'" to="/convenio" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+               <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
                 <q-item-section>
-                  Convenio
+                 Convênio
                 </q-item-section>
             </q-item>
           </q-expansion-item>

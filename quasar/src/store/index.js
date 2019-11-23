@@ -5,6 +5,7 @@ import auth from './auth'
 import permissions from './permissions'
 import prestador from './prestador'
 import unidade from './unidade'
+import grupoprocedimento from './grupoprocedimento'
 
 Vue.use(Vuex)
 
@@ -19,7 +20,8 @@ export default function (/* { ssrContext } */) {
       auth,
       permissions,
       prestador,
-      unidade
+      unidade,
+      grupoprocedimento
     },
 
     // enable strict mode (adds overhead!)
@@ -50,6 +52,10 @@ export default function (/* { ssrContext } */) {
     module.hot.accept(['./unidade'], () => {
       const newObj = require('./unidade').default
       Store.hotUpdate({ modules: { unidade: newObj } })
+    })
+    module.hot.accept(['./grupoprocedimento'], () => {
+      const newObj = require('./grupoprocedimento').default
+      Store.hotUpdate({ modules: { grupoprocedimento: newObj } })
     })
   }
   return Store
