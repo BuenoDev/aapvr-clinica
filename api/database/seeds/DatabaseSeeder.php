@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
          * Abaixo apenas seeds em modo de desenvolvimento
          */
         $this->call(UsersTableSeeder::class);
+        $this->call(GrupoProcedimentoTableSeeder::class);
     }
 }
