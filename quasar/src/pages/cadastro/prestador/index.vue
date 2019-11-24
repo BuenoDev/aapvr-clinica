@@ -10,10 +10,17 @@
             </span>
           </q-card-section>
           <q-card-section>
-            <q-table  :data="prestadores" :columns="columns" :loading="loading"
+            <q-table no-data-label="Nenhum Registro Encontrado!" :data="prestadores" :columns="columns" :loading="loading"
               rows-per-page-label="Registros por página:" loading-label="Carregando..."
               row-key="name">
-              <template v-slot:top>
+                 <template v-slot:top-right>
+                <q-input borderless dense debounce="300" v-model="filter" placeholder="Procurar">
+                  <template v-slot:append>
+                    <q-icon name="search" ></q-icon>
+                  </template>
+                </q-input>
+              </template>
+              <template v-slot:top-left>
                 <q-btn color="white" text-color="black" label="Adicionar Prestador" to="prestador/cadastro" />
                 <q-space />
                 <!-- <q-input  dense debounce="300" color="primary" v-model="search">

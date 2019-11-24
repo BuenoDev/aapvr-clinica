@@ -10,13 +10,18 @@
             </span>
           </q-card-section>
           <q-card-section>
-            <q-table  :data="grupoprocedimentos" :columns="columns" :loading="loading"
-              rows-per-page-label="Registros por página:" loading-label="Carregando..."
-              row-key="descricao">
-              <template v-slot:top>
+            <q-table :filter="filter" no-data-label="Nenhum Registro Encontrado!" :data="grupoprocedimentos" :columns="columns" :loading="loading" rows-per-page-label="Registros por página:" loading-label="Carregando..." row-key="descricao">
+              <template v-slot:top-right>
+                <q-input borderless dense debounce="300" v-model="filter" placeholder="Procurar">
+                  <template v-slot:append>
+                    <q-icon name="search" ></q-icon>
+                  </template>
+                </q-input>
+              </template>
+              <template v-slot:top-left>
                 <q-btn color="white" text-color="black" label="Adicionar Grupo de Procedimento" to="grupoprocedimento/cadastro" />
                 <q-space />
-                <!-- <q-input  dense debounce="300" color="primary" v-model="search">
+                <!-- <q-input dense debounce="300" color="primary" v-model="search">
                 <template v-slot:append>
                   <q-icon name="search" />
                 </template>
@@ -56,6 +61,7 @@ export default {
   },
   data () {
     return {
+      filter: '',
       headerConfig: [
         {
           icon: 'home',
