@@ -120,8 +120,8 @@ module.exports = function (ctx) {
       // workboxPluginMode: 'InjectManifest',
       // workboxOptions: {}, // only for NON InjectManifest
       manifest: {
-        // name: 'Quasar App',
-        // short_name: 'Quasar App',
+        name: 'Sistema de Clínica Médica',
+        short_name: 'Sistema de Clínica Médica',
         // description: 'A Quasar Framework app',
         display: 'standalone',
         orientation: 'portrait',

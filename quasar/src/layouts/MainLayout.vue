@@ -20,7 +20,7 @@
 
     <q-drawer show-if-above v-model="left" side="left" elevated :width="220"  v-if="authUser" >
       <!-- drawer content -->
-        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 110px">
+        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 110px; z-index: 2">
             <div class="absolute-bottom bg-transparent">
               <!-- <q-avatar size="56px" class="q-mb-sm">
                 <img src="https://cdn.quasar.dev/img/boy-avatar.png">
