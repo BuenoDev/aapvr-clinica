@@ -42,6 +42,12 @@ const routes = [
       { path: 'prestador/cadastro', component: () => import('pages/cadastro/prestador/create') },
       { path: 'prestador/visualizar', component: () => import('pages/cadastro/prestador/show') },
       /**
+       * Grupo de Procedimento
+       */
+      { path: 'grupoprocedimento', component: () => import('pages/cadastro/grupoprocedimento/index') },
+      { path: 'grupoprocedimento/cadastro', component: () => import('pages/cadastro/grupoprocedimento/create') },
+      { path: 'grupoprocedimento/visualizar', component: () => import('pages/cadastro/grupoprocedimento/show') },
+      /**
        * Unidade
        */
       { path: 'unidade', component: () => import('pages/cadastro/unidade/index') },

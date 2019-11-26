@@ -7,7 +7,7 @@
 
         <q-toolbar-title>
           <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
+            <img src="/statics/logo.webp">
              <!-- <img src="https://static.wixstatic.com/media/769b46_80e632a9b8e64f80a2b12a0fce072515~mv2.png/v1/fill/w_84,h_78,al_c,q_80,usm_0.66_1.00_0.01/769b46_80e632a9b8e64f80a2b12a0fce072515~mv2.webp" > -->
           </q-avatar>
           AAPVR - Associação de Aposentados de Volta Redonda
@@ -20,7 +20,7 @@
 
     <q-drawer show-if-above v-model="left" side="left" elevated :width="220"  v-if="authUser" >
       <!-- drawer content -->
-        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 110px">
+        <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 110px; z-index: 2">
             <div class="absolute-bottom bg-transparent">
               <!-- <q-avatar size="56px" class="q-mb-sm">
                 <img src="https://cdn.quasar.dev/img/boy-avatar.png">
@@ -65,7 +65,7 @@
                 Turmas
               </q-item-section>
           </q-item>
-          <q-item :active="activeRoute === '/financeiro'" clickable v-ripple>
+          <q-item :active="activeRoute === '/faturamento'" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="attach_money" />
               </q-item-section>
@@ -73,6 +73,16 @@
                 Financeiro
               </q-item-section>
           </q-item>
+        <q-expansion-item icon="file_copy" label="Faturamento" v-if="authUser.hasRole('admin')">
+            <q-item :active="activeRoute === '/grupoprocedimento'" to="/grupoprocedimento" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
+                <q-item-section>
+                  Grupo
+                </q-item-section>
+            </q-item>
+          </q-expansion-item>
           <q-expansion-item
             icon="settings"
             label="Configurações"
@@ -89,23 +99,35 @@
           </q-expansion-item>
           <q-expansion-item icon="supervised_user_circle" label="Cadastros" v-if="authUser.hasRole('admin')">
             <q-item :active="activeRoute === '/prestador'" to="/prestador" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
                 <q-item-section>
                   Prestador
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/unidade/cadastro'" to="/unidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/unidade'" to="/unidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
                 <q-item-section>
                   Unidade
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/paciente/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/paciente'" to="/paciente" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
                 <q-item-section>
                   Paciente
                 </q-item-section>
             </q-item>
-            <q-item :active="activeRoute === '/convenio/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+            <q-item :active="activeRoute === '/convenio'" to="/convenio" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+               <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
                 <q-item-section>
-                  Convenio
+                 Convênio
                 </q-item-section>
             </q-item>
           </q-expansion-item>
