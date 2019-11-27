@@ -5,6 +5,7 @@ use App\Http\Requests\ProcedimentoRequest;
 use App\Procedimento;
 use Illuminate\Http\Request;
 
+
 class ProcedimentoController extends Controller
 {
     private $procedimento;
@@ -12,7 +13,7 @@ class ProcedimentoController extends Controller
     {
            $this->procedimento = $procedimento;
     }
-
+    
     public function index()
     {
         return response()->json(Procedimento::get());
@@ -20,26 +21,19 @@ class ProcedimentoController extends Controller
 
     public function store (ProcedimentoRequest $request)
     {
-     $procedimento = $this->procedimento->create($request->all()); 
-     return response()->json($procedimento,201);
+        $procedimento = $this->procedimento->create($request->all()); 
     }
 
     public function update(ProcedimentoRequest $request, $id)
     {   
-        if (!$procedimento = $this->procedimento->find($id))
-        return response()->json(['error'=> 'Procedimento não encontrado!'],404);
-
-                  $procedimento->update($request->all()); 
-            return response()->json(['success'=> 'Procedimento atualizado com sucesso!'],201);
+        if ($procedimento = $this->procedimento->find($id))
+        $procedimento->update($request->all());
     }
 
     public function destroy($id)
     {
-        if (!$procedimento = $this->procedimento->find($id))
-        return response()->json(['error'=> 'Procedimento não encontrado!'],404);
-
+        if ($procedimento = $this->procedimento->find($id))
         $procedimento->delete();
-        return response()->json(['success'=> 'Procedimento deletado com sucesso!'],204);
 
     }
 

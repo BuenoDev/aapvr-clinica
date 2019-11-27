@@ -24,9 +24,7 @@ class ConselhoRequest extends FormRequest
     public function rules()
     {
         return [
-            'numero' => "required|min:5",
-            'sigla' => "required",
-            'nome' => "required",
+    
         ];
     }
 }

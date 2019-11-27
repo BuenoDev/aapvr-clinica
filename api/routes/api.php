@@ -49,4 +49,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('prestador', 'PrestadorController');
     Route::resource('unidade', 'UnidadeController');
     Route::resource('grupoprocedimento', 'GrupoProcedimentoController');
+    Route::resource('procedimento', 'ProcedimentoController');
+    Route::resource('conselho', 'ConselhoController');
 });

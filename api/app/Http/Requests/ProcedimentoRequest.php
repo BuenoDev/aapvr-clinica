@@ -24,10 +24,6 @@ class ProcedimentoRequest extends FormRequest
     public function rules()
     {
         return [
-            'codigo' => "required|min:1|max:11",
-            'procedimento' => "required|min:5|max:100",
-            'status' => "required|min:1|max:1",
-            'grupo_procedimento_id' => "required",
         ];
     }
 }
