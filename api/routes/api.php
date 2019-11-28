@@ -51,4 +51,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('grupoprocedimento', 'GrupoProcedimentoController');
     Route::resource('procedimento', 'ProcedimentoController');
     Route::resource('conselho', 'ConselhoController');
+    Route::resource('convenio', 'ConvenioController');
 });
