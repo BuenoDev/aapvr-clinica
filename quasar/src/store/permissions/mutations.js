@@ -6,6 +6,14 @@ export function setUsers (state, data) {
   state.users.data = data.users
   state.users.count = data.count
 }
+export function setUnlinkedUsers (state, data) {
+  state.unlinkedUsers = data
+}
+export function removeUnlinked (state, id) {
+  state.unlinkedUsers = Object.values(state.unlinkedUsers).filter(user => {
+    return user.id !== id
+  })
+}
 export function setRoles (state, data) {
   state.roles.data = data.roles
   state.roles.count = data.count

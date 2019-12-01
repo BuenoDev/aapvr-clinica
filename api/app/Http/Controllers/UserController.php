@@ -34,6 +34,12 @@ class UserController extends Controller
         ]);
     }
 
+    public function unlinked() {
+        return User::all()->filter(function($user){
+            return $user->prestador === null;
+        });
+    }
+
     public function revoke( User $user, Request $request){
         $user = $user->removeRole($request->role);
         return response()->json(new UserResource($user));

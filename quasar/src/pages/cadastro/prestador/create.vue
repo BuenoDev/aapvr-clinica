@@ -9,14 +9,14 @@
               Atribuir a usuário
             </span> -->
             <!-- <p>{{ tableCol }}</p> -->
-            <q-table :data="users" :columns="tableCol" rows-per-page-label="Registros por página:"
+            <q-table :data="unlinkedUsers" :columns="tableCol" rows-per-page-label="Registros por página:"
               loading-label="Carregando..." row-key="id">
               <!-- <template v-slot:top>
                   <fuse-input :data="prestadores" :keys="['email']" @result="setResult" />
                 </template> -->
               <template v-slot:body-cell-actions="props">
                 <q-td key="actions" :props="props">
-                  <q-btn split size="sm" color="primary" icon="done" @click="selectUser(props.row.id)" />
+                  <q-btn split size="sm" color="primary" icon="done" @click="selectUser(props.row)" />
                 </q-td>
               </template>
             </q-table>
@@ -31,13 +31,13 @@
                 <q-separator/>
               </q-card-section>
               <q-card-section>
-                <q-btn class="q-mr-md" color="positive" text-color="white" label="Cadastrar novo usuário" @click="newUserClick"/>
-                <q-btn color="primary" text-color="white" label="Atribuir a usuário existente" @click="assignUserClick"/>
+                <q-btn class="q-mr-md" color="positive" text-color="white" label="Cadastrar novo usuário" @click="newUserClick" />
+                <q-btn color="primary" text-color="white" label="Atribuir a usuário existente" @click="assignUserClick" />
               </q-card-section>
               <q-card-section>
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy :disabled="disableForm">
                   <q-input class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="nome" :rules="rules.nome" lazy-rules />
-                  <q-input class="q-mb-sm" type="email" square dense outlined ref="email" v-model="form.email" label="Email"  :rules="rules.email" lazy-rules v-if="form.options.newUser"/>
+                  <q-input class="q-mb-sm" type="email" square dense outlined ref="email" v-model="form.email" label="Email"  :rules="rules.email" lazy-rules :disable="this.form.options.userId !== null"/>
                   <q-input class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="CPF" :mask="mask.cpf" :rules="rules.cpf" lazy-rules />
                   <q-input class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="RG" :mask="mask.rg" :rules="rules.rg" lazy-rules />
                   <q-select square dense outlined v-model="form.role" :options="rolesOptions" label="Cargo" class="q-mb-lg"/>
@@ -132,10 +132,7 @@ export default {
       'especialidades'
     ]),
     ...mapGetters('permissions', [
-      'roles'
-    ]),
-    ...mapGetters('permissions', [
-      'users'
+      'roles', 'unlinkedUsers'
     ]),
     disableForm () {
       return !(this.form.options.newUser || this.form.options.userId !== null)
@@ -277,9 +274,9 @@ export default {
     }
   },
   methods: {
-    // TODO: Modificar label e cor do botão quando selecionar usuário ou criar novo
-    selectUser (id) {
-      this.form.options.userId = id
+    selectUser (row) {
+      this.form.email = row.email
+      this.form.options.userId = row.id
       this.assignUser = false
     },
     newUserClick () {
@@ -287,16 +284,12 @@ export default {
       this.form.options.newUser = true
     },
     assignUserClick () {
-      console.log({
-        users: this.users,
-        columns: this.tableCol
-      })
-      if (this.users.length === 0) {
+      if (this.unlinkedUsers.length === 0) {
         console.log('fetch users')
         this.$q.loading.show({
           message: 'Carregando ususários'
         })
-        this.$store.dispatch('permissions/searchUsers').then(() => {
+        this.$store.dispatch('permissions/getUnlinkedUsers').then(() => {
           this.$q.loading.hide()
           this.assignUser = true
         })
@@ -373,9 +366,10 @@ export default {
     },
     submit () {
       this.$refs.form.validate().then(result => {
-        console.log({ then: result })
         this.$axios.post('/prestador', this.form).then(response => {
-          console.log(response)
+          if (this.form.options.userId !== null) {
+            this.$store.dispatch('removeUnlinked', this.form.options.userId)
+          }
           this.$q.notify({
             message: 'Prestador cadastrado com sucesso',
             color: 'positive'

@@ -4,6 +4,9 @@ export function users (state) {
 export function usersCount (state) {
   return state.users.count
 }
+export function unlinkedUsers (state) {
+  return state.unlinkedUsers
+}
 export function roles (state) {
   return state.roles.data
 }

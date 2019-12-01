@@ -13,13 +13,14 @@ class UserResource extends JsonResource
      * @return array
      */
     public function toArray($request)
-    {        
+    {
         return [
-            'id'         => $this->id,
-            'name'       => $this->name,
-            'email'      => $this->email,
-            'roles'      => $this->getRoleNames(),
-            'permissions'=> $this->getAllPermissions()->map(function($permission){return $permission->name;}), //TODO: verificar metodo 
+            'id'           => $this->id,
+            'name'         => $this->name,
+            'email'        => $this->email,
+            'roles'        => $this->getRoleNames(),
+            'permissions'  => $this->getAllPermissions()->map(function($permission){return $permission->name;}), //TODO: verificar metodo
+            'hasPrestador' => $this->prestador != null
         ];
     }
 }

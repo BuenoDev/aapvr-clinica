@@ -4,6 +4,7 @@ export default {
     data: [],
     count: 0
   },
+  unlinkedUsers: [],
   permissions: {
     selected: null,
     data: [],

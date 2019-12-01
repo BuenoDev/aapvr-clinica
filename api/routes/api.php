@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth:api']], function () {
      * Roles
      */
     Route::get('/user', 'UserController@index');
+    Route::get('/user/unlinked','UserController@unlinked');
     Route::delete('/user/{user}/role','UserController@revoke');
     Route::put('/user/{user}/role','UserController@syncRoles');
     Route::put('/user/{user}/permission','UserController@syncPermissions');

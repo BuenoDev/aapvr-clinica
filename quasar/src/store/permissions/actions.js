@@ -16,6 +16,14 @@ export function searchUsers (context, params) {
     context.commit('setUsers', response.data)
   })
 }
+export function getUnlinkedUsers (context) {
+  return Vue.prototype.$axios.get('user/unlinked').then(response => {
+    context.commit('setUnlinkedUsers', response.data)
+  })
+}
+export function removeUnlinked (context, id) {
+  context.commit('removeUnlinked', id)
+}
 export function searchRole (context, params) {
   return Vue.prototype.$axios.get('role', {
     params: params
