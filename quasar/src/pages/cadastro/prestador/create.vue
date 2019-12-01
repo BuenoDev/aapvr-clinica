@@ -2,8 +2,25 @@
     <div class="q-mt-lg">
        <default-page-header
         :config="headerConfig"
-        backTo="home"
+        backTo="/prestador"
         />
+        <q-dialog v-model="assignUser" width="600px">
+            <!-- <span class="text-h4">
+              Atribuir a usuário
+            </span> -->
+            <!-- <p>{{ tableCol }}</p> -->
+            <q-table :data="users" :columns="tableCol" rows-per-page-label="Registros por página:"
+              loading-label="Carregando..." row-key="id">
+              <!-- <template v-slot:top>
+                  <fuse-input :data="prestadores" :keys="['email']" @result="setResult" />
+                </template> -->
+              <template v-slot:body-cell-actions="props">
+                <q-td key="actions" :props="props">
+                  <q-btn split size="sm" color="primary" icon="done" @click="selectUser(props.row.id)" />
+                </q-td>
+              </template>
+            </q-table>
+        </q-dialog>
         <div class="row justify-center">
           <div class="col-lg-6 col-md-8 col-sm-12">
             <q-card class=" q-mb-xl q-mt-lg">
@@ -117,6 +134,9 @@ export default {
     ...mapGetters('permissions', [
       'roles'
     ]),
+    ...mapGetters('permissions', [
+      'users'
+    ]),
     disableForm () {
       return !(this.form.options.newUser || this.form.options.userId !== null)
       // return !this.form.options.newUser
@@ -140,6 +160,20 @@ export default {
   },
   data () {
     return {
+      tableCol: [
+        {
+          label: 'Email',
+          name: 'email',
+          field: 'email',
+          align: 'center'
+        },
+        {
+          label: 'Selecionar',
+          name: 'actions',
+          field: 'id',
+          align: 'center'
+        }
+      ],
       headerConfig: [
         {
           icon: 'home',
@@ -157,6 +191,7 @@ export default {
           label: 'cadastro'
         }
       ],
+      assignUser: false,
       form: {
         options: {
           newUser: false,
@@ -242,12 +277,30 @@ export default {
     }
   },
   methods: {
+    // TODO: Modificar label e cor do botão quando selecionar usuário ou criar novo
+    selectUser (id) {
+      this.form.options.userId = id
+      this.assignUser = false
+    },
     newUserClick () {
       console.log('newUserClick')
       this.form.options.newUser = true
     },
     assignUserClick () {
-      console.log('assign user')
+      console.log({
+        users: this.users,
+        columns: this.tableCol
+      })
+      if (this.users.length === 0) {
+        console.log('fetch users')
+        this.$q.loading.show({
+          message: 'Carregando ususários'
+        })
+        this.$store.dispatch('permissions/searchUsers').then(() => {
+          this.$q.loading.hide()
+          this.assignUser = true
+        })
+      } else this.assignUser = true
     },
     fetchCEP (endereco) {
       //  this.$axios({ url: `/ws/${this.form.cep}/json`, baseURL: 'https://viacep.com.br/' }).then(response => {
