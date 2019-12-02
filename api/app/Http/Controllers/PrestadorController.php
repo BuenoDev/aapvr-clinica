@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PrestadorRequest;
+use App\Http\Resources\PrestadorResource;
 use App\Prestador;
 use App\Repositories\PrestadorRepository;
 use App\Repositories\UserRepository;
@@ -16,7 +17,11 @@ class PrestadorController extends Controller
      */
     public function index()
     {
-        return response()->json(Prestador::with('enderecos','telefones')->get());
+        return response()->json(
+            PrestadorResource::collection(
+                Prestador::with('enderecos', 'telefones')->get()
+            )
+        );
     }
 
     /**

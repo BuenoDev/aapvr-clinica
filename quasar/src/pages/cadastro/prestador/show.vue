@@ -21,6 +21,15 @@
                   <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="nrConselho" v-model="form.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
                   <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="CPF" :mask="mask.cpf" :rules="rules.cpf" lazy-rules />
                   <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="RG" :mask="mask.rg" :rules="rules.rg" lazy-rules />
+                  <q-select square dense outlined v-model="form.role" :options="rolesOptions" label="Cargo" class="q-mb-lg"/>
+                  <q-separator class="q-mb-lg"/>
+                  <div v-if="toggleMedicSection">
+                    <span class="text-h6" style="color:black">
+                      Medicos
+                    </span>
+                    <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.medico.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
+                    <q-select square dense outlined input-debounce="0" v-model="form.medico.especialidades" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" multiple use-input @filter="filterEspecialidade"/>
+                  </div>
                   <!-- telefones -->
                   <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addPhone" v-if="edit"/>
                   <span class="text-h6" style="color:black">
@@ -83,6 +92,7 @@
 
 <script>
 import axios from 'axios'
+import Fuse from 'fuse.js'
 import defaultPageHeader from '../../../components/defaultPageHeader'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -96,7 +106,34 @@ export default {
     ]),
     ...mapGetters('auth', [
       'authUser'
-    ])
+    ]),
+    ...mapGetters('especialidade', [
+      'especialidades'
+    ]),
+    ...mapGetters('permissions', [
+      'roles'
+    ]),
+    toggleMedicSection () {
+      if (this.form.role === undefined) return false
+      else if (this.form.role.label === 'medico') return true
+      else return false
+    },
+    especialidadesInitialOptions () {
+      return this.especialidades.map(obj => {
+        return {
+          value: obj.id,
+          label: obj.nome
+        }
+      })
+    },
+    rolesOptions () {
+      return this.roles.map(obj => {
+        return {
+          value: obj.id,
+          label: obj.name
+        }
+      })
+    }
   },
   data () {
     return {
@@ -272,6 +309,48 @@ export default {
         this.$router.push('/prestador')
       })
     },
+    loadSelectData () {
+      if (this.roles.length === 0 || this.especialidades.length === 0) {
+        this.$q.loading.show({
+          message: 'Carregando cargos'
+        })
+        this.$store.dispatch('permissions/searchRole').then(() => {
+          if (this.especialidades.length === 0) {
+            this.$q.loading.show({
+              message: 'Carregando especialidades'
+            })
+            this.$store.dispatch('especialidade/refresh').then(() => {
+              this.especialidadesOptions = this.especialidadesInitialOptions
+              this.$q.loading.hide()
+            })
+          } else {
+            this.especialidadesOptions = this.especialidadesInitialOptions
+            this.$q.loading.hide()
+          }
+        })
+      }
+    },
+    filterEspecialidade (param, update) {
+      if (param === '') {
+        update(() => {
+          this.especialidadesOptions = this.especialidadesInitialOptions
+        })
+      } else {
+        let fuse = new Fuse(this.especialidadesOptions, {
+          shouldSort: true,
+          threshold: 0.6,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: ['label']
+        })
+        let result = fuse.search(param)
+        update(() => {
+          this.especialidadesOptions = result
+        })
+      }
+    },
     submit () {
       this.$refs.form.validate().then(() => {
         console.log('validated')
@@ -293,9 +372,14 @@ export default {
     }
   },
   mounted () {
-    console.log(this.selected)
+    this.loadSelectData()
     this.form = this.selected
+    if (this.form.medico === null) {
+      this.form.medico = {
+        nrConselho: null,
+        especialidades: []
+      }
+    }
   }
 }
-
 </script>

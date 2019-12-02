@@ -10,9 +10,7 @@ export function setUnlinkedUsers (state, data) {
   state.unlinkedUsers = Object.values(data)
 }
 export function removeUnlinked (state, id) {
-  state.unlinkedUsers = state.unlinkedUsers.filter(user => {
-    return user.id !== id
-  })
+  state.unlinkedUsers = state.unlinkedUsers.filter(user => user.id !== id)
 }
 export function setRoles (state, data) {
   state.roles.data = data.roles
