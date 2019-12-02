@@ -9,11 +9,11 @@
               Atribuir a usuário
             </span> -->
             <!-- <p>{{ tableCol }}</p> -->
-            <q-table :data="unlinkedUsers" :columns="tableCol" rows-per-page-label="Registros por página:"
+            <q-table :data="users" :columns="tableCol" rows-per-page-label="Registros por página:"
               loading-label="Carregando..." row-key="id">
-              <!-- <template v-slot:top>
-                  <fuse-input :data="prestadores" :keys="['email']" @result="setResult" />
-                </template> -->
+              <template v-slot:top>
+                  <fuse-input class="full-width" :data="unlinkedUsers" :keys="['email']" @result="setResult" />
+                </template>
               <template v-slot:body-cell-actions="props">
                 <q-td key="actions" :props="props">
                   <q-btn split size="sm" color="primary" icon="done" @click="selectUser(props.row)" />
@@ -120,12 +120,14 @@
 <script>
 import axios from 'axios'
 import Fuse from 'fuse.js'
+import fuseInput from '../../../components/fuseInput'
 import defaultPageHeader from '../../../components/defaultPageHeader'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    defaultPageHeader
+    defaultPageHeader,
+    fuseInput
   },
   computed: {
     ...mapGetters('especialidade', [
@@ -157,6 +159,7 @@ export default {
   },
   data () {
     return {
+      users: [],
       tableCol: [
         {
           label: 'Email',
@@ -285,15 +288,22 @@ export default {
     },
     assignUserClick () {
       if (this.unlinkedUsers.length === 0) {
-        console.log('fetch users')
         this.$q.loading.show({
           message: 'Carregando ususários'
         })
         this.$store.dispatch('permissions/getUnlinkedUsers').then(() => {
           this.$q.loading.hide()
+          this.users = this.unlinkedUsers
           this.assignUser = true
         })
-      } else this.assignUser = true
+      } else {
+        this.users = this.unlinkedUsers
+        this.assignUser = true
+      }
+    },
+    setResult (result) {
+      if (result.length > 0) this.users = result
+      else this.users = this.unlinkedUsers
     },
     fetchCEP (endereco) {
       //  this.$axios({ url: `/ws/${this.form.cep}/json`, baseURL: 'https://viacep.com.br/' }).then(response => {

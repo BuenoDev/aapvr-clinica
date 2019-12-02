@@ -65,9 +65,9 @@ module.exports = function (ctx) {
           warning : '#F2C037'
         },
         loadingBar: {
-          position:'bottom',
-          size: '8px',
-          color: 'primary'
+          position:'top',
+          size: '2px',
+          color: 'white'
         }
       }
     },

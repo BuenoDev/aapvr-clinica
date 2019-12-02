@@ -7,10 +7,10 @@ export function setUsers (state, data) {
   state.users.count = data.count
 }
 export function setUnlinkedUsers (state, data) {
-  state.unlinkedUsers = data
+  state.unlinkedUsers = Object.values(data)
 }
 export function removeUnlinked (state, id) {
-  state.unlinkedUsers = Object.values(state.unlinkedUsers).filter(user => {
+  state.unlinkedUsers = state.unlinkedUsers.filter(user => {
     return user.id !== id
   })
 }
