@@ -18,17 +18,17 @@
               <q-card-section>
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
                   <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="nome" :rules="rules.nome" lazy-rules />
-                  <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="nrConselho" v-model="form.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
+                  <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="email" v-model="form.email" label="email" :rules="rules.email" lazy-rules />
                   <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="CPF" :mask="mask.cpf" :rules="rules.cpf" lazy-rules />
                   <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="RG" :mask="mask.rg" :rules="rules.rg" lazy-rules />
-                  <q-select square dense outlined v-model="form.role" :options="rolesOptions" label="Cargo" class="q-mb-lg"/>
+                  <q-select square dense outlined ref="role" v-model="form.role" :options="rolesOptions" label="Cargo" class="q-mb-lg"/>
                   <q-separator class="q-mb-lg"/>
                   <div v-if="toggleMedicSection">
                     <span class="text-h6" style="color:black">
                       Medicos
                     </span>
-                    <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.medico.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
-                    <q-select square dense outlined input-debounce="0" v-model="form.medico.especialidades" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" multiple use-input @filter="filterEspecialidade"/>
+                    <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.medico.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules :disable="!edit"/>
+                    <q-select square dense outlined input-debounce="0" ref="especialidades" v-model="form.medico.especialidades" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" multiple use-input @filter="filterEspecialidade" :disable="!edit"/>
                   </div>
                   <!-- telefones -->
                   <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addPhone" v-if="edit"/>
@@ -156,9 +156,10 @@ export default {
       ],
       form: {
         nome: null,
-        nrConselho: null,
+        email: null,
         cpf: null,
         rg: null,
+        role: null,
         telefones: [
           {
             numero: null,
@@ -184,8 +185,8 @@ export default {
           val => val !== null || 'Campo Obrigatório',
           val => val.length > 5 || 'O nome deve ter ao menos 5 caracteres'
         ],
-        nrConselho: [
-          val => true || 'O numero do conselho deve ter ao menos 5 caracteres'
+        email: [
+          val => val !== null || 'Campo Obrigatório'
         ],
         cpf: [
           val => val !== null || 'Campo Obrigatório',
@@ -225,6 +226,8 @@ export default {
         'Residencial',
         'Comercial'
       ],
+      especialidadesOptions: [],
+      tempMedic: null,
       edit: false
     }
   },
@@ -338,7 +341,7 @@ export default {
       } else {
         let fuse = new Fuse(this.especialidadesOptions, {
           shouldSort: true,
-          threshold: 0.6,
+          threshold: 0.2,
           location: 0,
           distance: 100,
           maxPatternLength: 32,
@@ -378,6 +381,24 @@ export default {
       this.form.medico = {
         nrConselho: null,
         especialidades: []
+      }
+    } else if (this.form.role === 'medico') {
+      this.form.medico = Object.assign({
+        nrConselho: this.selected.medico.nrconselho,
+        especialidades: this.selected.medico.especialidades.map(esp => {
+          return {
+            label: esp.nome,
+            value: esp.id
+          }
+        })
+      })
+    }
+    console.log(this.form.roles)
+    if (this.form.roles != null) {
+      let role = Object.assign(this.form.roles[0])
+      this.form.role = {
+        value: role.id,
+        label: role.name
       }
     }
   }

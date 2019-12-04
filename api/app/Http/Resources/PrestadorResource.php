@@ -19,10 +19,11 @@ class PrestadorResource extends JsonResource
             'id' => $this->id,
             'rg' => $this->rg,
             'cpf' => $this->cpf,
-            'medico' => $this->medico,
+            'medico' => new MedicoResource($this->medico),
             'telefones' => $this->telefones,
             'enderecos' => $this->enderecos,
             'roles' => $this->user != null ? $this->user->roles : null,
+            'email' => $this->user != null ? $this->user->email : null,
         ];
     }
 }

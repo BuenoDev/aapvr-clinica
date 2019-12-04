@@ -47,6 +47,7 @@
                       Medicos
                     </span>
                     <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.medico.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
+                    <!-- TODO: verificar select nao modificando valores no edit  -->
                     <q-select square dense outlined input-debounce="0" v-model="form.medico.especialidades" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" multiple use-input @filter="filterEspecialidade"/>
                   </div>
                   <!-- telefones -->
@@ -305,6 +306,7 @@ export default {
       if (result.length > 0) this.users = result
       else this.users = this.unlinkedUsers
     },
+    // TODO: Verificar erro de cors
     fetchCEP (endereco) {
       //  this.$axios({ url: `/ws/${this.form.cep}/json`, baseURL: 'https://viacep.com.br/' }).then(response => {
       let cep = endereco.cep.replace('-', '')

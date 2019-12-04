@@ -19,7 +19,7 @@ class PrestadorController extends Controller
     {
         return response()->json(
             PrestadorResource::collection(
-                Prestador::with('enderecos', 'telefones')->get()
+                Prestador::with('enderecos', 'telefones','medico','medico.especialidades')->get()
             )
         );
     }

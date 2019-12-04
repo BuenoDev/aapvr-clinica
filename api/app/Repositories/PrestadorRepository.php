@@ -32,7 +32,7 @@ class PrestadorRepository extends BaseRepository{
         $this->enderecoRepo->createMany($params['enderecos'],$prestador);
         $this->telefoneRepo->createMany($params['telefones'],$prestador);
 
-        $prestador->user->assignRole($role);
+        $prestador->user->syncRoles($role);
         if($role === 'medico'){
             $medico = Medico::create([
                 'nrconselho' => $conselho,
@@ -45,6 +45,23 @@ class PrestadorRepository extends BaseRepository{
     }
     public function update($params){
         $prestador = $this->model->update($params['prestador']) ? $this->model : abort(500);
+        $this->model->user->update($params['user']);
+        $this->model->user->syncRoles($params['prestador']['role']);
+
+        if($this->model->user->hasRole('medico')){
+
+            if($this->model->medico === null) {
+                $this->model->medico()->create([
+                    'nrconselho' => $params['medico']['nrConselho']
+                ]);
+            } else $this->model->medico->update([
+                'nrconselho' => $params['medico']['nrConselho']
+            ]);
+
+            $this->model->medico->especialidades()->sync($params['medico']['especialidades']);
+        } else if($this->model->medico != null) {
+            $this->model->medico->delete();
+        }
         $enderecos = $this->enderecoRepo->updateOrCreate($params['enderecos'],$prestador);
         $telefones = $this->telefoneRepo->updateOrCreate($params['telefones'],$prestador);
 

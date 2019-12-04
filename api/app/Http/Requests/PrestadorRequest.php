@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class PrestadorRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class PrestadorRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::user()->can('editar-prestador');
     }
 
     /**
@@ -36,7 +37,9 @@ class PrestadorRequest extends FormRequest
     public function formated(){
         $data = parent::all();
 
-        $assign = $data['options']['userId'] != null ? $data['options']['userId'] : false;
+        if(isset($data['options'])) {
+            $assign = $data['options']['userId'] != null ? $data['options']['userId'] : false;
+        } else $assign = null;
         $user = [
             'name' => $data['nome'],
             'email' => $data['email'],
