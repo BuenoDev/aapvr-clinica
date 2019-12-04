@@ -284,7 +284,6 @@ export default {
       this.assignUser = false
     },
     newUserClick () {
-      console.log('newUserClick')
       this.form.options.newUser = true
     },
     assignUserClick () {

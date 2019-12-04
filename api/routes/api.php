@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/role','RoleController@index');
     Route::get('/role/{role}/users','RoleController@getUsers');
     Route::post('/role','RoleController@store');
-    route::delete('/role/{role}','RoleController@destroy');
+    Route::delete('/role/{role}','RoleController@destroy');
     Route::put('/role/{role}/permission','RoleController@syncPermissions');
     Route::get('/permission','PermissionController@index');
     Route::get('/permission/{permission}/users', 'PermissionController@getUsers');
@@ -50,4 +50,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('prestador', 'PrestadorController');
     Route::resource('unidade', 'UnidadeController');
     Route::resource('especialidade','EspecialidadeController');
+    Route::resource('grupoprocedimento', 'GrupoProcedimentoController');
+    Route::resource('procedimento', 'ProcedimentoController');
+    Route::resource('conselho', 'ConselhoController');
+    Route::resource('convenio', 'ConvenioController');
 });

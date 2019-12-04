@@ -12,6 +12,13 @@
 
 * [Laravel Permissions](https://github.com/spatie/laravel-permission)
 * [Laravel Modules](https://github.com/nWidart/laravel-modules)            
+
+
+
+### Pacotes uteis
+
+* [Laravel Permissions](https://github.com/spatie/laravel-permission)
+* [Laravel Modules](https://github.com/nWidart/laravel-modules)            
 * [Laravel Telescope - Debuging](https://laravel.com/docs/5.8/telescope)
 * [Vuelidate](https://github.com/vuelidate/vuelidate)
 

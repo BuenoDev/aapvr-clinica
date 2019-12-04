@@ -12,9 +12,11 @@
             <q-table  :data="tableData" :columns="columns" :loading="loading"
               rows-per-page-label="Registros por página:" loading-label="Carregando..."
               row-key="name">
-              <template v-slot:top>
+              <template v-slot:top-left>
                 <q-btn color="white" text-color="black" label="Adicionar Prestador" to="prestador/cadastro" />
                 <q-space />
+              </template>
+              <template v-slot:top-right>
                 <fuse-input :data="prestadores" :keys="['nome']" @result="setResult" />
               </template>
               <template v-slot:body-cell-actions="props">

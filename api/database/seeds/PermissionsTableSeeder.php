@@ -30,6 +30,8 @@ class PermissionsTableSeeder extends Seeder
             'visualizar-agenda',
             'editar-agenda',
             'visualizar-prontuario',
+            'visualizar-grupoprocedimento',
+            'editar-grupoprocedimento',
         ];
         foreach ($permissions as $permission) Permission::create(['name' => $permission]);
     }

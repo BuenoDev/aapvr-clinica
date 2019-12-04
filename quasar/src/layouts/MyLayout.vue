@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          Sistema de Clinica Médica
         </q-toolbar-title>
 
         <div>Quasar v{{ $q.version }}</div>
