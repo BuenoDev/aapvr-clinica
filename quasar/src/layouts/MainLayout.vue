@@ -82,64 +82,72 @@
                   Grupo
                 </q-item-section>
             </q-item>
-          </q-expansion-item>
-          <q-expansion-item
-            icon="settings"
-            label="Configurações"
-            v-if="authUser.can('visualizar-permissoes')"
-          >
-            <q-item :active="activeRoute === '/permissoes'" to="/permissoes" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+        </q-expansion-item>
+        <q-expansion-item
+          icon="settings"
+          label="Configurações"
+          v-if="authUser.can('visualizar-permissoes')"
+        >
+          <q-item :active="activeRoute === '/permissoes'" to="/permissoes" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section avatar>
                   <q-icon name="pan_tool" />
                 </q-item-section>
                 <q-item-section>
                   Grupos e permissões
                 </q-item-section>
-            </q-item>
-          </q-expansion-item>
+          </q-item>
           <q-expansion-item icon="supervised_user_circle" label="Cadastros" v-if="authUser.hasRole('admin')">
-            <q-item :active="activeRoute === '/prestador'" to="/prestador" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+              <q-item :active="activeRoute === '/prestador'" to="/prestador" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                  <q-item-section avatar>
+                    <q-icon name="add" />
+                  </q-item-section>
+                  <q-item-section>
+                    Prestador
+                  </q-item-section>
+              </q-item>
+              <q-item :active="activeRoute === '/especialidade'" to="/especialidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                  <q-item-section avatar>
+                    <q-icon name="add" />
+                  </q-item-section>
+                  <q-item-section>
+                    Especialidade
+                  </q-item-section>
+              </q-item>
+              <q-item :active="activeRoute === '/unidade'" to="/unidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                  <q-item-section avatar>
+                    <q-icon name="add" />
+                  </q-item-section>
+                  <q-item-section>
+                    Unidade
+                  </q-item-section>
+              </q-item>
+              <q-item :active="activeRoute === '/paciente'" to="/paciente" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                  <q-item-section avatar>
+                    <q-icon name="add" />
+                  </q-item-section>
+                  <q-item-section>
+                    Pacientes
+                  </q-item-section>
+              </q-item>
+              <!-- <q-item :active="activeRoute === '/paciente/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+              <q-item :active="activeRoute === '/paciente'" to="/paciente" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                  <q-item-section avatar>
+                    <q-icon name="add" />
+                  </q-item-section>
+                  <q-item-section>
+                    Paciente
+                  </q-item-section>
+              </q-item>
+              <q-item :active="activeRoute === '/convenio'" to="/convenio" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
                 <q-item-section avatar>
-                  <q-icon name="add" />
-                </q-item-section>
-                <q-item-section>
-                  Prestador
-                </q-item-section>
-            </q-item>
-            <q-item :active="activeRoute === '/especialidade'" to="/especialidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
-                <q-item-section avatar>
-                  <q-icon name="add" />
-                </q-item-section>
-                <q-item-section>
-                  Especialidade
-                </q-item-section>
-            </q-item>
-            <q-item :active="activeRoute === '/unidade'" to="/unidade" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
-                <q-item-section avatar>
-                  <q-icon name="add" />
-                </q-item-section>
-                <q-item-section>
-                  Unidade
-                </q-item-section>
-            </q-item>
-            <!-- <q-item :active="activeRoute === '/paciente/cadastro'" to="/prestador/cadastro" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
-            <q-item :active="activeRoute === '/paciente'" to="/paciente" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
-                <q-item-section avatar>
-                  <q-icon name="add" />
-                </q-item-section>
-                <q-item-section>
-                  Paciente
-                </q-item-section>
-            </q-item>
-            <q-item :active="activeRoute === '/convenio'" to="/convenio" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
-               <q-item-section avatar>
-                  <q-icon name="add" />
-                </q-item-section>
-                <q-item-section>
-                 Convênio
-                </q-item-section>
-            </q-item> -->
+                    <q-icon name="add" />
+                  </q-item-section>
+                  <q-item-section>
+                  Convênio
+                  </q-item-section>
+              </q-item> -->
           </q-expansion-item>
+        </q-expansion-item>
         </q-list>
     </q-drawer>
 

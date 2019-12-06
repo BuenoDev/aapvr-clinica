@@ -7,6 +7,7 @@ import prestador from './prestador'
 import unidade from './unidade'
 import especialidade from './especialidade'
 import grupoprocedimento from './grupoprocedimento'
+import paciente from './paciente'
 
 Vue.use(Vuex)
 
@@ -23,7 +24,8 @@ export default function (/* { ssrContext } */) {
       prestador,
       unidade,
       especialidade,
-      grupoprocedimento
+      grupoprocedimento,
+      paciente
     },
 
     // enable strict mode (adds overhead!)
@@ -62,6 +64,10 @@ export default function (/* { ssrContext } */) {
     module.hot.accept(['./grupoprocedimento'], () => {
       const newObj = require('./grupoprocedimento').default
       Store.hotUpdate({ modules: { grupoprocedimento: newObj } })
+    })
+    module.hot.accept(['./paciente'], () => {
+      const newObj = require('./paciente').default
+      Store.hotUpdate({ modules: { paciente: newObj } })
     })
   }
   return Store

@@ -11,18 +11,17 @@ class UnidadeRepository extends BaseRepository{
         $this->enderecoRepo = $endereco;
     }
 
-    //TODO: vc consegue fazer melhor cara
-    public function setModel(Unidade $unidade){
-        $this->model = $unidade;
+    public function all(){
+        $this->setEager([
+            'endereco'
+        ]);
+        return parent::all();
     }
     public function create($params){
-        $prestador = Unidade::create($params['unidade']);
-        $enderecos = $this->enderecoRepo->createMany($params['enderecos'],$prestador);
+        $unidade = parent::create($params['unidade']);
+        $this->enderecoRepo->createMany($params['enderecos'],$unidade);
 
-        return compact([
-            'prestador',
-            'enderecos'
-        ]);
+        return $unidade;
     }
     public function update($params){
         $prestador = $this->model->update($params['unidade']) ? $this->model : abort(500);

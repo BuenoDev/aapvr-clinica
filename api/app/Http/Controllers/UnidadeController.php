@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class UnidadeController extends Controller
 {
+    public function __construct(UnidadeRepository $repo)
+    {
+        $this->repo = $repo;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +20,7 @@ class UnidadeController extends Controller
      */
     public function index()
     {
-        return response()->json(Unidade::with('endereco')->get());
+        return response()->json($this->repo->all());
     }
 
     /**
@@ -25,9 +29,9 @@ class UnidadeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UnidadeRequest $request, UnidadeRepository $repo)
+    public function store(UnidadeRequest $request)
     {
-        $repo->create($request->formated());
+        $this->repo->create($request->formated());
         return response()->json();
     }
 
