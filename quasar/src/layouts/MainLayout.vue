@@ -82,6 +82,14 @@
                   Grupo
                 </q-item-section>
             </q-item>
+            <q-item :active="activeRoute === '/procedimento'" to="/procedimento" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
+                <q-item-section>
+                  Procedimento
+                </q-item-section>
+            </q-item>
         </q-expansion-item>
         <q-expansion-item
           icon="settings"
@@ -119,6 +127,22 @@
                   </q-item-section>
                   <q-item-section>
                     Unidade
+                  </q-item-section>
+              </q-item>
+              <q-item :active="activeRoute === '/convenio'" to="/convenio" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                    <q-icon name="add" />
+                  </q-item-section>
+                  <q-item-section>
+                  Convênio
+                  </q-item-section>
+              </q-item>
+              <q-item :active="activeRoute === '/conselho'" to="/conselho" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                <q-item-section avatar>
+                    <q-icon name="add" />
+                  </q-item-section>
+                  <q-item-section>
+                  Conselho
                   </q-item-section>
               </q-item>
               <q-item :active="activeRoute === '/paciente'" to="/paciente" dense clickable v-ripple v-if="authUser.hasRole('admin')" >

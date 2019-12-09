@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
             'name'     => 'Recepcionista',
             'email'    => 'recepcionista@gmail.com',
             'password' => Hash::make('123123')
-        ])->assignRole('medico');
+        ])->assignRole('recepcionista');
 
         $users = factory(App\User::class, 30)->create();
         foreach($users as $user) $user->assignRole('medico');

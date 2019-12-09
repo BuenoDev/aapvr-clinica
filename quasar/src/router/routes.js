@@ -48,6 +48,24 @@ const routes = [
       { path: 'grupoprocedimento/cadastro', component: () => import('pages/cadastro/grupoprocedimento/create') },
       { path: 'grupoprocedimento/visualizar', component: () => import('pages/cadastro/grupoprocedimento/show') },
       /**
+       * Procedimento
+       */
+      { path: 'procedimento', component: () => import('pages/cadastro/procedimento/index') },
+      { path: 'procedimento/cadastro', component: () => import('pages/cadastro/procedimento/create') },
+      { path: 'procedimento/visualizar', component: () => import('pages/cadastro/procedimento/show') },
+      /**
+       * Conselho
+       */
+      { path: 'conselho', component: () => import('pages/cadastro/conselho/index') },
+      { path: 'conselho/cadastro', component: () => import('pages/cadastro/conselho/create') },
+      { path: 'conselho/visualizar', component: () => import('pages/cadastro/conselho/show') },
+      /**
+       * Convenio
+       */
+      { path: 'convenio', component: () => import('pages/cadastro/convenio/index') },
+      { path: 'convenio/cadastro', component: () => import('pages/cadastro/convenio/create') },
+      { path: 'convenio/visualizar', component: () => import('pages/cadastro/convenio/show') },
+      /**
        * Unidade
        */
       { path: 'unidade', component: () => import('pages/cadastro/unidade/index') },

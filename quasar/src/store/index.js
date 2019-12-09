@@ -8,6 +8,9 @@ import unidade from './unidade'
 import especialidade from './especialidade'
 import grupoprocedimento from './grupoprocedimento'
 import paciente from './paciente'
+import procedimento from './procedimento'
+import conselho from './conselho'
+import convenio from './convenio'
 
 Vue.use(Vuex)
 
@@ -24,8 +27,11 @@ export default function (/* { ssrContext } */) {
       prestador,
       unidade,
       especialidade,
+      procedimento,
       grupoprocedimento,
-      paciente
+      paciente,
+      conselho,
+      convenio
     },
 
     // enable strict mode (adds overhead!)
@@ -64,6 +70,18 @@ export default function (/* { ssrContext } */) {
     module.hot.accept(['./grupoprocedimento'], () => {
       const newObj = require('./grupoprocedimento').default
       Store.hotUpdate({ modules: { grupoprocedimento: newObj } })
+    })
+    module.hot.accept(['./procedimento'], () => {
+      const newObj = require('./procedimento').default
+      Store.hotUpdate({ modules: { procedimento: newObj } })
+    })
+    module.hot.accept(['./conselho'], () => {
+      const newObj = require('./conselho').default
+      Store.hotUpdate({ modules: { conselho: newObj } })
+    })
+    module.hot.accept(['./convenio'], () => {
+      const newObj = require('./convenio').default
+      Store.hotUpdate({ modules: { convenio: newObj } })
     })
     module.hot.accept(['./paciente'], () => {
       const newObj = require('./paciente').default
