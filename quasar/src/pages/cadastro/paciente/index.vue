@@ -5,12 +5,13 @@
       <div class="col-lg-6 col-md-8 col-sm-12">
           <q-card-section>
             <span class="text-h5">
-              Unidades
+              Pacientes
             </span>
           </q-card-section>
           <q-card-section>
             <q-table  :data="tableData" :columns="columns" :loading="loading"
               rows-per-page-label="Registros por página:" loading-label="Carregando..."
+              no-data-label="Nenhum registro disponível."
               row-key="name">
               <template v-slot:top-left>
                 <q-btn color="white" text-color="black" label="Adicionar Paciente" to="paciente/cadastro" />
@@ -21,7 +22,7 @@
               </template>
               <template v-slot:body-cell-actions="props">
                 <q-td key="actions" :props="props">
-                  <q-btn split size="sm" color="primary" icon="visibility" :to="`/pacientes/visualizar`"
+                  <q-btn split size="sm" color="primary" icon="visibility" :to="`/paciente/visualizar`"
                      @click="select(props.row.id)"/>
                 </q-td>
               </template>

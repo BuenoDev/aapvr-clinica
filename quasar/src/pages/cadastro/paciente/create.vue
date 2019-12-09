@@ -16,29 +16,58 @@
               <q-card-section>
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
                   <q-input class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="nome" :rules="rules.nome" lazy-rules />
-                  <q-input class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="rg" :rules="rules.rg" lazy-rules />
-                  <q-input class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="cpf" :rules="rules.cpf" lazy-rules />
-                  <q-input class="q-mb-sm" square dense outlined ref="mae" v-model="form.mae" label="mae" :rules="rules.mae" lazy-rules />
-                  <q-input class="q-mb-sm" square dense outlined ref="dtnascimento" v-model="form.dtnascimento" label="Data de Nascimento" :mask="mask.dtnascimento" :rules="rules.dtnascimento" lazy-rules />
+                  <q-input class="q-mb-sm" square dense outlined ref="mae" v-model="form.mae" label="Nome da Mãe" :rules="rules.mae" lazy-rules />
+                  <div class="row">
+                    <div class="col-6">
+                      <q-input class="q-mb-sm q-mr-md" square dense outlined ref="rg" v-model="form.rg" label="RG" :rules="rules.rg" lazy-rules />
+                    </div>
+                    <div class="col-6">
+                      <q-input class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="CPF" :rules="rules.cpf" lazy-rules />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <!-- <q-input square dense outlined  label="Data de Nascimento" v-model="form.dtnascimento"  lazy-rules >
+                        <template v-slot:append>
+                          <q-icon name="event" class="cursor-pointer">
+                            <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                              <q-date v-model="form.dtnascimento" @input="() => $refs.qDateProxy.hide()" />
+                            </q-popup-proxy>
+                          </q-icon>
+                        </template>
+                      </q-input> -->
+
+                      <q-input class="q-mb-sm q-mr-md" type="date" square dense outlined ref="dtnascimento" v-model="form.dtnascimento" label="Data de Nascimento" :mask="mask.dtnascimento" :rules="rules.dtnascimento" lazy-rules />
+                    </div>
+                    <div class="col-6">
+
+                    </div>
+                  </div>
                   <!-- <q-input class="q-mb-sm" square dense outlined ref="sexo" v-model="form.sexo" label="sexo" lazy-rules /> -->
-                  <q-select square dense outlined v-model="form.sexo" :options="sexoOptions" label="Sexo" class="q-mb-sm">
-                    <template v-slot:no-option>
-                      <q-item>
-                        <q-item-section class="text-grey">
-                          Sem Resultados
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                  </q-select>
-                  <q-select square dense outlined v-model="form.estadoCivil" :options="estadoCivilOptions" label="Estado Civil" class="q-mb-sm">
-                    <template v-slot:no-option>
-                      <q-item>
-                        <q-item-section class="text-grey">
-                          Sem Resultados
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                  </q-select>
+                  <div class="row q-mb-lg">
+                    <div class="col-6">
+                      <q-select  square dense outlined v-model="form.sexo" :options="sexoOptions" label="Sexo" class="q-mb-sm q-mr-md" behavior="menu">
+                        <template v-slot:no-option>
+                          <q-item>
+                            <q-item-section class="text-grey">
+                              Sem Resultados
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </q-select>
+                    </div>
+                    <div class="col-6">
+                      <q-select square dense outlined v-model="form.estadoCivil" :options="estadoCivilOptions" label="Estado Civil" class="q-mb-sm" behavior="menu">
+                        <template v-slot:no-option>
+                          <q-item>
+                            <q-item-section class="text-grey">
+                              Sem Resultados
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </q-select>
+                    </div>
+                  </div>
                   <!-- TODO: q-text -->
                   <q-input class="q-mb-sm" square dense outlined ref="observacao" v-model="form.observacao" label="observacao" :rules="rules.observacao" lazy-rules />
                   <!-- telefones -->

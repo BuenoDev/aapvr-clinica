@@ -110,5 +110,13 @@ abstract class BaseRepository{
         return $this->model->update($params);
     }
 
+    /**
+     * Deleta o model
+     */
+    public function delete(){
+        $this->forgetCache();
+        return $this->model->delete();
+    }
+
 
 }

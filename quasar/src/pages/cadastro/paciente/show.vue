@@ -2,7 +2,7 @@
     <div class="q-mt-lg">
        <default-page-header
         :config="headerConfig"
-        backTo="/unidade"
+        backTo="/paciente"
         />
         <div class="row justify-center">
           <div class="col-lg-6 col-md-8 col-sm-12">
@@ -10,50 +10,104 @@
               <q-card-section >
                 <span class="text-h4" style="color:black">
                   {{ form.nome }}
-                  <q-btn label="Editar" size="sm" class="q-ma-md" color="primary" @click="editForm" v-if="authUser.can('editar-unidade')"/>
-                  <q-btn label="Apagar" size="sm"  color="negative" @click="deleteForm" v-if="authUser.can('editar-unidade')"/>
+                  <q-btn label="Editar" size="sm" class="q-ma-md" color="primary" @click="editForm" v-if="authUser.can('editar-pacientes')"/>
+                  <q-btn label="Apagar" size="sm"  color="negative" @click="deleteForm" v-if="authUser.can('editar-pacientes')"/>
                 </span>
                 <q-separator/>
               </q-card-section>
               <q-card-section>
-                <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
-                  <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="nome" :rules="rules.nome" lazy-rules />
-                  <q-input class="q-mb-sm" square dense outlined ref="regans" v-model="form.regans" label="regans" :rules="rules.regans" lazy-rules />
+                <q-form ref="form" @submit.prevent = 'submit' autofocus greedy :disabled="!edit">
+                  <q-input class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="nome" :rules="rules.nome" lazy-rules />
+                  <q-input class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="rg" :rules="rules.rg" lazy-rules />
+                  <q-input class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="cpf" :rules="rules.cpf" lazy-rules />
+                  <q-input class="q-mb-sm" square dense outlined ref="mae" v-model="form.mae" label="mae" :rules="rules.mae" lazy-rules />
+                  <q-input class="q-mb-sm" square dense outlined ref="dtnascimento" v-model="form.dtnascimento" label="Data de Nascimento" :mask="mask.dtnascimento" :rules="rules.dtnascimento" lazy-rules />
+                  <div class="row q-mb-lg">
+                    <div class="col-6">
+                      <q-select :disabled="!edit" square dense outlined v-model="form.sexo" :options="sexoOptions" label="Sexo" class="q-mb-sm q-mr-md">
+                        <template v-slot:no-option>
+                          <q-item>
+                            <q-item-section class="text-grey">
+                              Sem Resultados
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </q-select>
+                    </div>
+                    <div class="col-6">
+                      <q-select square dense outlined v-model="form.estadoCivil" :options="estadoCivilOptions" label="Estado Civil" class="q-mb-sm">
+                        <template v-slot:no-option>
+                          <q-item>
+                            <q-item-section class="text-grey">
+                              Sem Resultados
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </q-select>
+                    </div>
+                  </div>
+                  <!-- TODO: q-text -->
+                  <q-input class="q-mb-sm" square dense outlined ref="observacao" v-model="form.observacao" label="observacao" :rules="rules.observacao" lazy-rules />
+                  <!-- telefones -->
+                  <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addPhone"/>
+                  <span class="text-h6" style="color:black">
+                    Telefones de Contato
+                  </span>
+                  <q-separator class="q-mb-md q-mt-md"/>
+                  <div class="row" v-for="(telefone, phoneIndex) in form.telefones" :key="'phone-' + phoneIndex">
+                    <div class="col-md-4">
+                      <q-input class="q-mb-sm" square dense outlined :ref="`telefone${phoneIndex}`" :mask="phoneMask(telefone)" :rules="rules.telefone" v-model="telefone.numero" label="Telefone"/>
+                    </div>
+                    <div class="col-md-4">
+                      <q-select :disabled="!edit" square dense outlined v-model="telefone.tipo" :options="phoneOptions" label="Tipo" class="q-ml-sm">
+                        <template v-slot:no-option>
+                          <q-item>
+                            <q-item-section class="text-grey">
+                              Sem Resultados
+                            </q-item-section>
+                          </q-item>
+                        </template>
+                      </q-select>
+                    </div>
+                    <div class="col-md-2">
+                       <q-btn color="white" text-color="black"  label="Remover" class="q-ml-md" :disabled="form.telefones.length === 1" @click="removePhone(phoneIndex)"/>
+                    </div>
+                  </div>
                   <!-- endereços -->
                   <q-separator class="q-mb-sm"/>
-                  <!-- <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addAddress" v-if="edit"/> -->
+                  <!-- <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addAddress"/> -->
                   <span class="text-h6" style="color:black">
-                    Endereços
+                    Endereço
                   </span>
                   <q-separator class="q-mb-md q-mt-md"/>
                   <div  v-for="(endereco, addressIndex) in form.enderecos" :key="'address-' + addressIndex">
                     <div class="row">
                       <div class="col-6">
-                        <q-input :disable="!edit" class="q-mb-md" square dense outlined ref="cep" :mask="mask.cep" v-model="endereco.cep" label="cep" lazy-rules  @keyup="fetchCEP(endereco)"/>
+                        <q-input class="q-mb-md" square dense outlined ref="cep" :mask="mask.cep" v-model="endereco.cep" label="cep" lazy-rules :loading="endereco.cepLoading" @keyup="fetchCEP(endereco)"/>
                       </div>
                       <div class="col-4">
-                        <!-- <q-select :disable="!edit" square dense outlined v-model="endereco.tipo" :options="addressOptions" label="Tipo" class="q-ml-sm"/> -->
+                        <!-- <q-select square dense outlined v-model="endereco.tipo" :options="addressOptions" label="Tipo" class="q-ml-sm"/> -->
                       </div>
                       <div class="col-2">
-                         <!-- <q-btn color="white" text-color="black" label="Remover" class="q-ml-md" :disable="form.enderecos.length === 1" @click="removeAddress(addressIndex)"/> -->
+                         <!-- <q-btn color="white" text-color="black" label="Remover" class="q-ml-md" :disabled="form.enderecos.length === 1" @click="removeAddress(addressIndex)"/> -->
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-6">
-                        <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="bairro" v-model="endereco.bairro" label="bairro" :rules="rules.bairro" lazy-rules />
+                        <q-input class="q-mb-sm" square dense outlined ref="bairro" v-model="endereco.bairro" label="bairro" :rules="rules.bairro" lazy-rules />
                       </div>
                       <div class="col-4">
-                        <q-input :disable="!edit" class="q-mb-sm q-ml-sm" square dense outlined ref="cidade" v-model="endereco.cidade" label="cidade" :rules="rules.cidade" lazy-rules />
+                        <q-input class="q-mb-sm q-ml-sm" square dense outlined ref="cidade" v-model="endereco.cidade" label="cidade" :rules="rules.cidade" lazy-rules />
                       </div>
                       <div class="col-2">
-                        <q-input :disable="!edit" class="q-mb-sm q-ml-sm" square dense outlined ref="uf" v-model="endereco.uf" label="uf" mask="AA" :rules="rules.uf" lazy-rules />
+                        <q-input class="q-mb-sm q-ml-sm" square dense outlined ref="uf" v-model="endereco.uf" label="uf" mask="AA" :rules="rules.uf" lazy-rules />
                       </div>
                     </div>
-                    <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="logradouro" v-model="endereco.logradouro" label="logradouro" :rules="rules.logradouro" lazy-rules />
-                    <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="complemento" v-model="endereco.complemento" label="complemento" :rules="rules.complemento" lazy-rules />
+                    <q-input class="q-mb-sm" square dense outlined ref="logradouro" v-model="endereco.logradouro" label="logradouro" :rules="rules.logradouro" lazy-rules />
+                    <q-input class="q-mb-sm" square dense outlined ref="complemento" v-model="endereco.complemento" label="complemento" :rules="rules.complemento" lazy-rules />
                     <q-separator class="q-mb-md"/>
                   </div>
-                  <q-btn type="submit" label="enviar" v-if="edit"/>
+                  <q-btn type="submit" label="enviar"/>
                 </q-form>
               </q-card-section>
             </q-card>
@@ -72,7 +126,7 @@ export default {
     defaultPageHeader
   },
   computed: {
-    ...mapGetters('unidade', [
+    ...mapGetters('paciente', [
       'selected'
     ]),
     ...mapGetters('auth', [
@@ -89,20 +143,24 @@ export default {
         },
         {
           icon: 'person',
-          route: '/unidade',
+          route: '/paciente',
           label: 'Unidade'
         },
         {
-          icon: '',
-          route: '',
+          icon: 'plus',
+          route: '/visualizar',
           label: 'Visualizar'
         }
       ],
       form: {
         nome: null,
-        nrConselho: null,
-        cpf: null,
         rg: null,
+        cpf: null,
+        mae: null,
+        dtnascimento: null,
+        sexo: null,
+        estadoCivil: null,
+        observacao: null,
         enderecos: [
           {
             cep: null,
@@ -115,12 +173,41 @@ export default {
             ativo: null,
             cepLoading: false
           }
+        ],
+        telefones: [
+          {
+            numero: null,
+            tipo: 'Residencial'
+          }
         ]
       },
       rules: {
         nome: [
           val => val !== null || 'Campo Obrigatório',
           val => val.length > 5 || 'O nome deve ter ao menos 5 caracteres'
+        ],
+        rg: [
+          val => val !== null || 'Campo Obrigatório'
+        ],
+        cpf: [
+          val => val !== null || 'Campo Obrigatório'
+        ],
+        mae: [
+          val => val !== null || 'Campo Obrigatório'
+        ],
+        dtnascimento: [
+          val => val !== null || 'Campo Obrigatório',
+          val => val.split('/')[1] <= 12 || 'Mês inválido',
+          val => val.split('/')[0] <= 31 || 'Dia inválido'
+        ],
+        sexo: [
+          val => val !== null || 'Campo Obrigatório'
+        ],
+        estadoCivil: [
+          val => val !== null || 'Campo Obrigatório'
+        ],
+        observacao: [
+          val => val !== null || 'Campo Obrigatório'
         ],
         logradouro: [
           val => val !== null || 'Campo Obrigatório'
@@ -138,19 +225,46 @@ export default {
       mask: {
         cpf: '###.###.###-##',
         cep: '#####-###',
-        rg: '##.###.###-#'
+        rg: '##.###.###-#',
+        dtnascimento: '##/##/####'
       },
       addressOptions: [
         'Residencial',
         'Comercial'
+      ],
+      phoneOptions: [
+        'Residencial',
+        'Celular',
+        'Comercial'
+      ],
+      sexoOptions: [
+        'Masculino',
+        'Feminino'
+      ],
+      estadoCivilOptions: [
+        'Solteiro',
+        'Casado',
+        'Divorciado'
       ],
       edit: false
     }
   },
   methods: {
     ...mapActions(['prestador'], [
-      'deletePrestador'
+      'deletePaciente'
     ]),
+    addPhone () {
+      this.form.telefones.push({
+        numero: null,
+        tipo: 'Residencial'
+      })
+    },
+    removePhone (index) {
+      this.form.telefones.splice(index, 1)
+    },
+    phoneMask (phone) {
+      return phone.tipo === 'Celular' ? '(##) #####-####' : '(##) ####-####'
+    },
     fetchCEP (endereco) {
       //  this.$axios({ url: `/ws/${this.form.cep}/json`, baseURL: 'https://viacep.com.br/' }).then(response => {
       let cep = endereco.cep.replace('-', '')
@@ -188,30 +302,30 @@ export default {
     },
     deleteForm () {
       this.$q.dialog({
-        title: 'Apagar Unidade',
-        message: 'Deseja realmente apagar esta Unidade? Esta ação não poderá ser revertida!',
+        title: 'Apagar Paciente',
+        message: 'Deseja realmente apagar este Paciente? Esta ação não poderá ser revertida!',
         cancel: 'Cancelar'
       }).onOk(() => {
-        this.$store.dispatch('unidade/deleteUnidade', this.form.id).then(() => {
+        this.$store.dispatch('paciente/deletePaciente', this.form.id).then(() => {
           console.log('delete')
           this.$q.notify({
-            message: 'Unidade Removida',
+            message: 'Paciente Removida',
             color: 'positive'
           })
         })
-        this.$router.push('/unidade')
+        this.$router.push('/paciente')
       })
     },
     submit () {
       this.$refs.form.validate().then(() => {
         console.log('validated')
-        this.$axios.put('/unidade/' + this.form.id, this.form).then(response => {
+        this.$axios.put('/paciente/' + this.form.id, this.form).then(response => {
           console.log(response)
           this.$q.notify({
-            message: 'Unidade editada com sucesso',
+            message: 'Paciente editado com sucesso',
             color: 'positive'
           })
-          this.$router.push('/unidade')
+          this.$router.push('/paciente')
         }).catch(error => {
           console.error(error)
           this.$q.notify({
@@ -223,8 +337,15 @@ export default {
     }
   },
   mounted () {
-    console.log(this.selected)
+    console.log({
+      selected: this.selected,
+      telefones: this.selected.telefones,
+      enderecos: this.selected.enderecos
+    })
+
     this.form = this.selected
+    this.form.telefones = this.selected.telefones
+    this.form.enderecos = this.selected.enderecos
   }
 }
 

@@ -12,12 +12,14 @@ class PacienteRepository extends BaseRepository{
         $this->model = $model;
         $this->enderecoRepo = $endereco;
         $this->telefoneRepo = $telefone;
+        $this->setEager([
+            'enderecos','telefones'
+        ]);
     }
 
     public function all()
     {
         return parent::all();
-        // return $this->model->all();
     }
 
     /**

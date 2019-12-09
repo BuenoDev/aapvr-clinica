@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PacienteRequest;
+use App\Http\Resources\PacienteResource;
 use App\Paciente;
 use App\Repositories\PacienteRepository;
 use Illuminate\Http\Request;
@@ -20,8 +21,9 @@ class PacienteController extends Controller
      */
     public function index()
     {
-        // TODO: Make Resources
-        return $this->repo->all();
+        return response()->json(
+            PacienteResource::collection($this->repo->all()),
+        );
     }
 
     /**
@@ -46,37 +48,16 @@ class PacienteController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Paciente  $paciente
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Paciente $paciente)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Paciente  $paciente
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Paciente $paciente)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Paciente  $paciente
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Paciente $paciente)
+    public function update(PacienteRequest $request, Paciente $paciente)
     {
-        //
+        $this->repo->setModel($paciente);
+        $this->repo->update($request->formated());
     }
 
     /**
@@ -87,6 +68,7 @@ class PacienteController extends Controller
      */
     public function destroy(Paciente $paciente)
     {
-        //
+        $this->repo->setModel($paciente);
+        $this->repo->delete();
     }
 }
