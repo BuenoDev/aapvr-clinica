@@ -40,12 +40,12 @@ export default {
     fuseInput
   },
   computed: {
-    ...mapGetters('tipoPrestador', [
+    ...mapGetters('tipoprestador', [
       'tiposPrestador'
     ])
   },
   methods: {
-    ...mapActions('tipoPrestador', [
+    ...mapActions('tipoprestador', [
       'refresh',
       'select'
     ]),

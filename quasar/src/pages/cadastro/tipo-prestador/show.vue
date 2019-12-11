@@ -29,14 +29,14 @@
 
 <script>
 import defaultPageHeader from '../../../components/defaultPageHeader'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
     defaultPageHeader
   },
   computed: {
-    ...mapGetters('tipoPrestador', [
+    ...mapGetters('tipoprestador', [
       'selected'
     ]),
     ...mapGetters('auth', [
@@ -75,9 +75,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['tipoPrestador'], [
-      'remove'
-    ]),
     editForm () {
       this.edit = true
     },
@@ -87,7 +84,7 @@ export default {
         message: 'Deseja realmente apagar esta especialidade? Esta ação não poderá ser revertida!',
         cancel: 'Cancelar'
       }).onOk(() => {
-        this.remove().then(() => {
+        this.$store.dispatch('tipoprestador/remove', this.form.id).then(() => {
           this.$q.notify({
             message: 'Tipo Removido',
             color: 'positive'
