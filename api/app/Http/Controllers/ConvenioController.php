@@ -3,40 +3,37 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\ConvenioRequest;
 use App\Convenio;
+use App\Repositories\ConvenioRepository;
 use Illuminate\Http\Request;
 
 
 class ConvenioController extends Controller
 {
-    private $convenio;
-    public function __construct(Convenio $convenio)
+    public function __construct(ConvenioRepository $repo)
     {
-           $this->convenio = $convenio;
+        $this->repo = $repo;
     }
-    
+
     public function index()
     {
-        return response()->json(Convenio::get());
+        return response()->json($this->repo->all());
     }
 
-    public function store (ConvenioRequest $request)
+    public function store(ConvenioRequest $request)
     {
-        //$convenio = $this->convenio->create($request->all()); 
-        var_dump($this->convenio->create($request->all()));
+        $this->repo->create($request->all());
     }
 
-    public function update(ConvenioRequest $request, $id)
-    {   
-        if ($convenio = $this->convenio->find($id))
-        $convenio->update($request->all());
-    }
-
-    public function destroy($id)
+    public function update(ConvenioRequest $request, Convenio $convenio)
     {
-        if ($convenio = $this->convenio->find($id))
-        $convenio->delete();
+        $this->repo->setModel($convenio);
+        $this->repo->update($request->all());
+    }
 
+    public function destroy(Convenio $convenio)
+    {
+        $this->repo->setModel($convenio);
+        $this->repo->delete();
     }
 
 }
-

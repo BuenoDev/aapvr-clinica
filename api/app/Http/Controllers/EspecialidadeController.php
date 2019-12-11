@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Especialidade;
 use App\Http\Requests\EspecialidadeRequest;
+use App\Repositories\EspecialidadeRepository;
 use Illuminate\Http\Request;
 
 class EspecialidadeController extends Controller
 {
+    public function __construct(EspecialidadeRepository $repo){
+        $this->repo = $repo;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +19,7 @@ class EspecialidadeController extends Controller
      */
     public function index()
     {
-        return response()->json(Especialidade::all());
+        return response()->json($this->repo->all());
     }
 
     /**
@@ -26,7 +30,7 @@ class EspecialidadeController extends Controller
      */
     public function store(EspecialidadeRequest $request)
     {
-        Especialidade::create($request->formated());
+        $this->repo->create($request->formated());
     }
 
     /**
@@ -38,7 +42,8 @@ class EspecialidadeController extends Controller
      */
     public function update(EspecialidadeRequest $request, Especialidade $especialidade)
     {
-        $especialidade->update($request->formated());
+        $this->repo->setModel($especialidade);
+        $this->repo->update($request->formated());
     }
 
     /**
@@ -49,6 +54,7 @@ class EspecialidadeController extends Controller
      */
     public function destroy(Especialidade $especialidade)
     {
-        $especialidade->delete();
+        $this->repo->setModel($especialidade);
+        $this->repo->delete();
     }
 }

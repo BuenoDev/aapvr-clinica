@@ -5,24 +5,21 @@
       <div class="col-lg-6 col-md-8 col-sm-12">
           <q-card-section>
             <span class="text-h5">
-              Unidades
+              Tipo de Prestador
             </span>
           </q-card-section>
           <q-card-section>
             <q-table  :data="tableData" :columns="columns" :loading="loading"
               rows-per-page-label="Registros por página:" loading-label="Carregando..."
-              no-data-label="Nenhum Registro Encontrado!"
               row-key="name">
-              <template v-slot:top-left>
-                <q-btn color="white" text-color="black" label="Adicionar Unidade" to="unidade/cadastro" />
-              </template>
-              <template v-slot:top-right>
+              <template v-slot:top>
+                <q-btn color="white" text-color="black" label="Adicionar Tipo de Prestador" to="tipo-prestador/cadastro" />
                 <q-space />
-                <fuse-input :data="unidades" :keys="['nome']" @result="setResult" />
+                <fuse-input :data="tiposPrestador" :keys="['nome']" @result="setResult" />
               </template>
               <template v-slot:body-cell-actions="props">
                 <q-td key="actions" :props="props">
-                  <q-btn split size="sm" color="primary" icon="visibility" :to="`/unidade/visualizar`"
+                  <q-btn split size="sm" color="primary" icon="visibility" :to="`/tipo-prestador/visualizar`"
                      @click="select(props.row.id)"/>
                 </q-td>
               </template>
@@ -43,12 +40,12 @@ export default {
     fuseInput
   },
   computed: {
-    ...mapGetters('unidade', [
-      'unidades'
+    ...mapGetters('tipoprestador', [
+      'tiposPrestador'
     ])
   },
   methods: {
-    ...mapActions('unidade', [
+    ...mapActions('tipoprestador', [
       'refresh',
       'select'
     ]),
@@ -66,8 +63,8 @@ export default {
         },
         {
           icon: 'person',
-          route: '/unidade',
-          label: 'Unidade'
+          route: '/tipo-prestador',
+          label: 'Tipo de Prestador'
         }
       ],
       columns: [
@@ -75,7 +72,7 @@ export default {
           name: 'name',
           label: 'Nome',
           field: 'nome',
-          align: 'center'
+          align: 'left'
         },
         {
           name: 'actions',
@@ -90,10 +87,10 @@ export default {
   },
   mounted () {
     this.loading = true
-    this.tableData = this.unidades
+    this.tableData = this.tiposPrestador
     this.refresh().then(() => {
       this.loading = false
-      this.tableData = this.unidades
+      this.tableData = this.tiposPrestador
     })
   }
 }

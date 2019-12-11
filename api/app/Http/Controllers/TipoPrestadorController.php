@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UnidadeRequest;
-use App\Repositories\UnidadeRepository;
-use App\Unidade;
+use App\Repositories\TipoPrestadorRepository;
+use App\TipoPrestador;
 use Illuminate\Http\Request;
 
-class UnidadeController extends Controller
+class TipoPrestadorController extends Controller
 {
-    public function __construct(UnidadeRepository $repo)
-    {
+    public function __construct(TipoPrestadorRepository $repo){
         $this->repo = $repo;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +19,9 @@ class UnidadeController extends Controller
      */
     public function index()
     {
-        return response()->json($this->repo->all());
+        return response()->json(
+            $this->repo->all()
+        );
     }
 
     /**
@@ -29,35 +30,33 @@ class UnidadeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UnidadeRequest $request)
+    public function store(Request $request)
     {
-        $this->repo->create($request->formated());
-        return response()->json();
+        $this->repo->create($request->all());
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Unidade  $unidade
+     * @param  \App\TipoPrestador  $tipoPrestador
      * @return \Illuminate\Http\Response
      */
-    public function update(UnidadeRequest $request, Unidade $unidade)
+    public function update(Request $request, TipoPrestador $tipoPrestador)
     {
-        $this->repo->setModel($unidade);
-        $this->repo->update($request->formated());
-        return response()->json();
+        $this->repo->setModel($tipoPrestador);
+        $this->repo->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Unidade  $unidade
+     * @param  \App\TipoPrestador  $tipoPrestador
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Unidade $unidade)
+    public function destroy(TipoPrestador $tipoPrestador)
     {
-        $this->repo->setModel($unidade);
+        $this->repo->setModel($tipoPrestador);
         $this->repo->delete();
     }
 }

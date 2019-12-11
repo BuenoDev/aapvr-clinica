@@ -2,15 +2,14 @@
   <div class="q-mt-lg">
     <default-page-header :config="headerConfig" backTo="home" />
     <div class="row justify-center q-mt-lg">
-      <div class="col-lg-6 col-md-12 col-sm-12">
-        <q-card>
-          <q-card-section>
+      <div class="col-lg-6 col-md-8 col-sm-12">
+        <q-card-section>
             <span class="text-h5">
-              Procedimentos
+               Conselhos
             </span>
-          </q-card-section>
-          <q-card-section>
-            <q-table :filter="filter" no-data-label="Nenhum Registro Encontrado!" :data="procedimentos" :columns="columns" :loading="loading" rows-per-page-label="Registros por página:" loading-label="Carregando..." row-key="codigo">
+        </q-card-section>
+        <q-card-section>
+            <q-table :filter="filter" no-data-label="Nenhum Registro Encontrado!" :data="conselhos" :columns="columns" :loading="loading" rows-per-page-label="Registros por página:" loading-label="Carregando..." row-key="nome">
               <template v-slot:top-right>
                 <q-input borderless dense debounce="300" v-model="filter" placeholder="Procurar">
                   <template v-slot:append>
@@ -19,7 +18,7 @@
                 </q-input>
               </template>
               <template v-slot:top-left>
-                <q-btn color="white" text-color="black" label="Adicionar Procedimento" to="procedimento/cadastro" />
+                <q-btn color="white" text-color="black" label="Adicionar Conselhos" to="conselho/cadastro" />
                 <q-space />
                 <!-- <q-input dense debounce="300" color="primary" v-model="search">
                 <template v-slot:append>
@@ -29,13 +28,12 @@
               </template>
               <template v-slot:body-cell-actions="props">
                 <q-td key="actions" :props="props">
-                  <q-btn split size="sm" color="primary" icon="visibility" :to="`/procedimento/visualizar`"
+                  <q-btn split size="sm" color="primary" icon="visibility" :to="`/conselho/visualizar`"
                      @click="select(props.row.id)"/>
                 </q-td>
               </template>
             </q-table>
-          </q-card-section>
-        </q-card>
+        </q-card-section>
       </div>
     </div>
   </div>
@@ -49,12 +47,12 @@ export default {
     defaultPageHeader
   },
   computed: {
-    ...mapGetters('procedimento', [
-      'procedimentos'
+    ...mapGetters('conselho', [
+      'conselhos'
     ])
   },
   methods: {
-    ...mapActions('procedimento', [
+    ...mapActions('conselho', [
       'refresh',
       'select'
     ])
@@ -71,27 +69,21 @@ export default {
         {
           icon: 'person',
           route: '/criar',
-          label: 'Procedimentos'
+          label: 'Conselhos'
         }
       ],
       columns: [
         {
-          name: 'codigo',
-          label: 'Código',
-          field: 'codigo',
-          align: 'center'
-        },
-        {
-          name: 'procedimento',
-          label: 'Procedimento',
-          field: 'procedimento',
+          name: 'sigla',
+          label: 'Sigla',
+          field: 'sigla',
           align: 'left'
         },
         {
-          name: 'status',
-          label: 'Status',
-          field: 'status',
-          align: 'center'
+          name: 'nome',
+          label: 'Nome',
+          field: 'nome',
+          align: 'left'
         },
         {
           name: 'actions',
