@@ -11,6 +11,7 @@
           <q-card-section>
             <q-table  :data="tableData" :columns="columns" :loading="loading"
               rows-per-page-label="Registros por página:" loading-label="Carregando..."
+              no-data-label="Nenhum Registro Encontrado!"
               row-key="name">
               <template v-slot:top-left>
                 <q-btn color="white" text-color="black" label="Adicionar Unidade" to="unidade/cadastro" />

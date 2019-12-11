@@ -3,38 +3,37 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\ConselhoRequest;
 use App\Conselho;
+use App\Repositories\ConselhoRepository;
 use Illuminate\Http\Request;
 
 
 class ConselhoController extends Controller
 {
-    private $conselho;
-    public function __construct(Conselho $conselho)
+    public function __construct(ConselhoRepository $repo)
     {
-           $this->conselho = $conselho;
+           $this->repo = $repo;
     }
-    
+
     public function index()
     {
-        return response()->json(Conselho::get());
+        return response()->json($this->repo->all());
     }
 
     public function store (ConselhoRequest $request)
     {
-        $conselho = $this->conselho->create($request->all()); 
+        $this->repo->create($request->all());
     }
 
-    public function update(ConselhoRequest $request, $id)
-    {   
-        if ($conselho = $this->conselho->find($id))
-        $conselho->update($request->all());
-    }
-
-    public function destroy($id)
+    public function update(ConselhoRequest $request, Conselho $conselho)
     {
-        if ($conselho = $this->conselho->find($id))
-        $conselho->delete();
+        $this->repo->setModel($conselho);
+        $this->repo->update($request->all());
+    }
 
+    public function destroy(Conselho $conselho)
+    {
+        $this->repo->setModel($conselho);
+        $this->repo->delete();
     }
 
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +12,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Artisan::call('cache:clear');
+        
         $this->call(RolesTableSeeder::class);
         $this->call(PermissionsTableSeeder::class);
         $this->call(AssignPermissionsSeeder::class);
@@ -20,5 +23,6 @@ class DatabaseSeeder extends Seeder
          */
         $this->call(UsersTableSeeder::class);
         $this->call(GrupoProcedimentoTableSeeder::class);
+
     }
 }

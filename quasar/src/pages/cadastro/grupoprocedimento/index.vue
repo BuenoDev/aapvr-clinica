@@ -3,13 +3,12 @@
     <default-page-header :config="headerConfig" backTo="home" />
     <div class="row justify-center q-mt-lg">
       <div class="col-lg-6 col-md-8 col-sm-12">
-        <q-card>
-          <q-card-section>
+        <q-card-section>
             <span class="text-h5">
               Grupo de Procedimentos
             </span>
-          </q-card-section>
-          <q-card-section>
+        </q-card-section>
+        <q-card-section>
             <q-table :filter="filter" no-data-label="Nenhum Registro Encontrado!" :data="grupoprocedimentos" :columns="columns" :loading="loading" rows-per-page-label="Registros por página:" loading-label="Carregando..." row-key="descricao">
               <template v-slot:top-right>
                 <q-input borderless dense debounce="300" v-model="filter" placeholder="Procurar">
@@ -34,8 +33,7 @@
                 </q-td>
               </template>
             </q-table>
-          </q-card-section>
-        </q-card>
+        </q-card-section>
       </div>
     </div>
   </div>

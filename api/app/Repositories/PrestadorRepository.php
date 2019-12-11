@@ -13,10 +13,6 @@ class PrestadorRepository extends BaseRepository{
         $this->telefoneRepo = $telefone;
     }
 
-    //TODO: vc consegue fazer melhor cara
-    public function setModel(Prestador $prestador){
-        $this->model = $prestador;
-    }
     public function create($params, $user_id){
         $role = $params['prestador']['role'];
         $conselho = $params['medico']['nrConselho'];

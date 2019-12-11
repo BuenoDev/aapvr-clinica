@@ -9,28 +9,25 @@
             <q-card class=" q-mb-xl q-mt-lg">
               <q-card-section >
                 <span class="text-h5" style="color:black">
-                  Cadastrar Procedimento
+                  Cadastrar Conselhos
                 </span>
                 <q-separator/>
               </q-card-section>
               <q-card-section>
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
                   <div class="row">
-                     <div class="col-md-12">
-                     <q-select square dense outlined v-model="form.grupo_procedimento_id" :options="options" label="Grupo" class="q-mb-lg"/>
-                     </div>
-                    <div class="col-md-4">
-                  <q-input class="q-mb-xs" mask="###########" square dense outlined ref="codigo" v-model="form.codigo" label="Código" :rules="rules.codigo" lazy-rules />
-                    </div>
-                 <div class="col-md-12">
-                  <q-input square dense outlined ref="procedimento" v-model="form.procedimento" label="Nome do Procedimento" :rules="rules.procedimento" lazy-rules />
-                      </div>
-                      <div class="col-md-2">
-                  <q-select square dense outlined v-model="form.status" :options="status" label="Status" class="q-mb-sm"/>
-                     </div>
-                      </div>
-                 <!-- telefones -->
-                 <!-- endereços -->
+                  <div class="col-3">
+                  <q-input class="q-mb-sm" type="number" square dense outlined ref="numero" v-model="form.numero" label="Número" :rules="rules.numero" lazy-rules />
+                  </div>
+                  </div>
+                  <div class="row">
+                  <div class="col-2">
+                  <q-input class="q-mb-sm" square dense outlined ref="sigla" v-model="form.sigla" label="Sigla" :rules="rules.sigla" lazy-rules />
+                  </div>
+                  <div class="col-9">
+                  <q-input class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="Nome" :rules="rules.nome" lazy-rules />
+                  </div>
+                  </div>
                   <q-btn type="submit" label="enviar"/>
                 </q-form>
               </q-card-section>
@@ -41,23 +38,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import defaultPageHeader from '../../../components/defaultPageHeader'
-
 export default {
   components: {
     defaultPageHeader
   },
-
-  computed: {
-    ...mapGetters('grupoprocedimento', [
-      'grupoprocedimentos'
-    ])
-  },
   data () {
     return {
-      options: [],
-      value: [],
       headerConfig: [
         {
           icon: 'home',
@@ -66,8 +53,8 @@ export default {
         },
         {
           icon: 'business',
-          route: '/procedimento',
-          label: 'Procedimento'
+          route: '/conselho',
+          label: 'Conselho'
         },
         {
           icon: 'person',
@@ -76,26 +63,22 @@ export default {
         }
       ],
       form: {
-        codigo: null,
-        procedimento: null,
-        status: null,
-        grupo_procedimento_id: null
+        numero: null,
+        sigla: null,
+        nome: null
       },
       rules: {
-        codigo: [
-          val => val !== null || 'Campo Obrigatório',
-          val => val.length > 1 || 'O código deve ter ao menos 2 números',
-          val => val.length < 12 || 'O código deve ter no máximo 11 números'
+        numero: [
+          val => val !== null || 'Campo Obrigatório'
         ],
-        procedimento: [
+        sigla: [
+          val => val !== null || 'Campo Obrigatório'
+        ],
+        nome: [
           val => val !== null || 'Campo Obrigatório',
-          val => val.length > 4 || 'O código deve ter ao menos 5 caracteres'
+          val => val.length > 5 || 'O Nome deve conter ao menos 5 caracteres'
         ]
-      },
-      status: [
-        'Ativado',
-        'Desativado'
-      ]
+      }
     }
   },
   methods: {
@@ -107,14 +90,14 @@ export default {
     submit () {
       this.$refs.form.validate().then(result => {
         console.log({ then: result })
-        this.$axios.post('/procedimento', this.form).then(response => {
+        this.$axios.post('/conselho', this.form).then(response => {
           console.log(response)
           this.$q.notify({
-            message: 'Procedimento cadastrado com sucesso',
+            message: 'Conselho cadastrado com sucesso',
             color: 'positive'
           })
-          this.$router.push('/procedimento')
-          this.$store.dispatch('procedimento/refresh')
+          this.$router.push('/conselho')
+          this.$store.dispatch('conselho/refresh')
         }).catch(error => {
           console.error(error)
           this.$q.notify({
@@ -130,16 +113,7 @@ export default {
         })
       })
     }
-  },
-  mounted () {
-    this.$axios.get('/grupoprocedimento').then(response => {
-      this.options = response.data.map(item => {
-        return {
-          label: item.descricao,
-          value: item.id
-        }
-      })
-    })
   }
 }
+
 </script>

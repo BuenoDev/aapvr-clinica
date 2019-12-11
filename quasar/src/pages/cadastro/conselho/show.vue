@@ -2,14 +2,13 @@
     <div class="q-mt-lg">
        <default-page-header
         :config="headerConfig"
-        backTo="/procedimento"
+        backTo="/conselho"
         />
         <div class="row justify-center">
           <div class="col-lg-6 col-md-8 col-sm-12">
             <q-card class=" q-mb-xl q-mt-lg">
               <q-card-section >
                 <span class="text-h4" style="color:black">
-                  {{ form.nome }}
                   <q-btn label="Editar" size="sm" class="q-ma-md" color="primary" @click="editForm" v-if="authUser.can('editar-prestador')"/>
                   <q-btn label="Apagar" size="sm"  color="negative" @click="deleteForm" v-if="authUser.can('editar-prestador')"/>
                 </span>
@@ -18,19 +17,18 @@
               <q-card-section>
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
                   <div class="row">
-                     <div class="col-md-12">
-                        <q-select :disable="!edit" square dense outlined v-model="form.grupo_procedimento_id" :options="options" label="Grupo" class="q-mb-lg"/>
-                      </div>
-                      <div class="col-md-4">
-                        <q-input :disable="!edit" class="q-mb-xs" mask="###########" square dense outlined ref="codigo" v-model="form.codigo" label="Código" :rules="rules.codigo" lazy-rules />
-                      </div>
-                      <div class="col-md-12">
-                        <q-input :disable="!edit" square dense outlined ref="procedimento" v-model="form.procedimento" label="Nome do Procedimento" :rules="rules.procedimento" lazy-rules />
-                      </div>
-                      <div class="col-md-2">
-                         <q-select :disable="!edit" square dense outlined v-model="form.status" :options="status" label="Status" class="q-mb-sm"/>
-                     </div>
-                      </div>
+                  <div class="col-3">
+                  <q-input :disable="!edit" class="q-mb-sm" type="number" square dense outlined ref="numero" v-model="form.numero" label="Número" :rules="rules.numero" lazy-rules />
+                  </div>
+                  </div>
+                  <div class="row">
+                  <div class="col-2">
+                  <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="sigla" v-model="form.sigla" label="Sigla" :rules="rules.sigla" lazy-rules />
+                  </div>
+                  <div class="col-9">
+                  <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="Nome" :rules="rules.nome" lazy-rules />
+                  </div>
+                  </div>
                    <q-btn type="submit" label="enviar" v-if="edit"/>
                 </q-form>
               </q-card-section>
@@ -49,7 +47,7 @@ export default {
     defaultPageHeader
   },
   computed: {
-    ...mapGetters('procedimento', [
+    ...mapGetters('conselho', [
       'selected'
     ]),
     ...mapGetters('auth', [
@@ -66,8 +64,8 @@ export default {
         },
         {
           icon: 'business',
-          route: '/procedimento',
-          label: 'Procedimento'
+          route: '/conselho',
+          label: 'Conselhos'
         },
         {
           icon: '',
@@ -76,62 +74,57 @@ export default {
         }
       ],
       form: {
-        codigo: null,
-        procedimento: null,
-        status: null,
-        grupo_procedimento_id: null
+        numero: null,
+        sigla: null,
+        nome: null
       },
       rules: {
-        codigo: [
-          val => val !== null || 'Campo Obrigatório',
-          val => val.length > 1 || 'O código deve ter ao menos 2 números',
-          val => val.length < 12 || 'O código deve ter no máximo 11 números'
+        nome: [
+          val => val.length > 0 || 'Campo Obrigatório'
         ],
-        procedimento: [
-          val => val !== null || 'Campo Obrigatório',
-          val => val.length > 4 || 'O código deve ter ao menos 5 caracteres'
+        numero: [
+          val => val.length > 0 || 'Campo Obrigatório'
+        ],
+        sigla: [
+          val => val.length > 0 || 'Campo Obrigatório'
         ]
       },
-      status: [
-        'Ativado',
-        'Desativado'
-      ],
       edit: false
     }
   },
   methods: {
-    ...mapActions(['procedimento'], [
-      'deleteProcedimento'
+    ...mapActions(['conselho'], [
+      'deleteConselho'
     ]),
     editForm () {
       this.edit = true
     },
     deleteForm () {
       this.$q.dialog({
-        title: 'Apagar Procedimento',
-        message: 'Deseja realmente apagar este Procedimento? Esta ação não poderá ser revertida!',
+        title: 'Apagar Conselho',
+        message: 'Deseja realmente apagar este Conselho? Esta ação não poderá ser revertida!',
         cancel: 'Cancelar'
       }).onOk(() => {
-        this.$store.dispatch('procedimento/deleteProcedimento', this.form.id).then(() => {
+        this.$store.dispatch('conselho/deleteConselho', this.form.id).then(() => {
           console.log('delete')
           this.$q.notify({
-            message: 'O Procedimento foi Removido',
+            message: 'O Conselho foi Removido',
             color: 'positive'
           })
         })
-        this.$router.push('/procedimento')
+        this.$router.push('/conselho')
       })
     },
     submit () {
       this.$refs.form.validate().then(() => {
         console.log('validated')
-        this.$axios.put('/procedimento/' + this.form.id, this.form).then(response => {
+        this.$axios.put('/conselho/' + this.form.id, this.form).then(response => {
           console.log(response)
           this.$q.notify({
-            message: 'Procedimento foi editado com sucesso',
+            message: 'O conselho foi editado com sucesso',
             color: 'positive'
           })
-          this.$router.push('/procedimento')
+          this.$router.push('/conselho')
         }).catch(error => {
           console.error(error)
           this.$q.notify({
@@ -143,14 +136,6 @@ export default {
     }
   },
   mounted () {
-    this.$axios.get('/grupoprocedimento').then(response => {
-      this.options = response.data.map(item => {
-        return {
-          label: item.descricao,
-          value: item.id
-        }
-      })
-    })
     console.log(this.selected)
     this.form = this.selected
   }

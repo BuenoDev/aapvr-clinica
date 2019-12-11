@@ -46,8 +46,15 @@ abstract class BaseRepository{
         $this->eagerLoading = collect($array);
     }
 
+    /**
+     * Seta o model padrão e retorna o model
+     *
+     * @param [type] $id
+     * @return void
+     */
     public function findById($id){
-        return $this->model->find($id);
+        $this->model = $this->model->findOrFail($id);
+        return $this->model;
     }
 
     /**
@@ -117,6 +124,4 @@ abstract class BaseRepository{
         $this->forgetCache();
         return $this->model->delete();
     }
-
-
 }

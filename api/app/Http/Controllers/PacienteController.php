@@ -10,9 +10,10 @@ use Illuminate\Http\Request;
 
 class PacienteController extends Controller
 {
-    public function __construct(PacienteRepository $repo)
+    public function __construct(Paciente $paciente, PacienteRepository $repo)
     {
         $this->repo = $repo;
+        $this->repo->setModel($paciente);
     }
     /**
      * Display a listing of the resource.

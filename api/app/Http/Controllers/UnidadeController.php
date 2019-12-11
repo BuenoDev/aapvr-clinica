@@ -36,27 +36,16 @@ class UnidadeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Unidade  $unidade
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Unidade $unidade)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Unidade  $unidade
      * @return \Illuminate\Http\Response
      */
-    public function update(UnidadeRequest $request, Unidade $unidade, UnidadeRepository $repo)
+    public function update(UnidadeRequest $request, Unidade $unidade)
     {
-        $repo->setModel($unidade);
-        $repo->update($request->formated());
+        $this->repo->setModel($unidade);
+        $this->repo->update($request->formated());
         return response()->json();
     }
 
@@ -68,6 +57,7 @@ class UnidadeController extends Controller
      */
     public function destroy(Unidade $unidade)
     {
-        $unidade->delete();
+        $this->repo->setModel($unidade);
+        $this->repo->delete();
     }
 }
