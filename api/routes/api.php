@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth:api']], function () {
      * Cruds
      */
     Route::resource('prestador', 'PrestadorController');
+    Route::resource('tipo-prestador', 'TipoPrestadorController');
     Route::resource('unidade', 'UnidadeController');
     Route::resource('especialidade','EspecialidadeController');
     Route::resource('grupoprocedimento', 'GrupoProcedimentoController');
