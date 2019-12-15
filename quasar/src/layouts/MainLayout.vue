@@ -12,27 +12,22 @@
           </q-avatar>
           AAPVR - Associação de Aposentados e Pensionistas de Volta Redonda
         </q-toolbar-title>
+        <span class="q-mr-md" @click="userDrawer">
+          {{ 'Olá, '+ authUser.name + '' }}
+        </span>
         <span @click="logout">
           Sair
         </span>
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="left" side="left" elevated :width="220"  v-if="authUser" >
+    <q-drawer show-if-above v-model="left"  side="left" elevated :width="220"  v-if="authUser"
+        :mini="miniState"
+        @mouseover="miniState = false"
+        @mouseout="miniState = true"
+    >
       <!-- drawer content -->
-        <q-img class="absolute-top" src="/statics/material.png" style="height: 110px; z-index: 2">
-            <div class="absolute-bottom bg-transparent">
-              <!-- <q-avatar size="56px" class="q-mb-sm">
-                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-              </q-avatar> -->
-              <div class="text-weight-bold">{{ authUser.name }}</div>
-              <div>
-                <span v-for="(role, index) in authUser.roles" :key="index">{{ role }}</span>
-              </div>
-              <div>{{ authUser.email }}</div>
-            </div>
-        </q-img>
-        <q-list padding class="menu-list" style="margin-top:110px">
+        <q-list padding class="menu-list" >
           <q-item :active="activeRoute === '/home'" to="/home" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon name="pie_chart" />
@@ -191,7 +186,9 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      left: false
+      left: false,
+      miniState: true,
+      userDrawer: false
     }
   },
   computed: {

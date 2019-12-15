@@ -24,7 +24,7 @@ class UnidadeRepository extends BaseRepository{
         return $unidade;
     }
     public function update($params){
-        $prestador = $this->model->update($params['unidade']) ? $this->model : abort(500);
+        $prestador = parent::update($params['unidade']) ? $this->model : abort(500);
         $enderecos = $this->enderecoRepo->updateOrCreate($params['enderecos'],$prestador);
 
         return compact([

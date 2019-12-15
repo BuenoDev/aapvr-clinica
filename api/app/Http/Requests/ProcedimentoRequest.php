@@ -26,4 +26,12 @@ class ProcedimentoRequest extends FormRequest
         return [
         ];
     }
+
+    public function formated(){
+        $data = parent::all();
+        $data['grupo_procedimento_id'] = $data['grupo_procedimento_id']['value'];
+        $data['status'] = $data['status'] === 'Ativado';
+
+        return $data;
+    }
 }

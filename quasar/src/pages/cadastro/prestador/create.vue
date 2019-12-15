@@ -40,7 +40,7 @@
                   <q-input class="q-mb-sm" type="email" square dense outlined ref="email" v-model="form.email" label="Email"  :rules="rules.email" lazy-rules :disable="this.form.options.userId !== null"/>
                   <q-input class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="CPF" :mask="mask.cpf" :rules="rules.cpf" lazy-rules />
                   <q-input class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="RG" :mask="mask.rg" :rules="rules.rg" lazy-rules />
-                  <q-select square dense outlined v-model="form.role" :options="rolesOptions" label="Cargo" class="q-mb-lg"/>
+                  <q-select square dense outlined v-model="form.role" :options="rolesOptions" label="Cargo" class="q-mb-lg" :loading="roleLoading"/>
                   <q-separator class="q-mb-lg"/>
                   <div v-if="form.role !== null && form.role.label === 'medico'">
                     <span class="text-h6" style="color:black">
@@ -48,7 +48,7 @@
                     </span>
                     <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.medico.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
                     <!-- TODO: verificar select nao modificando valores no edit  -->
-                    <q-select square dense outlined input-debounce="0" v-model="form.medico.especialidades" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" multiple use-input @filter="filterEspecialidade"/>
+                    <q-select square dense outlined input-debounce="0" v-model="form.medico.especialidades" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" multiple use-input @filter="filterEspecialidade" :loading="especialidadeLoading"/>
                   </div>
                   <!-- telefones -->
                   <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addPhone"/>
@@ -226,6 +226,8 @@ export default {
           }
         ]
       },
+      roleLoading: false,
+      especialidadeLoading: false,
       rules: {
         nome: [
           val => val !== null || 'Campo Obrigatório',
@@ -375,6 +377,20 @@ export default {
         })
       }
     },
+    fetchData () {
+      if (this.roles.length === 0) {
+        this.roleLoading = true
+        this.$store.dispatch('permissions/searchRole')
+          .then(() => { this.roleLoading = false })
+          .catch(() => { this.roleLoading = false })
+      }
+      if (this.especialidades.length === 0) {
+        this.especialidadeLoading = true
+        this.$store.dispatch('especialidade/refresh')
+          .then(() => { this.especialidadeLoading = false })
+          .catch(() => { this.especialidadeLoading = false })
+      }
+    },
     submit () {
       this.$refs.form.validate().then(result => {
         this.$axios.post('/prestador', this.form).then(response => {
@@ -404,25 +420,7 @@ export default {
     }
   },
   mounted () {
-    if (this.roles.length === 0 || this.especialidades.length === 0) {
-      this.$q.loading.show({
-        message: 'Carregando cargos'
-      })
-      this.$store.dispatch('permissions/searchRole').then(() => {
-        if (this.especialidades.length === 0) {
-          this.$q.loading.show({
-            message: 'Carregando especialidades'
-          })
-          this.$store.dispatch('especialidade/refresh').then(() => {
-            this.especialidadesOptions = this.especialidadesInitialOptions
-            this.$q.loading.hide()
-          })
-        } else {
-          this.especialidadesOptions = this.especialidadesInitialOptions
-          this.$q.loading.hide()
-        }
-      })
-    }
+    this.fetchData()
   }
 }
 

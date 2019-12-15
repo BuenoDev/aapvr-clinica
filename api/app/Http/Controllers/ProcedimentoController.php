@@ -19,7 +19,7 @@ class ProcedimentoController extends Controller
 
     public function store (ProcedimentoRequest $request)
     {
-        $this->repo->create($request->all());
+        $this->repo->create($request->formated());
     }
 
     public function update(ProcedimentoRequest $request, $id)

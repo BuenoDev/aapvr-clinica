@@ -2,6 +2,9 @@ const routes = [
   {
     path: '',
     component: () => import('layouts/AuthLayout.vue'),
+    /**
+     * Rotas de login
+     */
     children: [
       {
         path: '/login',
