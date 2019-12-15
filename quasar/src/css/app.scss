@@ -1,5 +1,8 @@
 // app global css in SCSS form
 
+@import '~@fullcalendar/core/main.css';
+@import '~@fullcalendar/daygrid/main.css';
+
 .container{
   max-width: 1200px;
 }
