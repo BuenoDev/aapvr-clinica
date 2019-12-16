@@ -12,6 +12,7 @@ import procedimento from './procedimento'
 import conselho from './conselho'
 import convenio from './convenio'
 import tipoprestador from './tipo-prestador'
+import tipopaciente from './tipo-paciente'
 
 Vue.use(Vuex)
 
@@ -33,7 +34,8 @@ export default function (/* { ssrContext } */) {
       paciente,
       conselho,
       convenio,
-      tipoprestador
+      tipoprestador,
+      tipopaciente
     },
 
     // enable strict mode (adds overhead!)
@@ -92,6 +94,10 @@ export default function (/* { ssrContext } */) {
     module.hot.accept(['./tipo-prestador'], () => {
       const newObj = require('./tipo-prestador').default
       Store.hotUpdate({ modules: { tipoprestador: newObj } })
+    })
+    module.hot.accept(['./tipo-paciente'], () => {
+      const newObj = require('./tipo-paciente').default
+      Store.hotUpdate({ modules: { tipopaciente: newObj } })
     })
   }
   return Store

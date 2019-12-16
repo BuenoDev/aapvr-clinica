@@ -12,9 +12,11 @@
           </q-avatar>
           AAPVR - Associação de Aposentados e Pensionistas de Volta Redonda
         </q-toolbar-title>
-        <span class="q-mr-md" @click="userDrawer">
-          {{ 'Olá, '+ authUser.name + '' }}
-        </span>
+        <div v-if="authUser !== null">
+          <span class="q-mr-md" @click="userDrawer">
+            {{ 'Olá, '+ authUser.name + '' }}
+          </span>
+        </div>
         <span @click="logout">
           Sair
         </span>
@@ -154,6 +156,14 @@
                   </q-item-section>
                   <q-item-section>
                     Tipo de Prestador
+                  </q-item-section>
+              </q-item>
+              <q-item :active="activeRoute === '/tipo-paciente'" to="/tipo-paciente" dense clickable v-ripple v-if="authUser.hasRole('admin')" >
+                  <q-item-section avatar>
+                    <q-icon name="add" />
+                  </q-item-section>
+                  <q-item-section>
+                    Tipo de Paciente
                   </q-item-section>
               </q-item>
 

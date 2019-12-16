@@ -56,4 +56,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('conselho', 'ConselhoController');
     Route::resource('convenio', 'ConvenioController');
     Route::resource('paciente', 'PacienteController');
+    Route::resource('tipo-paciente','TipoPacienteController');
 });

@@ -51,6 +51,12 @@ const routes = [
       { path: 'tipo-prestador/cadastro', component: () => import('pages/cadastro/tipo-prestador/create') },
       { path: 'tipo-prestador/visualizar', component: () => import('pages/cadastro/tipo-prestador/show') },
       /**
+       * Tipo de Paciente
+       */
+      { path: 'tipo-paciente', component: () => import('pages/cadastro/tipo-paciente/index') },
+      { path: 'tipo-paciente/cadastro', component: () => import('pages/cadastro/tipo-paciente/create') },
+      { path: 'tipo-paciente/visualizar', component: () => import('pages/cadastro/tipo-paciente/show') },
+      /**
        * Grupo de Procedimento
        */
       { path: 'grupoprocedimento', component: () => import('pages/cadastro/grupoprocedimento/index') },
