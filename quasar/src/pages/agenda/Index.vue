@@ -75,5 +75,7 @@ export default {
 <style lang="scss" scoped>
 .right-form{
   margin: 50px 30px 0px 20px !important;
+  position: fixed;
+  width: 300px;
 }
 </style>
