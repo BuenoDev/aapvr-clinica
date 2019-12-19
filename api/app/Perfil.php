@@ -21,7 +21,7 @@ class Perfil extends Model
     }
     public function prestador()
     {
-        return $this->belongsTo('App\Prestador');
+        return $this->hasOne('App\Prestador');
     }
     public function enderecos()
     {

@@ -15,6 +15,7 @@ class AlterUsersForPerfilMigration extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->bigInteger('perfil_id')->nullable();
+            $table->dropColumn('name');
         });
         Schema::dropIfExists('medicos');
     }
@@ -26,8 +27,9 @@ class AlterUsersForPerfilMigration extends Migration
      */
     public function down()
     {
-        Schema::table('user', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('perfil_id');
+            // $table->string('name');
         });
     }
 }

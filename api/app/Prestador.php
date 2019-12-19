@@ -28,7 +28,7 @@ class Prestador extends Model
         return $this->hasManyThrough('App\Perfil', 'App\Telefone');
     }
     public function perfil(){
-        return $this->hasOne('App\Perfil','perfil_id');
+        return $this->belongsTo('App\Perfil','perfil_id');
     }
     public function unidades()
     {
