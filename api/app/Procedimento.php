@@ -13,10 +13,10 @@ class Procedimento extends Model
         'status',
         'grupo_procedimento_id'
     ];
-    
+
     public function grupoprocedimento()
     {
-      return $this->belongsTo(GrupoProcedimento::class);
+      return $this->belongsTo(GrupoProcedimento::class,'grupo_procedimento_id');
     }
 
 }

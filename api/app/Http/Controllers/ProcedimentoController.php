@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\ProcedimentoRequest;
+use App\Http\Resources\ProcedimentoResource;
 use App\Repositories\ProcedimentoRepository;
 
 
@@ -14,7 +15,9 @@ class ProcedimentoController extends Controller
 
     public function index()
     {
-        return response()->json($this->repo->all());
+        return response()->json(
+            ProcedimentoResource::collection($this->repo->all())
+        );
     }
 
     public function store (ProcedimentoRequest $request)
@@ -25,7 +28,7 @@ class ProcedimentoController extends Controller
     public function update(ProcedimentoRequest $request, $id)
     {
         $this->repo->findById($id);
-        $this->repo->update($request->all());
+        $this->repo->update($request->formated());
     }
 
     public function destroy($id)
