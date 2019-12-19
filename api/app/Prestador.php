@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 
 class Prestador extends Model
 {
@@ -13,16 +15,20 @@ class Prestador extends Model
         'cpf',
         'rg',
         'nrConselho',
-        'user_id'
+        'user_id',
+        'perfil_id'
     ];
 
     public function telefones()
     {
-        return $this->morphMany('App\Telefone','dono');
+        return $this->hasManyThrough('App\Perfil', 'App\Telefone');
     }
     public function enderecos()
     {
-        return $this->morphMany('App\Endereco','dono');
+        return $this->hasManyThrough('App\Perfil', 'App\Telefone');
+    }
+    public function perfil(){
+        return $this->hasOne('App\Perfil','perfil_id');
     }
     public function unidades()
     {

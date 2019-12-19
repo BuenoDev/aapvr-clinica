@@ -19,6 +19,7 @@
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
                   <div class="row">
                      <div class="col-md-12">
+                       <!-- TODO: verificar por que o select nao muda de valor automaticamente -->
                         <q-select :disable="!edit" square dense outlined v-model="form.grupoProcedimento" :options="options" label="Grupo" :loading="loading.grupo" class="q-mb-lg"/>
                       </div>
                       <div class="col-md-4">

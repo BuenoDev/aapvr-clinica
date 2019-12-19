@@ -72,6 +72,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function prestador()
     {
-        return $this->hasOne('App\Prestador', 'user_id');
+        return $this->hasOne('App\Prestador');
+    }
+
+    public function perfil()
+    {
+        return $this->belongsTo('App\Perfil',null,'perfil_id');
     }
 }
