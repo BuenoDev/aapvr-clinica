@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Prestador;
 use App\Http\Requests\PrestadorRequest;
 use App\Http\Resources\PrestadorResource;
-use App\Prestador;
 use App\Repositories\PrestadorRepository;
 use App\Repositories\UserRepository;
 
 class PrestadorController extends Controller
 {
+    public function __construct(PrestadorRepository $repo)
+    {
+        $this->repo = $repo;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,9 +22,7 @@ class PrestadorController extends Controller
     public function index()
     {
         return response()->json(
-            PrestadorResource::collection(
-                Prestador::with('enderecos', 'telefones','medico','medico.especialidades')->get()
-            )
+            PrestadorResource::collection($this->repo->all())
         );
     }
 
@@ -33,26 +35,19 @@ class PrestadorController extends Controller
     public function store(PrestadorRequest $request, PrestadorRepository $prestadorRepository, UserRepository $userRepository)
     {
         $params = $request->formated();
+
         if(!$params['assign']){
             $user = $userRepository->createDefault($params['user']);
             $user_id = $user->id;
         } else {
             $user_id = $params['assign'];
         }
+
         $prestadorRepository->create($params,$user_id);
 
         return response()->json();
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Prestador  $prestador
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Prestador $prestador)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -74,8 +69,9 @@ class PrestadorController extends Controller
      * @param  \App\Prestador  $prestador
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Prestador $prestador)
+    public function destroy(Prestador $prestador,PrestadorRepository $repo)
     {
-        $prestador->delete();
+        $repo->setModel($prestador);
+        $repo->delete();
     }
 }

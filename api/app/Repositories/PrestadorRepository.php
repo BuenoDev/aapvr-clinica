@@ -1,8 +1,7 @@
 <?php
-
 namespace App\Repositories;
 
-use App\Medico;
+use App\Perfil;
 use App\Prestador;
 
 class PrestadorRepository extends BaseRepository{
@@ -11,35 +10,42 @@ class PrestadorRepository extends BaseRepository{
         $this->model = $model;
         $this->enderecoRepo = $endereco;
         $this->telefoneRepo = $telefone;
+
+        $this->setEager([
+            'especialidades',
+            'perfil',
+            'perfil.enderecos',
+            'perfil.telefones',
+        ]);
     }
 
-    public function create($params, $user_id){
-        $role = $params['prestador']['role'];
-        $conselho = $params['medico']['nrConselho'];
-        $especialidades = $params['medico']['especialidades'];
+    public function create($params){
+        parent::forgetCache();
 
-        unset($params['medico']['nrConselho']);
+        $role = $params['prestador']['role'];
+        $especialidades = $params['prestador']['especialidades'];
+        // $conselho = $params['prestador']['nrConselho'];
+
+        // unset($params['prestador']['nrConselho']);
         unset($params['prestador']['role']);
-        unset($params['medico']['especialidades']);
+        unset($params['prestador']['especialidades']);
 
         $params['prestador']['user_id'] = $user_id;
 
-        $prestador = Prestador::create($params['prestador']);
+        $perfil = Perfil::create($params['perfil']);
+        $prestador = $perfil->prestador()->create($params['prestador']);
+
+        $prestador->user->syncRoles($role);
         $this->enderecoRepo->createMany($params['enderecos'],$prestador);
         $this->telefoneRepo->createMany($params['telefones'],$prestador);
 
-        $prestador->user->syncRoles($role);
-        if($role === 'medico'){
-            $medico = Medico::create([
-                'nrconselho' => $conselho,
-                'prestador_id' => $prestador->id
-            ]);
-            $medico->especialidades()->sync($especialidades);
-        }
+
+        $prestador->especialidades()->sync($especialidades);
 
         return $prestador;
     }
     public function update($params){
+        parent::forgetCache();
         $prestador = $this->model->update($params['prestador']) ? $this->model : abort(500);
         $this->model->user->update($params['user']);
         $this->model->user->syncRoles($params['prestador']['role']);

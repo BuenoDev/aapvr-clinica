@@ -11,9 +11,6 @@ class Prestador extends Model
     protected $table = 'prestadores';
 
     protected $fillable = [
-        'nome',
-        'cpf',
-        'rg',
         'nrConselho',
         'user_id',
         'perfil_id'
@@ -38,8 +35,8 @@ class Prestador extends Model
     {
         return $this->belongsTo('App\User', 'user_id');
     }
-    public function medico()
+    public function especialidades()
     {
-        return $this->hasOne('App\Medico');
+        return $this->belongsToMany('App\Especialidade','especialidade_prestador' ,'prestador_id', 'especialidade_id');
     }
 }
