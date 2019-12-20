@@ -37,24 +37,17 @@ class PrestadorRequest extends FormRequest
     public function formated(){
         $data = parent::all();
 
-        if(isset($data['options'])) {
-            $assign = $data['options']['userId'] != null ? $data['options']['userId'] : false;
-        } else $assign = null;
 
-        $perfil = [
-            'nome' => $data['nome'],
-            'rg' => $data['rg'],
-            'cpf' => $data['cpf'],
-        ];
 
-        $user = [
-            'email' => $data['email'],
-        ];
+        $perfil = $data['perfil'];
+
+        $user = $data['user'];
+
 
         $prestador = [
-            'role' => $data['role']['label'],
-            'nrConselho' => $data['medico']['nrConselho'],
-            'especialidades' => collect($data['medico']['especialidades'])->map(function($especialidade){
+            'tipoPrestador' => $data['prestador']['tipoPrestador']['value'],
+            'nrConselho' => $data['prestador']['nrConselho'],
+            'especialidades' => collect($data['prestador']['especialidades'])->map(function($especialidade){
                 return $especialidade['value'];
             })->toArray()
         ];

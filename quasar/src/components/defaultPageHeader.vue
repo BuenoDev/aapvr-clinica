@@ -6,7 +6,7 @@
       </template>
     </q-breadcrumbs>
     <div class="justify-right col-md-2 offset-6">
-      <q-btn label="voltar" size="sm" icon="arrow_back" :to="this.backTo" />
+      <q-btn label="voltar" size="sm" icon="arrow_back" :to="this.backTo" class="back-button"/>
     </div>
   </div>
   <!-- </div> -->
@@ -25,3 +25,8 @@ export default {
   ]
 }
 </script>
+<style lang="scss" scoped>
+.back-button{
+  background-color: white;
+}
+</style>

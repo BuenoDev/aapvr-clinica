@@ -46,7 +46,7 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('123123')
         ]);
 
-        $medico->assignRole('medico');
+        $medico->assignRole('prestador');
         $medico->perfil->prestador()->create([
             'nrConselho' => '123',
         ])->especialidades()->sync(Especialidade::find(10));

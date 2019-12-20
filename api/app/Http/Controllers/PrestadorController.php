@@ -32,18 +32,11 @@ class PrestadorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PrestadorRequest $request, PrestadorRepository $prestadorRepository, UserRepository $userRepository)
+    public function store(PrestadorRequest $request)
     {
         $params = $request->formated();
 
-        if(!$params['assign']){
-            $user = $userRepository->createDefault($params['user']);
-            $user_id = $user->id;
-        } else {
-            $user_id = $params['assign'];
-        }
-
-        $prestadorRepository->create($params,$user_id);
+        $this->repo->create($params);
 
         return response()->json();
     }

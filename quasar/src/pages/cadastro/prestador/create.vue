@@ -4,7 +4,7 @@
         :config="headerConfig"
         backTo="/prestador"
         />
-        <q-dialog v-model="assignUser" width="600px">
+        <q-dialog v-model="assignUserDialog" width="600px">
             <!-- <span class="text-h4">
               Atribuir a usuário
             </span> -->
@@ -31,24 +31,92 @@
                 <q-separator/>
               </q-card-section>
               <q-card-section>
-                <q-btn class="q-mr-md" color="positive" text-color="white" label="Cadastrar novo usuário" @click="newUserClick" />
-                <q-btn color="primary" text-color="white" label="Atribuir a usuário existente" @click="assignUserClick" />
+                <div class="row">
+                  <div class="col-lg-4 col-sm-12">
+                    <q-btn color="positive" class="q-ma-sm" text-color="white" label="Cadastrar novo usuário" @click="newUserClick" />
+                  </div>
+                  <div class="col-lg-4 col-sm-12">
+                    <q-btn color="primary" class="q-ma-sm" text-color="white" label="Atribuir a usuário existente" @click="assignUserClick" />
+                  </div>
+                  <div class="col-lg-4 col-sm-12">
+                    <q-btn color="negative" class="q-ma-sm" text-color="white" label="Criar sem atribuir usuario" @click="noUserClick" />
+                  </div>
+                </div>
               </q-card-section>
               <q-card-section>
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy :disabled="disableForm">
-                  <q-input class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="nome" :rules="rules.nome" lazy-rules />
-                  <q-input class="q-mb-sm" type="email" square dense outlined ref="email" v-model="form.email" label="Email"  :rules="rules.email" lazy-rules :disable="this.form.options.userId !== null"/>
-                  <q-input class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="CPF" :mask="mask.cpf" :rules="rules.cpf" lazy-rules />
-                  <q-input class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="RG" :mask="mask.rg" :rules="rules.rg" lazy-rules />
-                  <q-select square dense outlined v-model="form.role" :options="rolesOptions" label="Cargo" class="q-mb-lg" :loading="roleLoading"/>
+                  <!-- nome -->
+                  <q-input class="q-mb-sm" square dense outlined
+                            v-model="form.perfil.nome"
+                            label="nome"
+                            ref="nome"
+                            :rules="rules.nome"
+                            lazy-rules
+                            />
+                  <!-- email -->
+                  <q-input class="q-mb-sm" square dense outlined
+                            type="email"
+                            v-if="form.user"
+                            v-model="form.user.email"
+                            label="Email"
+                            ref="email"
+                            :rules="rules.email"
+                            :disable="disableEmailForm"
+                            lazy-rules
+                            />
+                  <!-- cpf -->
+                  <q-input class="q-mb-sm" square dense outlined
+                            ref="cpf"
+                            v-model="form.perfil.cpf"
+                            label="CPF"
+                            :mask="mask.cpf"
+                            :rules="rules.cpf"
+                            lazy-rules
+                            />
+                  <!-- rg -->
+                  <q-input class="q-mb-sm" square dense outlined
+                            ref="rg"
+                            v-model="form.perfil.rg"
+                            label="RG"
+                            :mask="mask.rg"
+                            :rules="rules.rg"
+                            lazy-rules
+                            />
+                  <!-- Tipo -->
+                  <q-select class="q-mb-lg" square dense outlined
+                            v-model="form.prestador.tipoPrestador"
+                            :options="tiposPrestadorOptions"
+                            label="Tipo de Prestador"
+                            :loading="false"
+                            />
                   <q-separator class="q-mb-lg"/>
-                  <div v-if="form.role !== null && form.role.label === 'medico'">
+                  <div v-if="form.prestador.tipoPrestador !== null && form.prestador.tipoPrestador.label.toLowerCase() === 'medico'">
                     <span class="text-h6" style="color:black">
                       Medicos
                     </span>
-                    <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.medico.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules />
+                    <!-- conselho -->
+                    <q-input class="q-mb-sm q-mt-md" square dense outlined
+                             ref="nrConselho"
+                             label="numero do conselho"
+                             v-model="form.prestador.nrConselho"
+                             :rules="rules.nrConselho"
+                             lazy-rules
+                             />
+
                     <!-- TODO: verificar select nao modificando valores no edit  -->
-                    <q-select square dense outlined input-debounce="0" v-model="form.medico.especialidades" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" multiple use-input @filter="filterEspecialidade" :loading="especialidadeLoading"/>
+                    <!-- TODO: verificar select com input nao limpando o campo e,
+                    se possivel, adicionar tags -->
+
+                    <!-- especialidades -->
+                    <q-select class="q-mb-lg" square dense outlined multiple use-input
+                              input-debounce="1"
+                              label="Especialidade"
+                              ref="especialidade"
+                              v-model="form.prestador.especialidades"
+                              :options="especialidadesOptions"
+                              :loading="especialidadeLoading"
+                              @filter="filterEspecialidade"
+                              />
                   </div>
                   <!-- telefones -->
                   <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addPhone"/>
@@ -135,12 +203,11 @@ export default {
       'especialidades'
     ]),
     ...mapGetters('permissions', [
-      'roles', 'unlinkedUsers'
+      'unlinkedUsers'
     ]),
-    disableForm () {
-      return !(this.form.options.newUser || this.form.options.userId !== null)
-      // return !this.form.options.newUser
-    },
+    ...mapGetters('tipoprestador', [
+      'tiposPrestador'
+    ]),
     especialidadesInitialOptions () {
       return this.especialidades.map(obj => {
         return {
@@ -149,11 +216,11 @@ export default {
         }
       })
     },
-    rolesOptions () {
-      return this.roles.map(obj => {
+    tiposPrestadorOptions () {
+      return this.tiposPrestador.map(obj => {
         return {
           value: obj.id,
-          label: obj.name
+          label: obj.nome
         }
       })
     }
@@ -192,20 +259,21 @@ export default {
           label: 'cadastro'
         }
       ],
-      assignUser: false,
+      disableEmailForm: true,
+      assignUserDialog: false,
+      disableForm: true,
       form: {
-        options: {
-          newUser: false,
-          userId: null
+        user: null,
+        perfil: {
+          nome: null,
+          cpf: null,
+          rg: null
         },
-        medico: {
+        prestador: {
           nrConselho: null,
+          tipoPrestador: null,
           especialidades: []
         },
-        nome: null,
-        cpf: null,
-        rg: null,
-        role: null,
         telefones: [
           {
             numero: null,
@@ -226,7 +294,6 @@ export default {
           }
         ]
       },
-      roleLoading: false,
       especialidadeLoading: false,
       rules: {
         nome: [
@@ -281,12 +348,20 @@ export default {
   },
   methods: {
     selectUser (row) {
-      this.form.email = row.email
-      this.form.options.userId = row.id
-      this.assignUser = false
+      this.form.user = {
+        email: row.email,
+        id: row.id
+      }
+      this.assignUserDialog = false
+      this.disableForm = false
+      this.disableEmailForm = true
     },
     newUserClick () {
-      this.form.options.newUser = true
+      this.form.user = {
+        email: null
+      }
+      this.disableForm = false
+      this.disableEmailForm = false
     },
     assignUserClick () {
       if (this.unlinkedUsers.length === 0) {
@@ -296,12 +371,17 @@ export default {
         this.$store.dispatch('permissions/getUnlinkedUsers').then(() => {
           this.$q.loading.hide()
           this.users = this.unlinkedUsers
-          this.assignUser = true
+          this.assignUserDialog = true
         })
       } else {
         this.users = this.unlinkedUsers
-        this.assignUser = true
+        this.assignUserDialog = true
       }
+    },
+    noUserClick () {
+      this.form.user = null
+      this.disableForm = false
+      this.disableEmailForm = true
     },
     setResult (result) {
       if (result.length > 0) this.users = result
@@ -378,24 +458,22 @@ export default {
       }
     },
     fetchData () {
-      if (this.roles.length === 0) {
-        this.roleLoading = true
-        this.$store.dispatch('permissions/searchRole')
-          .then(() => { this.roleLoading = false })
-          .catch(() => { this.roleLoading = false })
-      }
       if (this.especialidades.length === 0) {
         this.especialidadeLoading = true
         this.$store.dispatch('especialidade/refresh')
           .then(() => { this.especialidadeLoading = false })
           .catch(() => { this.especialidadeLoading = false })
       }
+      if (this.tiposPrestador.length === 0) {
+        this.$store.dispatch('tipoprestador/refresh')
+      }
     },
     submit () {
       this.$refs.form.validate().then(result => {
         this.$axios.post('/prestador', this.form).then(response => {
-          if (this.form.options.userId !== null) {
-            this.$store.dispatch('removeUnlinked', this.form.options.userId)
+          // Remove usuario sem prestador da lista
+          if (this.form.user !== null) {
+            this.$store.dispatch('removeUnlinked', this.form.user.id)
           }
           this.$q.notify({
             message: 'Prestador cadastrado com sucesso',
@@ -405,8 +483,12 @@ export default {
           this.$store.dispatch('prestador/refresh')
         }).catch(error => {
           console.error(error)
+          let message = ''
+          if (error.response.data.message.includes('users_email_unique')) {
+            message = 'Este email ja esta em uso'
+          } else message = error.message
           this.$q.notify({
-            message: error.message,
+            message: message,
             color: 'negative'
           })
         })

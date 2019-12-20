@@ -35,9 +35,10 @@ class UserController extends Controller
     }
 
     public function unlinked() {
-        return User::all()->filter(function($user){
-            return $user->prestador === null;
-        });
+        return User::with('perfil','perfil.prestador')->get()
+                    ->filter(function($user){
+                        return $user->perfil->prestador === null;
+                    });
     }
 
     public function revoke( User $user, Request $request){
