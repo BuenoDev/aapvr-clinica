@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Especialidade;
 use App\Http\Requests\EspecialidadeRequest;
 use App\Repositories\EspecialidadeRepository;
-use Illuminate\Http\Request;
 
 class EspecialidadeController extends Controller
 {

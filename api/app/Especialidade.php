@@ -13,8 +13,8 @@ class Especialidade extends Model
         'codigo'
     ];
 
-    public function medicos()
+    public function prestadores()
     {
-        return $this->belongsToMany('App\Medico', 'especialidade_medico', 'especialidade_id', 'medico_id');
+        return $this->belongsToMany('App\Prestador', 'especialidade_prestador', 'especialidade_id', 'prestador_id');
     }
 }

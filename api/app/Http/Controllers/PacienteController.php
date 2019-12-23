@@ -23,7 +23,7 @@ class PacienteController extends Controller
     public function index()
     {
         return response()->json(
-            PacienteResource::collection($this->repo->all()),
+            PacienteResource::collection($this->repo->all())
         );
     }
 

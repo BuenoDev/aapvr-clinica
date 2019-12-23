@@ -12,8 +12,14 @@ class TipoPrestadorTableSeeder extends Seeder
      */
     public function run()
     {
-        TipoPrestador::create([
-            'nome' => 'Medico'
-        ]);
+        $nomes = [
+            'Medico',
+            'Fisioterapeuta',
+            'Professor',
+            'Acupuntura',
+        ];
+        foreach($nomes as $nome){
+            TipoPrestador::create(['nome' => $nome]);
+        }
     }
 }

@@ -20,7 +20,7 @@ class RolesTableSeeder extends Seeder
                 'name' => 'admin'
             ],
             [
-                'name' => 'medico'
+                'name' => 'prestador'
             ],
             [
                 'name' => 'recepcionista'
@@ -28,6 +28,6 @@ class RolesTableSeeder extends Seeder
         ];
         foreach ($roles as $role) {
             Role::create($role);
-        }        
+        }
     }
 }

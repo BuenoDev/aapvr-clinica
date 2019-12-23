@@ -17,7 +17,7 @@
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
                   <div class="row">
                      <div class="col-md-12">
-                     <q-select square dense outlined v-model="form.grupo_procedimento_id" :options="options" label="Grupo" class="q-mb-lg"/>
+                     <q-select square dense outlined v-model="form.grupoProcedimento" :options="options" label="Grupo" :loading="loading.grupo" class="q-mb-lg"/>
                      </div>
                     <div class="col-md-4">
                   <q-input class="q-mb-xs" mask="###########" square dense outlined ref="codigo" v-model="form.codigo" label="Código" :rules="rules.codigo" lazy-rules />
@@ -79,7 +79,10 @@ export default {
         codigo: null,
         procedimento: null,
         status: null,
-        grupo_procedimento_id: null
+        grupoProcedimento: null
+      },
+      loading: {
+        grupo: false
       },
       rules: {
         codigo: [
@@ -102,6 +105,14 @@ export default {
     addAddress () {
       this.form.enderecos.push({
         descricao: null
+      })
+    },
+    mapOptions (options) {
+      return options.map(item => {
+        return {
+          label: item.descricao,
+          value: item.id
+        }
       })
     },
     submit () {
@@ -132,13 +143,12 @@ export default {
     }
   },
   mounted () {
-    this.$axios.get('/grupoprocedimento').then(response => {
-      this.options = response.data.map(item => {
-        return {
-          label: item.descricao,
-          value: item.id
-        }
-      })
+    this.options = this.mapOptions(this.grupoprocedimentos)
+    if (this.options.length === 0) this.loading.grupo = true
+
+    this.$store.dispatch('grupoprocedimento/refresh').then(() => {
+      this.loading.grupo = false
+      this.options = this.mapOptions(this.grupoprocedimentos)
     })
   }
 }

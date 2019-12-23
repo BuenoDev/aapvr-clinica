@@ -13,7 +13,7 @@
           AAPVR - Associação de Aposentados e Pensionistas de Volta Redonda
         </q-toolbar-title>
         <span class="q-mr-md" @click="userDrawer">
-          {{ 'Olá, '+ authUser.name + '' }}
+          Olá, <b>{{authUser.name}}</b>
         </span>
         <span @click="logout">
           Sair
