@@ -7,6 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Medico::class, function (Faker $faker) {
     return [
-        //
+        'nrconselho' => $faker->ean8(),
+        'prestador_id' => $faker->ean8(),
     ];
 });

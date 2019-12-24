@@ -1,8 +1,9 @@
 <?php
-use App\Procedimento;
-use Illuminate\Database\Seeder;
 
-class ProcedimentoTableSeeder extends Seeder
+use Illuminate\Database\Seeder;
+use App\Paciente;
+
+class PacienteTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +12,6 @@ class ProcedimentoTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Procedimento::class, 25)->create();
+        factory(App\Paciente::class, 50)->create();
     }
 }

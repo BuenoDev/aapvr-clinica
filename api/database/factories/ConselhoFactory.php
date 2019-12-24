@@ -2,11 +2,11 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Convenio;
+use App\Conselho;
 use Faker\Generator as Faker;
 
-$factory->define(Convenio::class, function (Faker $faker) {
+$factory->define(Conselho::class, function (Faker $faker) {
     return [
-        
+        //
     ];
 });

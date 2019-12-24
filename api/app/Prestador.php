@@ -11,6 +11,7 @@ class Prestador extends Model
     protected $table = 'prestadores';
 
     protected $fillable = [
+        // 'nome',
         'nrConselho',
         'user_id',
         'perfil_id'

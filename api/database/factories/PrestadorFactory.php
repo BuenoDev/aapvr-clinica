@@ -7,9 +7,9 @@ use Faker\Generator as Faker;
 
 $factory->define(Prestador::class, function (Faker $faker) {
     return [
-        'nome' => $faker->name,
-        'nrConselho' => $faker->number,
-        'cpf' => $faker->number,
-        'rg' => $faker->number,
+        // 'nome' => $faker->firstName(),
+        'nrConselho' => $faker->ean8(),
+        // 'cpf' => $faker->ean8(),
+        // 'rg' => $faker->ean8(),
     ];
 });
