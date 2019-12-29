@@ -12,7 +12,7 @@
           </q-avatar>
           AAPVR - Associação de Aposentados e Pensionistas de Volta Redonda
         </q-toolbar-title>
-        <span class="q-mr-md" @click="userDrawer" v-if="authUser">
+        <span class="q-mr-md" @click="userDrawer" v-if="authUser"
           Olá, <b>{{authUser.name}}</b>
         </span>
         <span @click="logout">
@@ -209,7 +209,7 @@ export default {
       })
     }
   },
-  beforeMount () {
+  mounted () {
     this.$q.loading.show({
       message: 'Buscando informações do usuário'
     })
