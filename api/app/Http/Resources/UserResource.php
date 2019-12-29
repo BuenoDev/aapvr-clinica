@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'email'        => $this->email,
             'roles'        => $this->getRoleNames(),
             'permissions'  => $this->getAllPermissions()->map(function($permission){return $permission->name;}), //TODO: verificar metodo
-            'hasPrestador' => $this->prestador != null
+            'hasPrestador' => $this->perfil->prestador != null
         ];
     }
 }
