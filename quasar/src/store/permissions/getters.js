@@ -5,12 +5,7 @@ export function usersCount (state) {
   return state.users.count
 }
 export function unlinkedUsers (state) {
-  // let obj = state.unlinkedUsers.map(o => {
-  //   let usr = Object.assign({}, o)
-  //   usr.perfil = Object.assign({}, o.perfil)
-  // })
-  // console.log(obj)
-  return state.unlinkedUsers
+  return window.deepCopy(state.unlinkedUsers)
 }
 export function roles (state) {
   return state.roles.data

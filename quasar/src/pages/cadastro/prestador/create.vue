@@ -45,7 +45,6 @@
               </q-card-section>
               <q-card-section>
                 <!-- TODO: definir desabilitar form de forma independente pra cada modulo -->
-                <!-- TODO: Verificar alterações na mutation quanto ao usuario cadastrado por associação -->
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy :disabled="disable.form">
                   <!-- nome -->
                   <q-input class="q-mb-sm" square dense outlined
