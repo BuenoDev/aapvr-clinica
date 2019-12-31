@@ -33,10 +33,9 @@ class PrestadorRepository extends BaseRepository{
         // TODO: Modificar para que possa criar prestador
         // sem nenhum usuario
 
-        //Undefined index id - atribuindo usuario
-        if($params['user']['id'] != null)
+        if( isset($params['user']['id']) )
             $user = User::findOrFail($params['user']['id']);
-        else if($params['user']['id'] == null && $params['user']['email'] != null)
+        else if( ! isset($params['user']['id']) && isset($params['user']['email']) )
             $user = $this->userRepo->createDefault($params['user']);
         else $user = false;
         // formata parametros

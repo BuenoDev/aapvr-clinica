@@ -37,12 +37,9 @@ class PrestadorRequest extends FormRequest
     public function formated(){
         $data = parent::all();
 
-
-
         $perfil = $data['perfil'];
 
         $user = $data['user'];
-
 
         $prestador = [
             'tipoPrestador' => $data['prestador']['tipoPrestador']['value'],
@@ -78,7 +75,6 @@ class PrestadorRequest extends FormRequest
         })->toArray();
 
         return compact([
-            'assign',
             'user',
             'prestador',
             'perfil',

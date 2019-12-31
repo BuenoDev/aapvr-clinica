@@ -44,13 +44,16 @@
                 </div>
               </q-card-section>
               <q-card-section>
-                <q-form ref="form" @submit.prevent = 'submit' autofocus greedy :disabled="disableForm">
+                <!-- TODO: definir desabilitar form de forma independente pra cada modulo -->
+                <!-- TODO: Verificar alterações na mutation quanto ao usuario cadastrado por associação -->
+                <q-form ref="form" @submit.prevent = 'submit' autofocus greedy :disabled="disable.form">
                   <!-- nome -->
                   <q-input class="q-mb-sm" square dense outlined
                             v-model="form.perfil.nome"
                             label="nome"
                             ref="nome"
                             :rules="rules.nome"
+                            :disabled="disable.nome"
                             lazy-rules
                             />
                   <!-- email -->
@@ -61,7 +64,7 @@
                             label="Email"
                             ref="email"
                             :rules="rules.email"
-                            :disable="disableEmailForm"
+                            :disabled="disable.email"
                             lazy-rules
                             />
                   <!-- cpf -->
@@ -71,6 +74,7 @@
                             label="CPF"
                             :mask="mask.cpf"
                             :rules="rules.cpf"
+                            :disabled="disable.cpf"
                             lazy-rules
                             />
                   <!-- rg -->
@@ -80,6 +84,7 @@
                             label="RG"
                             :mask="mask.rg"
                             :rules="rules.rg"
+                            :disabled="disable.rg"
                             lazy-rules
                             />
                   <!-- Tipo -->
@@ -259,9 +264,14 @@ export default {
           label: 'cadastro'
         }
       ],
-      disableEmailForm: true,
+      disable: {
+        form: true,
+        email: true,
+        nome: false,
+        rg: false,
+        cpf: false
+      },
       assignUserDialog: false,
-      disableForm: true,
       form: {
         user: null,
         perfil: {
@@ -352,36 +362,45 @@ export default {
         email: row.email,
         id: row.id
       }
+      this.disable.form = false
       this.assignUserDialog = false
-      this.disableForm = false
-      this.disableEmailForm = true
+
+      this.disable.rg = true
+      this.disable.cpf = true
+      this.disable.nome = true
+      this.disable.email = true
+      this.form.perfil = row.perfil
     },
     newUserClick () {
       this.form.user = {
         email: null
       }
-      this.disableForm = false
-      this.disableEmailForm = false
+      this.disable.form = false
+
+      this.disable.rg = false
+      this.disable.cpf = false
+      this.disable.nome = false
+      this.disable.email = false
     },
     assignUserClick () {
       if (this.unlinkedUsers.length === 0) {
         this.$q.loading.show({
           message: 'Carregando ususários'
         })
-        this.$store.dispatch('permissions/getUnlinkedUsers').then(() => {
-          this.$q.loading.hide()
-          this.users = this.unlinkedUsers
-          this.assignUserDialog = true
-        })
       } else {
         this.users = this.unlinkedUsers
         this.assignUserDialog = true
       }
+      this.$store.dispatch('permissions/getUnlinkedUsers').then(() => {
+        this.$q.loading.hide()
+        this.users = this.unlinkedUsers
+        this.assignUserDialog = true
+      })
     },
     noUserClick () {
       this.form.user = null
-      this.disableForm = false
-      this.disableEmailForm = true
+      this.disable.form = false
+      this.disable.email = true
     },
     setResult (result) {
       if (result.length > 0) this.users = result
