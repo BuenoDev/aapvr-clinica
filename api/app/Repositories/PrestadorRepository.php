@@ -78,32 +78,20 @@ class PrestadorRepository extends BaseRepository{
     public function update($params){
         $this->forgetCache();
 
-        $prestador = $this->model->update($params['prestador']) ? $this->model : abort(500);
-        $this->model->user->update($params['user']);
+        $especialidades = $params['prestador']['especialidades'];
+        unset($params['prestador']['especialidades']);
 
-        $this->model->user->syncRoles($params['prestador']['role']);
+        if($this->model->perfil->user !== null)
+            $this->model->perfil->user->update($params['user']);
 
-        if($this->model->user->hasRole('medico')){
+        $prestador = $this->model->update($params['prestador']);
+        $this->model->perfil->update($params['perfil']);
+        $this->model->especialidades()->sync($especialidades);
 
-            if($this->model->medico === null) {
-                $this->model->medico()->create([
-                    'nrconselho' => $params['medico']['nrConselho']
-                ]);
-            } else $this->model->medico->update([
-                'nrconselho' => $params['medico']['nrConselho']
-            ]);
 
-            $this->model->medico->especialidades()->sync($params['medico']['especialidades']);
-        } else if($this->model->medico != null) {
-            $this->model->medico->delete();
-        }
         $enderecos = $this->enderecoRepo->updateOrCreate($params['enderecos'],$prestador);
         $telefones = $this->telefoneRepo->updateOrCreate($params['telefones'],$prestador);
 
-        return compact([
-            'prestador',
-            'enderecos',
-            'telefones'
-        ]);
+        return $prestador;
     }
 }
