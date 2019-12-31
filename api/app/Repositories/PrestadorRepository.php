@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\Perfil;
 use App\Prestador;
+use App\TipoPrestador;
 use App\User;
 
 class PrestadorRepository extends BaseRepository{
@@ -60,8 +61,10 @@ class PrestadorRepository extends BaseRepository{
             $perfil->user()->save($user);
             $perfil->user->syncRoles('prestador');
         }
+        $tipo = TipoPrestador::find($params['prestador']['tipoPrestador']);
 
         $prestador = $perfil->prestador()->create($params['prestador']);
+        $prestador->tipoPrestador()->associate($tipo);
 
         $this->enderecoRepo->createMany($params['enderecos'],$perfil);
         $this->telefoneRepo->createMany($params['telefones'],$perfil);

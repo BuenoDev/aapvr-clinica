@@ -6,6 +6,7 @@ export function refresh (context) {
   })
 }
 export function select (context, id) {
+  console.log(id)
   context.commit('select', id)
 }
 export function deletePrestador (context, data) {

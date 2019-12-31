@@ -17,7 +17,7 @@
                 <q-space />
               </template>
               <template v-slot:top-right>
-                <fuse-input :data="prestadores" :keys="['nome']" @result="setResult" />
+                <fuse-input :data="prestadores" :keys="['perfil.nome']" @result="setResult" />
               </template>
               <template v-slot:body-cell-actions="props">
                 <q-td key="actions" :props="props">
@@ -78,8 +78,8 @@ export default {
         {
           name: 'name',
           label: 'Nome',
-          field: 'nome',
-          align: 'center'
+          align: 'center',
+          field: row => row.perfil.nome
         },
         {
           name: 'actions',

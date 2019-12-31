@@ -9,7 +9,7 @@
             <q-card class=" q-mb-xl q-mt-lg">
               <q-card-section >
                 <span class="text-h4" style="color:black">
-                  {{ form.nome }}
+                  {{ form.perfil.nome }}
                   <q-btn label="Editar" size="sm" class="q-ma-md" color="primary" @click="editForm" v-if="authUser.can('editar-prestador')"/>
                   <q-btn label="Apagar" size="sm"  color="negative" @click="deleteForm" v-if="authUser.can('editar-prestador')"/>
                 </span>
@@ -17,18 +17,84 @@
               </q-card-section>
               <q-card-section>
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
-                  <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="nome" v-model="form.nome" label="nome" :rules="rules.nome" lazy-rules />
-                  <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="email" v-model="form.email" label="email" :rules="rules.email" lazy-rules />
-                  <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="cpf" v-model="form.cpf" label="CPF" :mask="mask.cpf" :rules="rules.cpf" lazy-rules />
-                  <q-input :disable="!edit" class="q-mb-sm" square dense outlined ref="rg" v-model="form.rg" label="RG" :mask="mask.rg" :rules="rules.rg" lazy-rules />
-                  <q-select square dense outlined ref="role" v-model="form.role" :options="rolesOptions" label="Cargo" class="q-mb-lg"/>
+                   <!-- nome -->
+                  <q-input class="q-mb-sm" square dense outlined
+                            :disabled="!edit"
+                            v-model="form.perfil.nome"
+                            label="nome"
+                            ref="nome"
+                            :rules="rules.nome"
+                            lazy-rules
+                            />
+                  <!-- email -->
+                  <q-input class="q-mb-sm" square dense outlined
+                            :disabled="!edit"
+                            type="email"
+                            v-if="form.user"
+                            v-model="form.user.email"
+                            label="Email"
+                            ref="email"
+                            :rules="rules.email"
+                            lazy-rules
+                            />
+                  <!-- cpf -->
+                  <q-input class="q-mb-sm" square dense outlined
+                            :disabled="!edit"
+                            ref="cpf"
+                            v-model="form.perfil.cpf"
+                            label="CPF"
+                            :mask="mask.cpf"
+                            :rules="rules.cpf"
+                            lazy-rules
+                            />
+                  <!-- rg -->
+                  <q-input class="q-mb-sm" square dense outlined
+                            :disabled="!edit"
+                            ref="rg"
+                            v-model="form.perfil.rg"
+                            label="RG"
+                            :mask="mask.rg"
+                            :rules="rules.rg"
+                            lazy-rules
+                            />
+                  <!-- Tipo -->
+                  <q-select class="q-mb-lg" square dense outlined
+                            :disabled="!edit"
+                            v-model="form.prestador.tipoPrestador"
+                            :options="tiposPrestadorOptions"
+                            label="Tipo de Prestador"
+                            :loading="false"
+                            />
                   <q-separator class="q-mb-lg"/>
-                  <div v-if="toggleMedicSection">
+                  <div v-if="form.prestador.tipoPrestador !== null && form.prestador.tipoPrestador.label.toLowerCase() === 'medico'">
                     <span class="text-h6" style="color:black">
                       Medicos
                     </span>
-                    <q-input class="q-mb-sm q-mt-md" square dense outlined ref="nrConselho" v-model="form.medico.nrConselho" label="numero do conselho" :rules="rules.nrConselho" lazy-rules :disable="!edit"/>
-                    <q-select square dense outlined input-debounce="0" ref="especialidades" v-model="form.medico.especialidades" :options="especialidadesOptions" label="Especialidade" class="q-mb-lg" multiple use-input @filter="filterEspecialidade" :disable="!edit"/>
+                    <!-- conselho -->
+                    <q-input class="q-mb-sm q-mt-md" square dense outlined
+                              :disabled="!edit"
+                             ref="nrConselho"
+                             label="numero do conselho"
+                             v-model="form.prestador.nrConselho"
+                             :rules="rules.nrConselho"
+                             lazy-rules
+                             />
+
+                    <!-- TODO: verificar select nao modificando valores no edit  -->
+                    <!-- TODO: verificar select com input nao limpando o campo e,
+                    se possivel, adicionar tags -->
+
+                    <!-- especialidades -->
+                    <q-select class="q-mb-lg" square dense outlined multiple use-input
+                              :disabled="!edit"
+                              input-debounce="1"
+                              label="Especialidade"
+                              ref="especialidade"
+                              v-model="form.prestador.especialidades"
+                              :options="especialidadesOptions"
+                              :loading="especialidadeLoading"
+                              @filter="filterEspecialidade"
+                              />
                   </div>
                   <!-- telefones -->
                   <q-btn round icon="add" color="positive" size="sm" class="q-mr-sm" @click="addPhone" v-if="edit"/>
@@ -110,8 +176,8 @@ export default {
     ...mapGetters('especialidade', [
       'especialidades'
     ]),
-    ...mapGetters('permissions', [
-      'roles'
+    ...mapGetters('tipoprestador', [
+      'tiposPrestador'
     ]),
     toggleMedicSection () {
       if (this.form.role === undefined) return false
@@ -131,6 +197,14 @@ export default {
         return {
           value: obj.id,
           label: obj.name
+        }
+      })
+    },
+    tiposPrestadorOptions () {
+      return this.tiposPrestador.map(obj => {
+        return {
+          value: obj.id,
+          label: obj.nome
         }
       })
     }
@@ -155,11 +229,17 @@ export default {
         }
       ],
       form: {
-        nome: null,
-        email: null,
-        cpf: null,
-        rg: null,
-        role: null,
+        user: null,
+        perfil: {
+          nome: null,
+          cpf: null,
+          rg: null
+        },
+        prestador: {
+          nrConselho: null,
+          tipoPrestador: null,
+          especialidades: []
+        },
         telefones: [
           {
             numero: null,
@@ -227,6 +307,7 @@ export default {
         'Comercial'
       ],
       especialidadesOptions: [],
+      especialidadeLoading: false,
       tempMedic: null,
       edit: false
     }
@@ -313,25 +394,26 @@ export default {
       })
     },
     loadSelectData () {
-      if (this.roles.length === 0 || this.especialidades.length === 0) {
-        this.$q.loading.show({
-          message: 'Carregando cargos'
-        })
-        this.$store.dispatch('permissions/searchRole').then(() => {
-          if (this.especialidades.length === 0) {
-            this.$q.loading.show({
-              message: 'Carregando especialidades'
-            })
-            this.$store.dispatch('especialidade/refresh').then(() => {
-              this.especialidadesOptions = this.especialidadesInitialOptions
-              this.$q.loading.hide()
-            })
-          } else {
-            this.especialidadesOptions = this.especialidadesInitialOptions
-            this.$q.loading.hide()
-          }
-        })
-      }
+      // TODO: fix me modafoka
+      // if (this.tiposPrestador.length === 0 || this.especialidades.length === 0) {
+      //   this.$q.loading.show({
+      //     message: 'Carregando cargos'
+      //   })
+      //   this.$store.dispatch('permissions/searchRole').then(() => {
+      //     if (this.especialidades.length === 0) {
+      //       this.$q.loading.show({
+      //         message: 'Carregando especialidades'
+      //       })
+      //       this.$store.dispatch('especialidade/refresh').then(() => {
+      //         this.especialidadesOptions = this.especialidadesInitialOptions
+      //         this.$q.loading.hide()
+      //       })
+      //     } else {
+      //       this.especialidadesOptions = this.especialidadesInitialOptions
+      //       this.$q.loading.hide()
+      //     }
+      //   })
+      // }
     },
     filterEspecialidade (param, update) {
       if (param === '') {
@@ -375,31 +457,13 @@ export default {
     }
   },
   mounted () {
-    this.loadSelectData()
+    // this.loadSelectData()
     this.form = this.selected
-    if (this.form.medico === null) {
-      this.form.medico = {
-        nrConselho: null,
-        especialidades: []
-      }
-    } else if (this.form.role === 'medico') {
-      this.form.medico = Object.assign({
-        nrConselho: this.selected.medico.nrconselho,
-        especialidades: this.selected.medico.especialidades.map(esp => {
-          return {
-            label: esp.nome,
-            value: esp.id
-          }
-        })
-      })
-    }
-    console.log(this.form.roles)
-    if (this.form.roles != null) {
-      let role = Object.assign(this.form.roles[0])
-      this.form.role = {
-        value: role.id,
-        label: role.name
-      }
+    let tipo = window.deepCopy(this.selected.prestador.tipoPrestador)
+    console.log(this.selected.prestador.tipoPrestador)
+    this.form.prestador.tipoPrestador = {
+      value: tipo.id,
+      label: tipo.nome
     }
   }
 }

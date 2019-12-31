@@ -11,4 +11,9 @@ class TipoPrestador extends Model
     protected $fillable = [
         'nome'
     ];
+
+    public function prestadores()
+    {
+        return $this->hasMany('App\Prestador');
+    }
 }

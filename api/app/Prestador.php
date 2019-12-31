@@ -16,14 +16,6 @@ class Prestador extends Model
         'perfil_id'
     ];
 
-    public function telefones()
-    {
-        return $this->hasManyThrough('App\Perfil', 'App\Telefone');
-    }
-    public function enderecos()
-    {
-        return $this->hasManyThrough('App\Perfil', 'App\Telefone');
-    }
     public function perfil(){
         return $this->belongsTo('App\Perfil','perfil_id');
     }
@@ -38,5 +30,9 @@ class Prestador extends Model
     public function especialidades()
     {
         return $this->belongsToMany('App\Especialidade','especialidade_prestador' ,'prestador_id', 'especialidade_id');
+    }
+    public function tipoPrestador()
+    {
+        return $this->belongsTo('App\TipoPrestador','tipoPrestador_id');
     }
 }
