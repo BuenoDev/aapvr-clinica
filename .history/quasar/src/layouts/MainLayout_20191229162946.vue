@@ -96,7 +96,7 @@
                   <q-icon name="pan_tool" />
                 </q-item-section>
                 <q-item-section>
-                  Permissões
+                  Grupos e permissões
                 </q-item-section>
           </q-item>
           <q-expansion-item icon="supervised_user_circle" label="Cadastros" v-if="authUser.hasRole('admin')">
@@ -209,7 +209,7 @@ export default {
       })
     }
   },
-  beforeMount () {
+  mounted () {
     this.$q.loading.show({
       message: 'Buscando informações do usuário'
     })
