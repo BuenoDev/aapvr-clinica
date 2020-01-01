@@ -33,19 +33,29 @@
               <q-card-section>
                 <div class="row">
                   <div class="col-lg-4 col-sm-12">
-                    <q-btn color="positive" class="q-ma-sm" text-color="white" label="Cadastrar novo usuário" @click="newUserClick" />
+                    <q-btn color="positive" class="q-ma-sm" text-color="white"
+                            label="Cadastrar novo usuário"
+                            @click="newUserClick"
+                            autofocus
+                            />
                   </div>
                   <div class="col-lg-4 col-sm-12">
-                    <q-btn color="primary" class="q-ma-sm" text-color="white" label="Atribuir a usuário existente" @click="assignUserClick" />
+                    <q-btn color="primary" class="q-ma-sm" text-color="white"
+                            label="Atribuir a usuário existente"
+                            @click="assignUserClick"
+                            />
                   </div>
                   <div class="col-lg-4 col-sm-12">
-                    <q-btn color="negative" class="q-ma-sm" text-color="white" label="Criar sem atribuir usuario" @click="noUserClick" />
+                    <q-btn color="negative" class="q-ma-sm" text-color="white"
+                            label="Criar sem atribuir usuario"
+                            @click="noUserClick"
+                            />
                   </div>
                 </div>
               </q-card-section>
               <q-card-section>
                 <!-- TODO: definir desabilitar form de forma independente pra cada modulo -->
-                <q-form ref="form" @submit.prevent = 'submit' autofocus greedy :disabled="disable.form">
+                <q-form ref="form" @submit.prevent = 'submit' greedy :disabled="disable.form">
                   <!-- nome -->
                   <q-input class="q-mb-sm" square dense outlined
                             v-model="form.perfil.nome"
@@ -112,7 +122,7 @@
                     se possivel, adicionar tags -->
 
                     <!-- especialidades -->
-                    <q-select class="q-mb-lg" square dense outlined multiple use-input
+                    <q-select class="q-mb-lg" square dense outlined multiple use-input use-chips
                               input-debounce="1"
                               label="Especialidade"
                               ref="especialidade"

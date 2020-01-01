@@ -85,7 +85,7 @@
                     se possivel, adicionar tags -->
 
                     <!-- especialidades -->
-                    <q-select class="q-mb-lg" square dense outlined multiple use-input
+                    <q-select class="q-mb-lg" square dense outlined multiple use-input use-chips
                               :disabled="!edit"
                               input-debounce="1"
                               label="Especialidade"

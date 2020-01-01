@@ -2,7 +2,7 @@
     <div class="q-mt-lg">
        <default-page-header
         :config="headerConfig"
-        backTo="home"
+        backTo="/home"
         />
         <div class="row justify-center">
           <div class="col-lg-6 col-md-8 col-sm-12">
@@ -36,8 +36,14 @@
                           </q-icon>
                         </template>
                       </q-input> -->
-
-                      <q-input class="q-mb-sm q-mr-md" type="date" square dense outlined ref="dtnascimento" v-model="form.dtnascimento" label="Data de Nascimento" :mask="mask.dtnascimento" :rules="rules.dtnascimento" lazy-rules />
+                      <q-input class="q-mb-sm q-mr-md" square dense outlined
+                                ref="dtnascimento"
+                                v-model="form.dtnascimento"
+                                label="Data de Nascimento"
+                                :mask="mask.dtnascimento"
+                                :rules="rules.dtnascimento"
+                                lazy-rules
+                                />
                     </div>
                     <div class="col-6">
 
@@ -209,7 +215,8 @@ export default {
           val => val !== null || 'Campo Obrigatório'
         ],
         dtnascimento: [
-          val => val !== null || 'Campo Obrigatório'
+          val => val !== null || 'Campo Obrigatório',
+          val => new Date(val) < new Date() || 'A data indicada não pode ser maior que a data atual'
         ],
         sexo: [
           val => val !== null || 'Campo Obrigatório'
