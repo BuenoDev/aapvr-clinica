@@ -5,6 +5,13 @@ namespace App\Repositories;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * Atualmente, o UserRepository so esta sendo usado
+ * no modulo de permissoes e cadastro de usuarios
+ *
+ * TODO: atualizar cadastro de usuarios
+ * para adicionar o perfil
+ */
 class UserRepository extends BaseRepository{
     public function __construct(User $model)
     {
@@ -13,7 +20,6 @@ class UserRepository extends BaseRepository{
 
     public function create($params){
         $user =  User::create([
-            'name' => $params['name'],
             'email' => $params['email'],
             'password' => Hash::make($params['password']),
         ]);

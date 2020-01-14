@@ -19,7 +19,8 @@
                 <q-form ref="form" @submit.prevent = 'submit' autofocus greedy>
                   <div class="row">
                      <div class="col-md-12">
-                        <q-select :disable="!edit" square dense outlined v-model="form.grupo_procedimento_id" :options="options" label="Grupo" class="q-mb-lg"/>
+                       <!-- TODO: verificar por que o select nao muda de valor automaticamente -->
+                        <q-select :disable="!edit" square dense outlined v-model="form.grupoProcedimento" :options="options" label="Grupo" :loading="loading.grupo" class="q-mb-lg"/>
                       </div>
                       <div class="col-md-4">
                         <q-input :disable="!edit" class="q-mb-xs" mask="###########" square dense outlined ref="codigo" v-model="form.codigo" label="Código" :rules="rules.codigo" lazy-rules />
@@ -52,6 +53,9 @@ export default {
     ...mapGetters('procedimento', [
       'selected'
     ]),
+    ...mapGetters('grupoprocedimento', [
+      'grupoprocedimentos'
+    ]),
     ...mapGetters('auth', [
       'authUser'
     ])
@@ -79,7 +83,11 @@ export default {
         codigo: null,
         procedimento: null,
         status: null,
-        grupo_procedimento_id: null
+        grupoProcedimento: null
+      },
+      options: [],
+      loading: {
+        grupo: false
       },
       rules: {
         codigo: [
@@ -105,6 +113,14 @@ export default {
     ]),
     editForm () {
       this.edit = true
+    },
+    mapOptions (options) {
+      return options.map(item => {
+        return {
+          label: item.descricao,
+          value: item.id
+        }
+      })
     },
     deleteForm () {
       this.$q.dialog({
@@ -143,16 +159,19 @@ export default {
     }
   },
   mounted () {
-    this.$axios.get('/grupoprocedimento').then(response => {
-      this.options = response.data.map(item => {
-        return {
-          label: item.descricao,
-          value: item.id
-        }
-      })
+    this.options = this.mapOptions(this.grupoprocedimentos)
+    if (this.options.length === 0) this.loading.grupo = true
+
+    this.$store.dispatch('grupoprocedimento/refresh').then(() => {
+      this.options = this.mapOptions(this.grupoprocedimentos)
+      this.loading.grupo = false
     })
-    console.log(this.selected)
     this.form = this.selected
+    let gp = this.selected.grupoprocedimento
+    this.form.grupoProcedimento = {
+      value: gp.id,
+      label: gp.descricao
+    }
   }
 }
 

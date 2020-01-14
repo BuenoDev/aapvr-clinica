@@ -15,15 +15,15 @@ class PrestadorResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'nome' => $this->nome,
+            'nome' => $this->perfil->nome,
             'id' => $this->id,
-            'rg' => $this->rg,
-            'cpf' => $this->cpf,
-            'medico' => new MedicoResource($this->medico),
-            'telefones' => $this->telefones,
-            'enderecos' => $this->enderecos,
-            'roles' => $this->user != null ? $this->user->roles : null,
-            'email' => $this->user != null ? $this->user->email : null,
+            'rg' => $this->perfil->rg,
+            'cpf' => $this->perfil->cpf,
+            // 'medico' => new MedicoResource($this->medico),
+            'telefones' => $this->perfil->telefones,
+            'enderecos' => $this->perfil->enderecos,
+            'roles' => $this->perfil->user != null ? $this->perfil->user->roles : null,
+            'email' => $this->perfil->user != null ? $this->perfil->user->email : null,
         ];
     }
 }

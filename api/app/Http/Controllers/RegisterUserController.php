@@ -28,7 +28,6 @@ class RegisterUserController extends Controller
     public function store(Request $request, UserRepository $repo)
     {
         $repo->create([
-            'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password,
         ]);

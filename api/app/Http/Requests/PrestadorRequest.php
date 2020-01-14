@@ -37,25 +37,21 @@ class PrestadorRequest extends FormRequest
     public function formated(){
         $data = parent::all();
 
-        if(isset($data['options'])) {
-            $assign = $data['options']['userId'] != null ? $data['options']['userId'] : false;
-        } else $assign = null;
-        $user = [
-            'name' => $data['nome'],
-            'email' => $data['email'],
-        ];
+
+
+        $perfil = $data['perfil'];
+
+        $user = $data['user'];
+
+
         $prestador = [
-            'nome' => $data['nome'],
-            'role' => $data['role']['label'],
-            'rg' => $data['rg'],
-            'cpf' => $data['cpf'],
-        ];
-        $medico = [
-            'nrConselho' => $data['medico']['nrConselho'],
-            'especialidades' => collect($data['medico']['especialidades'])->map(function($especialidade){
+            'tipoPrestador' => $data['prestador']['tipoPrestador']['value'],
+            'nrConselho' => $data['prestador']['nrConselho'],
+            'especialidades' => collect($data['prestador']['especialidades'])->map(function($especialidade){
                 return $especialidade['value'];
             })->toArray()
         ];
+
         $enderecos = collect($data['enderecos'])->map(function($endereco){
             $array = [
                 'bairro' => $endereco['bairro'],
@@ -70,6 +66,7 @@ class PrestadorRequest extends FormRequest
 
             return $array;
         })->toArray();
+
         $telefones = collect($data['telefones'])->map(function($telefone){
             $array = [
                 'numero' => $telefone['numero'],
@@ -79,11 +76,12 @@ class PrestadorRequest extends FormRequest
 
             return $array;
         })->toArray();
+
         return compact([
             'assign',
             'user',
             'prestador',
-            'medico',
+            'perfil',
             'enderecos',
             'telefones'
         ]);

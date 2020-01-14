@@ -29,7 +29,7 @@ class ProcedimentoRequest extends FormRequest
 
     public function formated(){
         $data = parent::all();
-        $data['grupo_procedimento_id'] = $data['grupo_procedimento_id']['value'];
+        $data['grupo_procedimento_id'] = $data['grupoProcedimento']['value'];
         $data['status'] = $data['status'] === 'Ativado';
 
         return $data;

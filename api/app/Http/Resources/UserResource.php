@@ -16,11 +16,11 @@ class UserResource extends JsonResource
     {
         return [
             'id'           => $this->id,
-            'name'         => $this->name,
+            'name'         => $this->perfil->nome,
             'email'        => $this->email,
             'roles'        => $this->getRoleNames(),
             'permissions'  => $this->getAllPermissions()->map(function($permission){return $permission->name;}), //TODO: verificar metodo
-            'hasPrestador' => $this->prestador != null
+            'hasPrestador' => $this->perfil->prestador != null
         ];
     }
 }

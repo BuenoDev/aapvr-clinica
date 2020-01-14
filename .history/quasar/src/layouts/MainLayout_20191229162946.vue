@@ -209,7 +209,7 @@ export default {
       })
     }
   },
-  beforeMount () {
+  mounted () {
     this.$q.loading.show({
       message: 'Buscando informações do usuário'
     })
@@ -225,6 +225,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-
-</style>
